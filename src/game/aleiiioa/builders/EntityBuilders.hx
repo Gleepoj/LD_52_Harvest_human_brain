@@ -1,6 +1,8 @@
 package aleiiioa.builders;
 
 
+import aleiiioa.components.logic.GrappleComponent;
+import aleiiioa.components.flags.hierarchy.ChildFlag;
 import aleiiioa.components.flags.logic.CatchableFlag;
 import aleiiioa.components.flags.hierarchy.MasterFlag;
 import aleiiioa.components.logic.InteractiveComponent;
@@ -86,7 +88,7 @@ class EntityBuilders {
         //Physics Component
         var pos = new GridPosition(cx,cy);
         var vas = new VelocityAnalogSpeed(0,0);
-        var vc  = new VelocityComponent(true);
+        var vc  = new VelocityComponent(true,true);
         var cl  = new CollisionsListener();
         
         //Hierarchy Component and Flag (to attach any entity depending on player position)
@@ -98,6 +100,8 @@ class EntityBuilders {
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
         se.baseColor = new Vector(0.5,0.2,0.6);
+        
+    
 
         //Logic and Dialog Component
         var ic = new InteractiveComponent();
@@ -111,6 +115,41 @@ class EntityBuilders {
 
         
         new echoes.Entity().add(pos,vas,vc,cl,mpos,spr,sq,se,ic,em,ac,inp,body,player,master);
+
+        //Grapple 
+
+         //Physics Component
+         var pos = new GridPosition(cx,cy);
+         var vas = new VelocityAnalogSpeed(0,0);
+         var vc  = new VelocityComponent(true,true);
+         var cl  = new CollisionsListener();
+         
+         //Hierarchy Component and Flag (to attach any entity depending on player position)
+         var gpos   = new GridPositionOffset(0,0);
+         gpos.setXYratio(0,2);
+         var child  = new ChildFlag();
+ 
+         //Rendering Component
+         var spr = new SpriteComponent(D.tiles.fxCircle15);
+         var sq  = new SquashComponent();
+         var se  = new SpriteExtension();
+         se.baseColor = new Vector(0,0.2,0.2);
+         
+     
+ 
+         //Logic and Dialog Component
+         var ic  = new InteractiveComponent();
+         var em  = new EmitterComponent();
+         var ac  = new ActionComponent();
+         var gr  = new GrappleComponent();
+         
+         //Flags
+         var body   = new BodyFlag();   
+         //var player = new PlayerFlag();
+
+         new echoes.Entity().add(pos,vas,vc,cl,mpos,gpos,spr,gr,sq,se,ic,em,ac,inp,body,child);
+
+
     }
 
     

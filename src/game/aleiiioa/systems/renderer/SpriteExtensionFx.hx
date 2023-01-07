@@ -1,6 +1,8 @@
 package aleiiioa.systems.renderer;
 
 //import aleiiioa.components.core.SpriteExtension;
+import h3d.Vector;
+import aleiiioa.components.logic.GrappleComponent;
 import aleiiioa.components.core.collision.CollisionsListener;
 import aleiiioa.components.core.rendering.*;
 import echoes.System;
@@ -13,6 +15,8 @@ class SpriteExtensionFx extends System {
         if(se.baseColor != null)
             spr.colorize(se.baseColor.toColor());
     }
+
+ 
 
     @u function collideDebug(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener) {
         spr.colorize(se.baseColor.toColor());
@@ -37,6 +41,11 @@ class SpriteExtensionFx extends System {
         if(cl.onCeil){
             spr.colorize(0xeea990);
         } */
+    }
+    @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,gr:GrappleComponent) {
+        var col:Vector = new Vector(gr.load,se.baseColor.g,se.baseColor.b);
+        spr.colorize(col.toColor());
+       
     }
    
 }

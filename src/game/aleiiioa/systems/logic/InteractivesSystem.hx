@@ -16,9 +16,57 @@ class InteractivesSystem extends echoes.System {
     
     var ALL_PLAYERS :View<GridPosition,PlayerFlag>;
     var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent>;
+    var lastActionX:Bool = false;
     
     public function new() {
         
+    }
+
+    @u function grappleUpdate(en:echoes.Entity,gr:GrappleComponent,cl:CollisionsListener,vas:VelocityAnalogSpeed, gpos:GridPositionOffset,inp:InputComponent){
+        
+        if(lastActionX != inp.ca.isDown(ActionX)){
+            if(!inp.ca.isDown(ActionX) && !cl.cd.has("grapple_is_launch") && !cl.cd.has("rewind")){
+                cl.cd.setS("grapple_is_launch",0.1);
+                gr.load = 0;
+                
+            }
+        }
+
+        if(cl.cd.has("grapple_is_launch")){
+            gpos.oyr += 0.2 ;
+        }
+
+        
+        if(cl.cd.has("grapple_is_launch") && inp.ca.isPressed(ActionX)){
+            cl.cd.unset("grapple_is_launch");
+            cl.cd.setS("rewind",1);
+           // trace("rewind");
+        }
+
+        if(cl.cd.has("rewind")){
+            gpos.oyr -= 0.3 ;
+            if(gpos.oyr <= 1){
+                gpos.oyr =1;
+                cl.cd.unset("rewind");
+            }
+
+        }
+
+        if(inp.ca.isDown(ActionX)){
+            
+            if(gr.load < gr.maxLoad){
+                gr.load += 0.05;
+               
+            }
+        }
+
+        if(gr.load > gr.maxLoad){
+            gr.load = gr.maxLoad;
+           // trace("max load");
+        }
+        
+        lastActionX = inp.ca.isDown(ActionX);
+
     }
 
     @u function updateInteractCooldown(dt:Float,ic:InteractiveComponent) {
