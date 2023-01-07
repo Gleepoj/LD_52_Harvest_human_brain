@@ -1,0 +1,50 @@
+title: Start
+tags: 
+colorID: 0
+position: 592,181
+---
+Arflantil: <blank>
+Arflantil: Hi !
+Arflantil: Here is the dialog system based on YarnSpinner tool and "hxyarn" parser and runner made by cxsquared. 
+-> Nice
+    Arflantil: Thanks !
+-> How does it works ? 
+    Arflantil: It is actually quite simple !
+    Arflantil: You just have to write a dialog with any yarnSpinner editor and export it in .yarn file.
+    Arflantil: Then you put it in res/yarn/ and then you can link the dialog file by passing the title of your dialog as a String parameter to your npc in LDtk editor. 
+    -> I understand 
+        <<jump Leave>>
+    -> Learn more
+        <<jump LearnMore>>
+===
+title: Leave
+tags: 
+colorID: 0
+position: 387,487
+---
+Arflantil: Have a nice day !
+Citrouille: What an awful NPC dialog ...
+Arflantil: Sorry ? 
+Citrouille: No it's nothing, don't worry.
+===
+title: LearnMore
+tags: rawText
+colorID: 0
+position: 763,472
+---
+Arflantil: If you want to know more about YarnSpinner go and see their documentation on Github 
+Arflantil: And for the implementation have a look in every files labelled as "dialog" in the source
+Arflantil: In order to create a npc like me see alleiiioa/builders/EnitityBuilders.hx in the function "pnj".
+Arflantil: PNJ means NPC in french, "Personnage non joueur", that's how my people are called in this region.
+-> I don't care about your people !
+    Arflantil: How dare you ! 
+    Arflantil: We are not here waiting at your disposal, untill you have some spare time to spend talking with us.
+    Arflantil: We are alive,we have work to do, children to raise, meal to cook.
+    Arflantil: Who do you think you are ?! 
+    Citrouille: Sorry I.. 
+    Arflantil: I would like to see your face the day where all NPCs of the electronic worlds will go on strike !
+    Arflantil: What games would be without us !? We deserve respect like every other living creatures ... 
+-> Is that all you have to tell me ?
+    Arflantil: No it lacks of feature for the moment and there is a bug, the first sentence is not display for the moment.
+    Arflantil: But i am sure we will solve those problems soon. 
+===

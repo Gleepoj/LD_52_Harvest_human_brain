@@ -1,0 +1,21 @@
+title: Start
+tags: 
+colorID: 0
+position: 592,181
+---
+Barbulle: <blank> 
+Barbulle: Hello !
+Barbulle: Welcome in a Entity Component System transcription of deepnight gameBase.
+Barbulle: It use "echo" ECS framework made by deepcake, you can see the documentation on Github
+Barbulle: Here : https:/ /github.com/deepcake/echo 
+-> What is an ECS ?
+    Barbulle: It's an architecture where entities are build with a collection of components.
+    Barbulle: Then each entity are identified by systems according to its different components.
+    Barbulle: For example, I can be grabbed and thrown by the player like the little blue bombs on the floor.
+    Barbulle: The only thing you have to do in order to remove this behavior,
+    Barbulle: is to delete the "CatchableFlag" from my component collection in aleiiioa.builders.EntityBuilders.hx in function "pnj". 
+    Barbulle: If you want to know more about this topic, you can read this article 
+    Barbulle: https:/ /cowboyprogramming.com/2007/01/05/evolve-your-heirachy/
+-> Have a nice day !
+    Barbulle: You too !
+===
