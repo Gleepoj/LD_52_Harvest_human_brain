@@ -40,11 +40,11 @@ class SpriteExtensionFx extends System {
         }
         if(cl.onCeil){
             spr.colorize(0xeea990);
-        } 
+        }  
     }
 
     @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,gr:GrappleComponent) {
-        //var col:Vector = new Vector(gr.load,se.baseColor.g,se.baseColor.b);
+       // var col:Vector = new Vector(gr.load,se.baseColor.g,se.baseColor.b);
        // spr.colorize(col.toColor());
        
     }

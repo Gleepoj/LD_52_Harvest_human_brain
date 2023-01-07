@@ -88,7 +88,8 @@ class  DynamicPhysicSystem extends System {
             trace("clamped integration problem");
     
     
-        return  clamp_integration;
+       // return  clamp_integration;
+       return v;
     } 
  
 }

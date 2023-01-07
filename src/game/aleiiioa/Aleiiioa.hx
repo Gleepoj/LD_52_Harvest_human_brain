@@ -54,6 +54,7 @@ class Aleiiioa extends Game {
 		//Object
 		Workflow.addSystem(new LevelCollisionsSystem());
 		Workflow.addSystem(new VelocitySystem());
+		Workflow.addSystem(new DynamicPhysicSystem());
 		Workflow.addSystem(new GridPositionActualizer());
 
 		//Interaction

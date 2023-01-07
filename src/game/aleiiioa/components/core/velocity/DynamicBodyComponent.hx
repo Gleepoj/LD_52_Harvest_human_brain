@@ -4,7 +4,7 @@ import h3d.Vector;
 
 class DynamicBodyComponent {
     
-    public var maxSpeed = 0.3;//0.8
+    public var maxSpeed = 10.;//0.8
     public var maxForce = 0.5;//0.05
     public var friction = 0.99;//0.99
     
@@ -60,9 +60,9 @@ class DynamicBodyComponent {
 
     public function addForce(f:Vector){
         var a = acceleration.clone();
-        var c = VectorUtils.clampVector(f,0.5);
-        if(c.length()> 3)
-            trace("add force issue");
+        var c = VectorUtils.clampVector(f,maxSpeed);
+        //if(c.length()> 3)
+          //  trace("add force issue");
         
         acceleration = a.add(f);
     }
@@ -124,17 +124,18 @@ class DynamicBodyComponent {
     public function accelerationFriction(){
         var af = new Vector();
         var accel = new Vector(M.maxPrecision(acceleration.x,2),M.maxPrecision(acceleration.y,2),0,0);
-        var f = M.fclamp(friction,0,3); 
+        var f = M.fclamp(friction,0,maxSpeed); 
         
         af.lerp(zero,accel,f);
         
         acceleration = af;
+       // acceleration = accel;
 
         if(af.length()> 4){
-            trace("friction issue");
-            trace(accel.toString());
-            trace(af.toString());
-            trace(friction);
+            //trace("friction issue");
+            //trace(accel.toString());
+            //trace(af.toString());
+            //trace(friction);
         }
 
     }   

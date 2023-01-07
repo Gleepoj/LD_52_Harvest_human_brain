@@ -1,5 +1,7 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.builders.UIBuilders;
+import h3d.Vector;
 import echoes.Entity;
 import echoes.View;
 
@@ -17,23 +19,35 @@ class InteractivesSystem extends echoes.System {
     var ALL_PLAYERS :View<GridPosition,PlayerFlag>;
     var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent>;
     var lastActionX:Bool = false;
-    
+    var grapplePower:Float = 2.75;
+    var rewind:Float = 0.05;
+
     public function new() {
-        
+        UIBuilders.slider("GrapplePower",function() return  grapplePower, function(v)  grapplePower = v, 0.5,5);
+        UIBuilders.slider("RewindPower",function() return  rewind, function(v)  rewind = v, 0.05,0.9);
     }
 
-    @u function grappleUpdate(en:echoes.Entity,gr:GrappleComponent,cl:CollisionsListener,vas:VelocityAnalogSpeed, gpos:GridPositionOffset,inp:InputComponent){
+    @u function grappleUpdate(en:echoes.Entity,gr:GrappleComponent,dpc:DynamicBodyComponent,mpos:MasterGridPosition,cl:CollisionsListener,vas:VelocityAnalogSpeed,inp:InputComponent){
         
+        dpc.seek(mpos.gpToVector(),0.1 + gr.load);
+        dpc.arrival(mpos.gpToVector());
+       
         if(lastActionX != inp.ca.isDown(ActionX)){
-            if(!inp.ca.isDown(ActionX) && !cl.cd.has("grapple_is_launch") && !cl.cd.has("rewind")){
+            if(!inp.ca.isDown(ActionX) && !cl.cd.has("grapple_is_launch")){
                 cl.cd.setS("grapple_is_launch",0.1);
-                gr.load = 0;
                 
+                //gr.load = 0;
+
             }
         }
 
         if(cl.cd.has("grapple_is_launch")){
-            gpos.oyr += 0.2 ;
+            
+            dpc.addForce(new Vector(0,gr.load*grapplePower));
+            
+            if(gr.load >0)
+                gr.load -= rewind/10;
+            
         }
 
         
@@ -44,11 +58,11 @@ class InteractivesSystem extends echoes.System {
         }
 
         if(cl.cd.has("rewind")){
-            gpos.oyr -= 0.3 ;
+       /*      gpos.oyr -= 0.3 ;
             if(gpos.oyr <= 1){
                 gpos.oyr =1;
                 cl.cd.unset("rewind");
-            }
+            } */
 
         }
 
@@ -56,13 +70,13 @@ class InteractivesSystem extends echoes.System {
             
             if(gr.load < gr.maxLoad){
                 gr.load += 0.05;
-               
+                //trace("charge");
             }
         }
 
         if(gr.load > gr.maxLoad){
             gr.load = gr.maxLoad;
-           // trace("max load");
+            //trace("max load");
         }
         
         lastActionX = inp.ca.isDown(ActionX);
