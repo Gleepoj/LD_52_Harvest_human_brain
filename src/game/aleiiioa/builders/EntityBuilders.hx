@@ -1,6 +1,10 @@
 package aleiiioa.builders;
 
 
+import aleiiioa.components.flags.physics.TopDownPhysicsFlag;
+import aleiiioa.components.flags.physics.DynamicBodyFlag;
+import aleiiioa.components.flags.physics.KinematicBodyFlag;
+import aleiiioa.components.flags.physics.PlateformerPhysicsFlag;
 import aleiiioa.components.logic.GrappleComponent;
 import aleiiioa.components.flags.hierarchy.ChildFlag;
 import aleiiioa.components.flags.logic.CatchableFlag;
@@ -66,9 +70,11 @@ class EntityBuilders {
         
         //Rendering Component
         var spr = new SpriteComponent(D.tiles.fxCircle15);
+        spr.pivot.setCenterRatio(0.5,1);
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
         se.baseColor = new Vector(0.3,0.2,0.8);
+        var bb  = new BoundingBox(spr);
 
         //Logic and Dialog Component
         var ic    = new InteractiveComponent();
@@ -78,9 +84,11 @@ class EntityBuilders {
         var body = new BodyFlag(); 
         var bomb = new BombFlag();
         var catchable = new CatchableFlag();
+        var plateformer = new PlateformerPhysicsFlag();
+        var kinematic = new KinematicBodyFlag();
         
         
-        new echoes.Entity().add(pos,vas,vc,cl,spr,sq,se,ic,em,body,bomb,catchable);
+        new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,em,body,bomb,catchable,plateformer,kinematic);
     }
 
     public static function player(cx:Int,cy:Int) {
@@ -97,9 +105,11 @@ class EntityBuilders {
 
         //Rendering Component
         var spr = new SpriteComponent(D.tiles.fxCircle15);
+        spr.pivot.setCenterRatio(0.5,1);
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
         se.baseColor = new Vector(0.5,0.2,0.6);
+        var bb  = new BoundingBox(spr);
         
     
 
@@ -112,27 +122,31 @@ class EntityBuilders {
         //Flags
         var body   = new BodyFlag();   
         var player = new PlayerFlag();
+        var kinematic = new KinematicBodyFlag();
+        var td = new TopDownPhysicsFlag();
 
         
-        new echoes.Entity().add(pos,vas,vc,cl,mpos,spr,sq,se,ic,em,ac,inp,body,player,master);
+        new echoes.Entity().add(pos,vas,vc,cl,mpos,spr,bb,sq,se,ic,em,ac,inp,body,player,master,kinematic,td);
 
         //Grapple 
 
          //Physics Component
-         var pos = new GridPosition(cx,cy);
+         var pos = new GridPosition(cx,cy+1);
          var vas = new VelocityAnalogSpeed(0,0);
          var vc  = new VelocityComponent(true,true);
          var cl  = new CollisionsListener();
          
          //Hierarchy Component and Flag (to attach any entity depending on player position)
-         var gpos   = new GridPositionOffset(0,0);
-         gpos.setXYratio(0,2);
-         var child  = new ChildFlag();
+         //var gpos   = new GridPositionOffset(0,0);
+         //gpos.setXYratio(0,2);
+         //var child  = new ChildFlag();
  
          //Rendering Component
          var spr = new SpriteComponent(D.tiles.fxCircle15);
+         spr.pivot.setCenterRatio(0.5,1);
          var sq  = new SquashComponent();
          var se  = new SpriteExtension();
+         var bb  = new BoundingBox(spr);
          se.baseColor = new Vector(0,0.2,0.2);
          
      
@@ -143,11 +157,14 @@ class EntityBuilders {
          var ac  = new ActionComponent();
          var gr  = new GrappleComponent();
          
-         //Flags
-         var body   = new BodyFlag();   
+         //Flags 
+         var body   = new BodyFlag(); 
+         var sw     = new DynamicBodyComponent();
+         //var kinematic = new KinematicBodyFlag();
+         var dyn = new DynamicBodyFlag();  
          //var player = new PlayerFlag();
 
-         new echoes.Entity().add(pos,vas,vc,cl,mpos,gpos,spr,gr,sq,se,ic,em,ac,inp,body,child);
+         new echoes.Entity().add(pos,vas,vc,sw,cl,mpos,spr,bb,gr,sq,se,ic,em,ac,inp,body,dyn);
 
 
     }
