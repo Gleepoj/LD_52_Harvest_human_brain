@@ -33,7 +33,7 @@ class VelocitySystem extends echoes.System {
 		if(cl.onSouth && cl.onGround)
 			cl.cd.setS("hit_horizontal",0.01);
 
-		if(cl.onHitHorizontal && !cl.cd.has("bounce_wall_cd")){
+		/* if(cl.onHitHorizontal && !cl.cd.has("bounce_wall_cd")){
             vhc.acceleration.scale(0.95);
 			var norm = new Vector(0,0);
 
@@ -66,7 +66,7 @@ class VelocitySystem extends echoes.System {
 			
             cl.cd.setS("bounce_wall_cd",0.01);
             cl.cd.unset("hit_vertical");
-        } 
+        }  */
     }
     
 	@u function updateDynamicBody(en:Entity,gp:GridPosition,vc:VelocityComponent,dpc:DynamicBodyComponent,cl:CollisionsListener,dyn:DynamicBodyFlag){

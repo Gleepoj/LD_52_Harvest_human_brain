@@ -1,5 +1,6 @@
 package aleiiioa.systems.collisions;
 
+import aleiiioa.components.logic.GrappleComponent;
 import aleiiioa.components.flags.logic.CatchableFlag;
 import aleiiioa.components.logic.InteractiveComponent;
 import aleiiioa.components.flags.logic.*;
@@ -13,6 +14,7 @@ class EntityCollisionsSystem extends echoes.System {
     var ALL_PNJ:View<GridPosition,PNJFlag>;
     var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent>;
     var PLAYER :View<GridPosition,PlayerFlag>;
+    var GRAPPLE:View<GridPosition,GrappleComponent>;
 
     var events:InstancedCollisionEvent;
 
@@ -47,8 +49,10 @@ class EntityCollisionsSystem extends echoes.System {
         }
         
     }
+   
 
-    @u function playerInInteractArea(gp:GridPosition,flag:PlayerFlag,cl:CollisionsListener) {
+
+    @u function grappleInInteractArea(gp:GridPosition,flag:GrappleComponent,cl:CollisionsListener) {
         var head = ALL_CATCHABLE.entities.head;
         var playerPos = gp.gpToVector();
 
@@ -65,7 +69,7 @@ class EntityCollisionsSystem extends echoes.System {
 
     
     @u function CatchableInInteractArea(catchable:CatchableFlag,gp:GridPosition,cl:CollisionsListener) {
-        var player = PLAYER.entities.head.value;
+        var player = GRAPPLE.entities.head.value;
         var pgp = player.get(GridPosition);
         var playerPos = pgp.gpToVector();
         var objPos = gp.gpToVector();

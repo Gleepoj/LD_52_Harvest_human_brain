@@ -70,7 +70,7 @@ class EntityBuilders {
         
         //Rendering Component
         var spr = new SpriteComponent(D.tiles.fxCircle15);
-        spr.pivot.setCenterRatio(0.5,1);
+        spr.pivot.setCenterRatio(0.5,0.5);
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
         se.baseColor = new Vector(0.3,0.2,0.8);
@@ -105,7 +105,7 @@ class EntityBuilders {
 
         //Rendering Component
         var spr = new SpriteComponent(D.tiles.fxCircle15);
-        spr.pivot.setCenterRatio(0.5,1);
+        spr.pivot.setCenterRatio(0.5,0.5);
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
         se.baseColor = new Vector(0.5,0.2,0.6);
@@ -129,7 +129,7 @@ class EntityBuilders {
         new echoes.Entity().add(pos,vas,vc,cl,mpos,spr,bb,sq,se,ic,em,ac,inp,body,player,master,kinematic,td);
 
         //Grapple 
-
+         
          //Physics Component
          var pos = new GridPosition(cx,cy+1);
          var vas = new VelocityAnalogSpeed(0,0);
@@ -137,13 +137,10 @@ class EntityBuilders {
          var cl  = new CollisionsListener();
          
          //Hierarchy Component and Flag (to attach any entity depending on player position)
-         //var gpos   = new GridPositionOffset(0,0);
-         //gpos.setXYratio(0,2);
-         //var child  = new ChildFlag();
- 
+
          //Rendering Component
          var spr = new SpriteComponent(D.tiles.fxCircle15);
-         spr.pivot.setCenterRatio(0.5,1);
+         spr.pivot.setCenterRatio(0.5,0.5);
          var sq  = new SquashComponent();
          var se  = new SpriteExtension();
          var bb  = new BoundingBox(spr);

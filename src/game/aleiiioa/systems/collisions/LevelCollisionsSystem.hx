@@ -1,5 +1,6 @@
 package aleiiioa.systems.collisions;
 
+import aleiiioa.components.core.rendering.BoundingBox;
 import aleiiioa.components.core.velocity.VelocityComponent;
 import aleiiioa.components.core.collision.CollisionsListener;
 import aleiiioa.components.core.position.*;
@@ -19,17 +20,18 @@ class LevelCollisionsSystem extends echoes.System {
 		return camera.isOnScreen(gp.attachX, gp.attachY, 0);
 	}
 
-    @u public function updateListener(entity:Entity,gp:GridPosition,bf:BodyFlag,cl:CollisionsListener,vc:VelocityComponent) {
+    @u public function updateListener(entity:Entity,gp:GridPosition,bf:BodyFlag,cl:CollisionsListener,vc:VelocityComponent,bb:BoundingBox) {
         if(entity.isValid() && !entity.exists(GridPositionOffset)){
-            cl.on_ground = level.hasCollision(gp.cx,gp.cy+1) && vc.dy == 0 && gp.yr ==1;
-            cl.on_land   = level.hasCollision(gp.cx,gp.cy+1) && vc.dy > 0;
-            cl.on_ceil   = level.hasCollision(gp.cx,gp.cy-1);
-            cl.on_left   = level.hasCollision(gp.cx-1,gp.cy);
-            cl.on_right  = level.hasCollision(gp.cx+1,gp.cy); 
+            cl.on_ground = level.hasCollision(gp.cx,gp.cy+bb.cyb);
+            cl.on_ceil   = level.hasCollision(gp.cx,gp.cy-bb.cyb);
+            cl.on_left   = level.hasCollision(gp.cx-bb.cxb,gp.cy);
+            cl.on_right  = level.hasCollision(gp.cx+bb.cxb,gp.cy); 
             cl.on_fall   = vc.dy > 0 ; 
-            cl.on_jump   = vc.dy < 0 ; 
-            
+            cl.on_jump   = vc.dy < 0 ;
+            cl.on_east   = vc.dx > 0 ;
+            cl.on_west   = vc.dx < 0 ;         
         }
     }
 
 }
+

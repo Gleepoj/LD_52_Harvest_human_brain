@@ -17,6 +17,7 @@ import aleiiioa.components.core.velocity.*;
 class InteractivesSystem extends echoes.System {
     
     var ALL_PLAYERS :View<GridPosition,PlayerFlag>;
+    var ALL_GRAPPLE :View<GridPosition,GrappleComponent>;
     var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent>;
     var lastActionX:Bool = false;
     var grapplePower:Float = 2.75;
@@ -87,14 +88,14 @@ class InteractivesSystem extends echoes.System {
         ic.cd.update(dt);
     }
 
-    @u function playerGrabObject(pl:PlayerFlag,cl:CollisionsListener,inp:InputComponent,ac:ActionComponent) {
+    @u function playerGrabObject(gr:GrappleComponent,cl:CollisionsListener,inp:InputComponent,ac:ActionComponent) {
         if(cl.onInteract && inp.ca.isPressed(ActionX)){
             ac.query = true;
         }
     }
 
 
-    @u function playerThrowCatchable(pl:PlayerFlag,inp:InputComponent,ac:ActionComponent,vc:VelocityComponent){
+    @u function playerThrowCatchable(gr:GrappleComponent,inp:InputComponent,ac:ActionComponent,vc:VelocityComponent){
         if(ac.grab && inp.ca.isPressed(ActionX)){
             var head = ALL_CATCHABLE.entities.head;
 
@@ -112,7 +113,7 @@ class InteractivesSystem extends echoes.System {
 
     @u function catchableIsGrabbedByPlayer(en:echoes.Entity,catchable:CatchableFlag,cl:CollisionsListener) {
         if(cl.onInteract){
-            var head = ALL_PLAYERS.entities.head;
+            var head = ALL_GRAPPLE.entities.head;
     
             while (head != null){
                 var player = head.value;
@@ -131,7 +132,7 @@ class InteractivesSystem extends echoes.System {
     
 
     function linkObject(en:echoes.Entity,mgp:MasterGridPosition) {
-        en.add(new GridPositionOffset(0,-1));
+        en.add(new GridPositionOffset(0,1));
         en.add(mgp);
         en.add(new ChildFlag());
         en.get(InteractiveComponent).isGrabbed = true;           

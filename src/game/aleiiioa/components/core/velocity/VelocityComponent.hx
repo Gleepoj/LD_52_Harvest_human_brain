@@ -30,7 +30,7 @@ class VelocityComponent {
 	  public var customPhysics:Bool = false;
 	  public var collide:Bool = true;
 	  
-  
+	//legacy a foutree en lair physic custom
 	  public function new(?_physicBody:Bool = false,?_customPhysics:Bool = false,_col:Bool = true) {
 		  physicBody = _physicBody;
 		  customPhysics = _customPhysics;
