@@ -28,7 +28,7 @@ class SpriteExtensionFx extends System {
         if(cl.onInteract){
             spr.colorize(0x01AA74);
         }
-/*  
+  
         if(cl.onGround){
             spr.colorize(0x3566D5);
         }
@@ -40,11 +40,12 @@ class SpriteExtensionFx extends System {
         }
         if(cl.onCeil){
             spr.colorize(0xeea990);
-        } */
+        } 
     }
+
     @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,gr:GrappleComponent) {
-        var col:Vector = new Vector(gr.load,se.baseColor.g,se.baseColor.b);
-        spr.colorize(col.toColor());
+        //var col:Vector = new Vector(gr.load,se.baseColor.g,se.baseColor.b);
+       // spr.colorize(col.toColor());
        
     }
    
