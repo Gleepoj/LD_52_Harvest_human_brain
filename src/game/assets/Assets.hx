@@ -1,5 +1,6 @@
 package assets;
 
+import dn.heaps.assets.Aseprite;
 import h2d.Tile;
 import hxd.BitmapData;
 import h2d.Bitmap;
@@ -15,6 +16,7 @@ class Assets {
 
 	/** Main atlas **/
 	public static var tiles : SpriteLib;
+	public static var gille : SpriteLib;
 
 	/** LDtk world data **/
 	public static var worldData : World;
@@ -39,6 +41,7 @@ class Assets {
 		
 		// build sprite atlas directly from Aseprite file
 		tiles = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.tiles.toAseprite());
+		gille = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.gilles.toAseprite());
 
 		// CastleDB file hot reloading
 		#if debug

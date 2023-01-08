@@ -1,5 +1,6 @@
 package aleiiioa.systems.renderer;
 
+import aleiiioa.components.core.velocity.VelocityComponent;
 import h3d.Vector;
 import echoes.System;
 import aleiiioa.components.core.rendering.*;
@@ -47,7 +48,15 @@ class SpriteRenderer extends echoes.System {
 		se.squashX = 2 - sq.squashY;
 		se.squashY = sq.squashY;
 	}
+	@u private function getDir(se:SpriteExtension,vc:VelocityComponent){
+		if(vc.dx > 0 )
+			se.dir = 1;
 
+		if(vc.dx <=0)
+			se.dir = -1;
+
+	}
+	
 	@u private function renderSprite(dt:Float,spr:SpriteComponent,gp:GridPosition,se:SpriteExtension,sq:SquashComponent) {
 		if (se.interpolateSprPos){
 			var interpolatePos = this.interpolateSpritePosition(gp);

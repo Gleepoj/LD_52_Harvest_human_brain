@@ -59,7 +59,7 @@ class EntityCollisionsSystem extends echoes.System {
         while (head != null){
             var obj = head.value;
             var objPos = obj.get(GridPosition).gpToVector();
-            if(playerPos.distance(objPos)<10){
+            if(playerPos.distance(objPos)<25){
                 cl.lastEvent = events.allowInteract;
                 orderListener(cl);
             }
@@ -74,7 +74,7 @@ class EntityCollisionsSystem extends echoes.System {
         var playerPos = pgp.gpToVector();
         var objPos = gp.gpToVector();
 
-        if(playerPos.distance(objPos)<10){
+        if(playerPos.distance(objPos)<25){
             cl.lastEvent = events.allowInteract;
             orderListener(cl);
         }

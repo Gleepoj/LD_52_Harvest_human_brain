@@ -1,5 +1,6 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.components.core.rendering.SpriteComponent;
 import aleiiioa.components.core.velocity.VelocityAnalogSpeed;
 import aleiiioa.builders.EntityBuilders;
 import aleiiioa.components.core.collision.CollisionsListener;
@@ -16,6 +17,12 @@ class EntityLogicSystem  extends echoes.System{
 
     public function new() {
         
+    }
+    @u function onGilleAdded(spr:SpriteComponent,gil:GilleFlag){
+        spr.set(Assets.gille);
+        spr.scale(2);
+        //spr.anim.registerStateAnim(AssetsDictionaries.anim_gille.idle_anim, 3);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_gille.walk,1);
     }
 
     @u function gilleWalk(vas:VelocityAnalogSpeed,ic:InteractiveComponent,gille:GilleFlag) {

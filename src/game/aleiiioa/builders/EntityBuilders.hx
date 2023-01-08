@@ -144,12 +144,17 @@ class EntityBuilders {
         var cl  = new CollisionsListener();
         
         //Rendering Component
-        var spr = new SpriteComponent(D.tiles.fxCircle15);
+        var spr = new SpriteComponent(D.tiles.gille);
         spr.pivot.setCenterRatio(0.5,0.5);
+        spr.scale(2);
+
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
-        se.baseColor = new Vector(0.3,0.2,0.8);
+        se.sprScaleX = 2;
+        se.sprScaleY = 2;
+        se.baseColor = new Vector(1,1,1);
         var bb  = new BoundingBox(spr);
+      
 
         //Logic and Dialog Component
         var ic    = new InteractiveComponent();
@@ -166,7 +171,7 @@ class EntityBuilders {
         var kinematic = new KinematicBodyFlag();
         
         
-        new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,em,body,bomb,catchable,plateformer,kinematic,gille);
+        new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,body,bomb,catchable,plateformer,kinematic,gille);
     }
 
     public static function player(cx:Int,cy:Int) {
