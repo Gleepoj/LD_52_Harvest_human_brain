@@ -14,6 +14,7 @@ import aleiiioa.components.flags.collision.IsDiedFlag;
 
 class EntityLogicSystem  extends echoes.System{
     public var lastSpawnState:Bool = false;
+    public var level(get,never) : Level; inline function get_level() return Game.ME.level;
 
     public function new() {
         
@@ -35,11 +36,28 @@ class EntityLogicSystem  extends echoes.System{
         }
     }
 
-    @u function spawnerUpdate(pos:GridPosition,spp:SpawnerPointComponent,cl:CollisionsListener){
-        
+    @u function gillecollide(en:echoes.Entity,pos:GridPosition,gille:GilleFlag) {
+            if(level.hasMethaniseur(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
+                en.add(new IsDiedFlag());
+                //trace(" is methanize ");
+            }
+
+            if(level.hasShredder(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
+                en.add(new IsDiedFlag());
+                //trace(" is shred");
+            }
+
+            if(level.hasMetro(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
+                en.add(new IsDiedFlag());
+                //trace(" is on Metro");
+            }
+    }
     
 
 
+    
+    @u function spawnerUpdate(pos:GridPosition,spp:SpawnerPointComponent,cl:CollisionsListener){
+        
 
         if(!cl.cd.has("spawn_cooldown")){
             cl.cd.setS("spawn_cooldown",spp.spawnRest);

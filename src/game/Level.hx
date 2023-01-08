@@ -72,6 +72,18 @@ class Level extends dn.Process {
 		return !isValid(cx,cy) ? true : data.l_Collisions.getInt(cx,cy)==1;
 	}
 
+	public inline function hasMetro(cx,cy) : Bool {
+		return !isValid(cx,cy) ? true : data.l_Collisions.getInt(cx,cy)==4;
+	}
+
+	public inline function hasShredder(cx,cy) : Bool {
+		return !isValid(cx,cy) ? true : data.l_Collisions.getInt(cx,cy)==2;
+	}
+
+	public inline function hasMethaniseur(cx,cy) : Bool {
+		return !isValid(cx,cy) ? true : data.l_Collisions.getInt(cx,cy)==3;
+	}
+
 	/** Render current level**/
 	function render() {
 		// Placeholder level render

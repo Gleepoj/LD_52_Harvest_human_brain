@@ -12,6 +12,7 @@ class SpriteExtensionFx extends System {
     public function new() {
         
     }
+    
     @a function onAdded(spr:SpriteComponent,se:SpriteExtension) {
         if(se.baseColor != null)
             spr.colorize(se.baseColor.toColor());
@@ -45,15 +46,15 @@ class SpriteExtensionFx extends System {
     }
 
     @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,ac:ActionComponent,gr:GrappleComponent) {
-       // var col:Vector = new Vector(gr.load,se.baseColor.g,se.baseColor.b);
-       // spr.colorize(col.toColor());
-       if(ac.grab == true){
+       var col:Vector = new Vector(gr.load,se.baseColor.g,se.baseColor.b);
+       spr.colorize(col.toColor());
+       /* if(ac.grab == true){
         spr.colorize(0x008e68);
        }
 
        if(ac.grab == false){
         spr.colorize(0x022c21);
-       }
+       } */
     }
    
 }
