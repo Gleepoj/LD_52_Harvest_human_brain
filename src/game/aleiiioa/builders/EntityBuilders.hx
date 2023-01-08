@@ -2,6 +2,7 @@ package aleiiioa.builders;
 
 
 
+import hxd.Math;
 import aleiiioa.components.logic.SpawnerPointComponent;
 import aleiiioa.components.flags.hierarchy.TargetedFlag;
 import aleiiioa.components.flags.hierarchy.TargeterFlag;
@@ -79,21 +80,9 @@ class EntityBuilders {
         se.baseColor = new Vector(0.3,0.3,0.9);
 
         var spp = new SpawnerPointComponent();
-
-        //Logic and Dialog Component
-        //var ic    = new InteractiveComponent();
-        //var em    = new EmitterComponent();
-        //var yarn  = new DialogReferenceComponent(yarnDialogName,pos.attachX,pos.attachY);
-        
-        //Flags
-        //var pnj   = new PNJFlag();
-        //var body  = new BodyFlag();   
-        //var catchable = new CatchableFlag();
-        
         
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,spp);
-        // Uncomment next entity creation and comment previous one to remove catchable behavior 
-        // new echoes.Entity().add(pos,vas,vc,cl,spr,sq,se,ic,em,yarn,pnj,body);
+
     }
     
     public static function chouxPeteur(cx:Int,cy:Int) {
@@ -125,6 +114,59 @@ class EntityBuilders {
         
         
         new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,em,body,bomb,catchable,plateformer,kinematic);
+    }
+
+    public static function gille(cx:Int,cy:Int) {
+
+        //Physics Component
+        var rand = M.randRange(1,2);
+        var bool:Bool = false;
+        
+        if(rand >1)
+            bool = true;
+
+        var right = bool;
+
+        var pos = new GridPosition(cx,cy);
+        var vas = new VelocityAnalogSpeed(0,0);
+
+        if(right){
+            pos.cx += 1;
+            vas.xSpeed = 1;
+        }
+
+        if(!right){
+            pos.cx -= 1;
+            vas.xSpeed = -1;
+        }
+
+        var vc  = new VelocityComponent(true);
+        var cl  = new CollisionsListener();
+        
+        //Rendering Component
+        var spr = new SpriteComponent(D.tiles.fxCircle15);
+        spr.pivot.setCenterRatio(0.5,0.5);
+        var sq  = new SquashComponent();
+        var se  = new SpriteExtension();
+        se.baseColor = new Vector(0.3,0.2,0.8);
+        var bb  = new BoundingBox(spr);
+
+        //Logic and Dialog Component
+        var ic    = new InteractiveComponent();
+        var em    = new EmitterComponent();
+        
+        //Flags
+        var gille = new GilleFlag();
+        gille.right = right;
+
+        var body = new BodyFlag(); 
+        var bomb = new BombFlag();
+        var catchable = new CatchableFlag();
+        var plateformer = new PlateformerPhysicsFlag();
+        var kinematic = new KinematicBodyFlag();
+        
+        
+        new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,em,body,bomb,catchable,plateformer,kinematic,gille);
     }
 
     public static function player(cx:Int,cy:Int) {

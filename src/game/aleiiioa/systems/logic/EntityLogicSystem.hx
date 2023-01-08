@@ -1,5 +1,6 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.components.core.velocity.VelocityAnalogSpeed;
 import aleiiioa.builders.EntityBuilders;
 import aleiiioa.components.core.collision.CollisionsListener;
 import aleiiioa.components.logic.SpawnerPointComponent;
@@ -17,6 +18,16 @@ class EntityLogicSystem  extends echoes.System{
         
     }
 
+    @u function gilleWalk(vas:VelocityAnalogSpeed,ic:InteractiveComponent,gille:GilleFlag) {
+        if(!ic.isGrabbed){
+            if(gille.right == true)
+                vas.xSpeed = 0.03;
+
+            if(gille.right == false)
+                vas.xSpeed = -0.03;
+        }
+    }
+
     @u function spawnerUpdate(pos:GridPosition,spp:SpawnerPointComponent,cl:CollisionsListener){
         
     
@@ -32,7 +43,7 @@ class EntityLogicSystem  extends echoes.System{
         }
         
         if(spp.onSpawn){
-            EntityBuilders.chouxPeteur(pos.cx-1,pos.cy);
+            EntityBuilders.gille(pos.cx,pos.cy);
             spp.onSpawn = false;
         }
 
