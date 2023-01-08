@@ -20,60 +20,116 @@ class InteractivesSystem extends echoes.System {
     var ALL_GRAPPLE :View<GridPosition,GrappleComponent>;
     var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent>;
     var lastActionX:Bool = false;
-    var grapplePower:Float = 2.75;
+    var grapplePower:Float = 3;
     var rewind:Float = 0.05;
+    var lastState:GrappleState;
+    var lastHome:Bool;
 
     public function new() {
         UIBuilders.slider("GrapplePower",function() return  grapplePower, function(v)  grapplePower = v, 0.5,5);
         UIBuilders.slider("RewindPower",function() return  rewind, function(v)  rewind = v, 0.05,0.9);
     }
-
-    @u function grappleUpdate(en:echoes.Entity,gr:GrappleComponent,dpc:DynamicBodyComponent,mpos:MasterGridPosition,cl:CollisionsListener,vas:VelocityAnalogSpeed,inp:InputComponent){
+   
+    @u function grappleStateAction(en:echoes.Entity,gr:GrappleComponent,tpos:TargetGridPosition,dpc:DynamicBodyComponent,cl:CollisionsListener,inp:InputComponent){
         
-        dpc.seek(mpos.gpToVector(),0.1 + gr.load);
-        dpc.arrival(mpos.gpToVector());
-       
-        if(lastActionX != inp.ca.isDown(ActionX)){
-            if(!inp.ca.isDown(ActionX) && !cl.cd.has("grapple_is_launch")){
-                cl.cd.setS("grapple_is_launch",0.1);
-                
-                //gr.load = 0;
-
-            }
+        if(gr.state == Idle){
+            dpc.seek(tpos.gpToVector(),0.3);
+            dpc.arrival(tpos.gpToVector());
         }
-
-        if(cl.cd.has("grapple_is_launch")){
-            
+        if(gr.state == Launch){
+            dpc.seek(tpos.gpToVector(),0.3+gr.load);
+            dpc.arrival(tpos.gpToVector());
             dpc.addForce(new Vector(0,gr.load*grapplePower));
             
             if(gr.load >0)
                 gr.load -= rewind/10;
-            
+            //if load == 0 => rewind 
         }
 
-        
-        if(cl.cd.has("grapple_is_launch") && inp.ca.isPressed(ActionX)){
-            cl.cd.unset("grapple_is_launch");
-            cl.cd.setS("rewind",1);
-           // trace("rewind");
+        if(gr.state == Rewind){
+            dpc.seek(tpos.gpToVector(),0.4);
+            dpc.arrival(tpos.gpToVector());
         }
 
-        if(cl.cd.has("rewind")){
-       /*      gpos.oyr -= 0.3 ;
-            if(gpos.oyr <= 1){
-                gpos.oyr =1;
-                cl.cd.unset("rewind");
-            } */
-
-        }
-
-        if(inp.ca.isDown(ActionX)){
-            
+        if(gr.state == Charge){
+            dpc.seek(tpos.gpToVector(),0.4+gr.load);
+            dpc.arrival(tpos.gpToVector());
             if(gr.load < gr.maxLoad){
                 gr.load += 0.05;
                 //trace("charge");
             }
         }
+
+        if(gr.state == Autorewind){
+            dpc.seek(tpos.gpToVector(),1.2);
+            dpc.arrival(tpos.gpToVector());
+        }
+
+        if(gr.load > gr.maxLoad){
+            gr.load = gr.maxLoad;
+            //trace("ok max load");
+        }
+        
+    }
+
+    @u function grappleCommand(en:echoes.Entity,ac:ActionComponent,gr:GrappleComponent,dpc:DynamicBodyComponent,tpos:TargetGridPosition,cl:CollisionsListener,vas:VelocityAnalogSpeed,inp:InputComponent){
+        gr.home = false;
+        
+        if(dpc.location.distance(tpos.gpToVector())<20)
+            gr.home = true;
+        
+        if(lastHome != gr.home){
+           /*  if(gr.home == false)
+                trace("left home");
+
+            if(gr.home == true)
+                trace("homing"); */
+        }
+        
+        lastHome  = gr.home;
+        lastState = gr.state;
+
+        
+        if(!inp.ca.isDown(ActionX)){
+            if(gr.home == true && gr.state != Launch)
+                gr.state = Idle;
+            
+            if(lastActionX != inp.ca.isDown(ActionX))
+                if(gr.home == true)
+                    gr.state = Launch;
+        }
+
+        if(inp.ca.isDown(ActionX)){
+            gr.state = Charge;
+        }
+
+        if(gr.state == Launch && gr.load <= 0 ){
+            gr.state = Rewind;
+        }
+
+      /*   if(lastActionX != inp.ca.isDown(ActionX)){
+            gr.state = Launch;
+        } */
+
+      /*   if(lastActionX != inp.ca.isDown(ActionX)){
+            if(!inp.ca.isDown(ActionX) && !cl.cd.has("grapple_is_launch")){
+                cl.cd.setS("grapple_is_launch",0.1);
+                gr.state = Launch;
+            }
+        }
+      
+        if(gr.state == Launch && gr.load <= 0 ){
+            gr.state = Rewind;
+        }
+
+        if(gr.state == Launch && inp.ca.isPressed(ActionX)){
+            cl.cd.unset("grapple_is_launch");
+            gr.state = Rewind;
+        }
+        
+        if(gr.state == Launch && cl.onGround){
+            gr.state = Autorewind;
+        } */
 
         if(gr.load > gr.maxLoad){
             gr.load = gr.maxLoad;
@@ -81,7 +137,12 @@ class InteractivesSystem extends echoes.System {
         }
         
         lastActionX = inp.ca.isDown(ActionX);
-
+        
+        if(lastState != gr.state){
+            var s = gr.state;
+            //
+            //trace('State : $s');
+        }
     }
 
     @u function updateInteractCooldown(dt:Float,ic:InteractiveComponent) {
@@ -95,9 +156,13 @@ class InteractivesSystem extends echoes.System {
     }
 
 
-    @u function playerThrowCatchable(gr:GrappleComponent,inp:InputComponent,ac:ActionComponent,vc:VelocityComponent){
-        if(ac.grab && inp.ca.isPressed(ActionX)){
+    @u function playerThrowCatchable(gr:GrappleComponent,inp:InputComponent,ac:ActionComponent,vc:VelocityComponent,cl:CollisionsListener){
+        if(ac.grab && !inp.ca.isDown(ActionX)){
+           
+            ac.grab = false;
             var head = ALL_CATCHABLE.entities.head;
+            gr.load = 0 ;
+            cl.cd.setS("has_drop",0.001);
 
             while (head != null){
                 var catchable = head.value;
@@ -114,7 +179,6 @@ class InteractivesSystem extends echoes.System {
     @u function catchableIsGrabbedByPlayer(en:echoes.Entity,catchable:CatchableFlag,cl:CollisionsListener) {
         if(cl.onInteract){
             var head = ALL_GRAPPLE.entities.head;
-    
             while (head != null){
                 var player = head.value;
                 var playerAc:ActionComponent  = player.get(ActionComponent);
@@ -146,8 +210,8 @@ class InteractivesSystem extends echoes.System {
     }
 
     function throwObject(en:echoes.Entity,vc:VelocityComponent){ 
-        en.get(VelocityAnalogSpeed).xSpeed = vc.dx * 20;
-        en.get(VelocityAnalogSpeed).ySpeed = -2;
+        en.get(VelocityAnalogSpeed).xSpeed = 0;
+        en.get(VelocityAnalogSpeed).ySpeed = 0;
     }
 
 }

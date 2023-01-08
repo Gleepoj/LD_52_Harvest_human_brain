@@ -1,6 +1,7 @@
 package aleiiioa.systems.renderer;
 
 //import aleiiioa.components.core.SpriteExtension;
+import aleiiioa.components.logic.ActionComponent;
 import h3d.Vector;
 import aleiiioa.components.logic.GrappleComponent;
 import aleiiioa.components.core.collision.CollisionsListener;
@@ -43,10 +44,16 @@ class SpriteExtensionFx extends System {
         }   */
     }
 
-    @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,gr:GrappleComponent) {
+    @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,ac:ActionComponent,gr:GrappleComponent) {
        // var col:Vector = new Vector(gr.load,se.baseColor.g,se.baseColor.b);
        // spr.colorize(col.toColor());
-       
+       if(ac.grab == true){
+        spr.colorize(0x008e68);
+       }
+
+       if(ac.grab == false){
+        spr.colorize(0x022c21);
+       }
     }
    
 }

@@ -45,6 +45,10 @@ class Aleiiioa extends Game {
 		for (cp in level.data.l_Entities.all_ChouxPeteur){
 			EntityBuilders.chouxPeteur(cp.cx,cp.cy);
 		}
+
+		for (sp in level.data.l_Entities.all_SpawnPoint){
+			EntityBuilders.spawnPoint(sp.cx,sp.cy);
+		}
 		
 		//Collision
 		Workflow.addSystem(new GarbageCollectionSystem());

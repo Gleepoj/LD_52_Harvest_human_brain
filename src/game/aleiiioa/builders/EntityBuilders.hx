@@ -1,6 +1,11 @@
 package aleiiioa.builders;
 
 
+
+import aleiiioa.components.logic.SpawnerPointComponent;
+import aleiiioa.components.flags.hierarchy.TargetedFlag;
+import aleiiioa.components.flags.hierarchy.TargeterFlag;
+
 import aleiiioa.components.flags.physics.TopDownPhysicsFlag;
 import aleiiioa.components.flags.physics.DynamicBodyFlag;
 import aleiiioa.components.flags.physics.KinematicBodyFlag;
@@ -60,6 +65,37 @@ class EntityBuilders {
         // new echoes.Entity().add(pos,vas,vc,cl,spr,sq,se,ic,em,yarn,pnj,body);
     }
 
+    public static function spawnPoint(cx:Int,cy:Int) {
+        //Physics Component
+        var pos = new GridPosition(cx,cy);
+        var cl  = new CollisionsListener();
+        
+        //Rendering Component
+        var spr = new SpriteComponent(D.tiles.Square);
+        spr.pivot.setCenterRatio(0.5,0.5);
+        var sq  = new SquashComponent();
+        var se  = new SpriteExtension();
+        var bb  = new BoundingBox(spr);
+        se.baseColor = new Vector(0.3,0.3,0.9);
+
+        var spp = new SpawnerPointComponent();
+
+        //Logic and Dialog Component
+        //var ic    = new InteractiveComponent();
+        //var em    = new EmitterComponent();
+        //var yarn  = new DialogReferenceComponent(yarnDialogName,pos.attachX,pos.attachY);
+        
+        //Flags
+        //var pnj   = new PNJFlag();
+        //var body  = new BodyFlag();   
+        //var catchable = new CatchableFlag();
+        
+        
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,spp);
+        // Uncomment next entity creation and comment previous one to remove catchable behavior 
+        // new echoes.Entity().add(pos,vas,vc,cl,spr,sq,se,ic,em,yarn,pnj,body);
+    }
+    
     public static function chouxPeteur(cx:Int,cy:Int) {
 
         //Physics Component
@@ -101,6 +137,7 @@ class EntityBuilders {
         
         //Hierarchy Component and Flag (to attach any entity depending on player position)
         var mpos   = new MasterGridPosition(cx,cy);
+        var tpos   = new TargetGridPosition(cx,cy);
         var master = new MasterFlag();
 
         //Rendering Component
@@ -123,13 +160,17 @@ class EntityBuilders {
         var body   = new BodyFlag();   
         var player = new PlayerFlag();
         var kinematic = new KinematicBodyFlag();
+        var targeted = new TargetedFlag();
         var td = new TopDownPhysicsFlag();
 
         
-        new echoes.Entity().add(pos,vas,vc,cl,mpos,spr,bb,sq,se,ic,em,ac,inp,body,player,master,kinematic,td);
+        new echoes.Entity().add(pos,vas,vc,cl,tpos,mpos,spr,bb,sq,se,ic,em,ac,inp,body,player,master,kinematic,td,targeted);
 
         //Grapple 
          
+         var mpos   = new MasterGridPosition(cx,cy);
+         var master = new MasterFlag();
+
          //Physics Component
          var pos = new GridPosition(cx,cy+1);
          var vas = new VelocityAnalogSpeed(0,0);
@@ -157,11 +198,12 @@ class EntityBuilders {
          //Flags 
          var body   = new BodyFlag(); 
          var sw     = new DynamicBodyComponent();
-         //var kinematic = new KinematicBodyFlag();
-         var dyn = new DynamicBodyFlag();  
-         //var player = new PlayerFlag();
+         
+         var dyn = new DynamicBodyFlag();
+         var targeter = new TargeterFlag();  
+        
 
-         new echoes.Entity().add(pos,vas,vc,sw,cl,mpos,spr,bb,gr,sq,se,ic,em,ac,inp,body,dyn);
+         new echoes.Entity().add(pos,vas,vc,sw,cl,tpos,mpos,master,spr,bb,gr,sq,se,ic,em,ac,inp,body,dyn,targeter);
 
 
     }

@@ -46,6 +46,14 @@ enum AreaInfluence {
 enum abstract LevelMark(Int) to Int {
 	var Coll_Wall;
 }
+
+enum abstract GrappleState(String) to String {
+	var Idle;
+	var Charge;
+	var Launch;
+	var Rewind;
+	var Autorewind;
+}
 	
 
 enum abstract LevelSubMark(Int) to Int {
