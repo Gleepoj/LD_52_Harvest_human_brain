@@ -224,7 +224,7 @@ class EntityBuilders {
          var master = new MasterFlag();
 
          //Physics Component
-         var pos = new GridPosition(cx,cy+1);
+         var pos = new GridPosition(cx,cy+6);
          var vas = new VelocityAnalogSpeed(0,0);
          var vc  = new VelocityComponent(true,true);
          var cl  = new CollisionsListener();

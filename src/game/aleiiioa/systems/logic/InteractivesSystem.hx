@@ -46,8 +46,8 @@ class InteractivesSystem extends echoes.System {
     @a function onGrappleAdded(en:echoes.Entity,gr:GrappleComponent,spr:SpriteComponent){
         spr.set(Assets.drone);
         spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_open,1,3);
-        //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_close,3,2);
-        //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_release,3,2);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_close,1,3);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_release,1,3);
         //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.grab,1);
         //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.docked,1);
         //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.load,1,1);
@@ -63,7 +63,7 @@ class InteractivesSystem extends echoes.System {
             }
         }
         if(inp.ca.isDown(ActionX)){
-            if(lastHome == true){
+            if(lastHome == true && droneLastState == Charge){
                 if(!droneIsDocked)
                     launch.state = Load;
                 if(droneIsDocked)
@@ -105,29 +105,23 @@ class InteractivesSystem extends echoes.System {
 
         if(stateChange){
             if(gr.state == Idle){
-            //spr.anim.play(AssetsDictionaries.anim_drone.fly_release);
-            spr.anim.playAndLoop(AssetsDictionaries.anim_drone.fly_release);
-            
-            //spr.anim.loop();
+                spr.anim.playAndLoop(AssetsDictionaries.anim_drone.fly_release);
             }
             if(gr.state == Launch){
                 spr.anim.playAndLoop(AssetsDictionaries.anim_drone.fly_open);
-            
             }
 
             if(gr.state == Rewind){
-            if(ac.grab == true)
-                spr.anim.playAndLoop(AssetsDictionaries.anim_drone.fly_close);
-            
-            if(ac.grab == false)
-                spr.anim.playAndLoop(AssetsDictionaries.anim_drone.fly_release);
+                if(ac.grab == true)
+                    spr.anim.playAndLoop(AssetsDictionaries.anim_drone.fly_close);
                 
+                if(ac.grab == false)
+                    spr.anim.playAndLoop(AssetsDictionaries.anim_drone.fly_release);
             }
 
             if(gr.state == Charge){
                 spr.anim.play(AssetsDictionaries.anim_drone.load);
                 spr.anim.stopOnLastFrame();
-
             }
 
             if(gr.state == Autorewind){
@@ -136,7 +130,8 @@ class InteractivesSystem extends echoes.System {
         
                 if(ac.grab == false)
                     spr.anim.play(AssetsDictionaries.anim_drone.fly_release);
-    */        }
+                */       
+            }
 
             if(gr.load > gr.maxLoad){
             
@@ -148,22 +143,12 @@ class InteractivesSystem extends echoes.System {
     @u function grappleStateAction(en:echoes.Entity,gr:GrappleComponent,tpos:TargetGridPosition,dpc:DynamicBodyComponent,cl:CollisionsListener,inp:InputComponent){
         
         if(gr.state == Idle){
-            dpc.seek(tpos.gpToVector(),0.3);
+            dpc.seek(tpos.gpToVector(),0.8);
             dpc.arrival(tpos.gpToVector());
-        }
-
-        if(gr.state == Launch){
-            dpc.seek(tpos.gpToVector(),0.3+gr.load);
-            dpc.arrival(tpos.gpToVector());
-            dpc.addForce(new Vector(0,gr.load*grapplePower));
-            
-            if(gr.load >0)
-                gr.load -= rewind/10;
-            //if load == 0 => rewind 
         }
 
         if(gr.state == Rewind){
-            dpc.seek(tpos.gpToVector(),0.4);
+            dpc.seek(tpos.gpToVector(),1.4);
             dpc.arrival(tpos.gpToVector());
         }
 
@@ -179,6 +164,18 @@ class InteractivesSystem extends echoes.System {
         if(gr.state == Autorewind){
             dpc.seek(tpos.gpToVector(),1.2);
             dpc.arrival(tpos.gpToVector());
+        }
+
+        if(gr.state == Launch){
+           
+            
+            dpc.seek(tpos.gpToVector(),0.3+gr.load);
+            dpc.arrival(tpos.gpToVector());
+            dpc.addForce(new Vector(0,gr.load*grapplePower));
+            
+            if(gr.load >0)
+                gr.load -= rewind/10;
+            
         }
 
         if(gr.load > gr.maxLoad){
@@ -200,29 +197,25 @@ class InteractivesSystem extends echoes.System {
         droneLastState = gr.state;
 
         if(lastHome != gr.home){
-           /*  if(gr.home == false)
-                trace("left home");
-
-            if(gr.home == true)
-                trace("homing"); */
+  
         }
         
 
 
         
         if(!inp.ca.isDown(ActionX)){
-            if(gr.home == true && gr.state != Launch)
+            if(gr.home == false && gr.state != Launch)
                 gr.state = Idle;
             
             if(lastActionX != inp.ca.isDown(ActionX)){
-                if(gr.home == true){
+                if(gr.state == Charge){
                     gr.state = Launch;
                     droneIsReleased = true;
                 }
             }
         }
 
-        if(inp.ca.isDown(ActionX) && gr.home){
+        if(inp.ca.isDown(ActionX) && gr.home && !ac.grab){
             gr.state = Charge;
         }
 
@@ -237,15 +230,13 @@ class InteractivesSystem extends echoes.System {
         if(gr.load >= gr.maxLoad){
             gr.load = gr.maxLoad;
             droneIsDocked = true;
-            //trace("max load");
         }
         
         lastActionX = inp.ca.isDown(ActionX);
         
         if(droneLastState != gr.state){
             var s = gr.state;
-            //
-            //trace('State : $s');
+           // trace('State : $s');
         }
     }
 
@@ -262,8 +253,9 @@ class InteractivesSystem extends echoes.System {
 
     @u function playerThrowCatchable(gr:GrappleComponent,inp:InputComponent,ac:ActionComponent,vc:VelocityComponent,cl:CollisionsListener){
         if(ac.grab && !inp.ca.isDown(ActionX)){
-           
             ac.grab = false;
+            trace("release gille");
+            trace(gr.state);
             var head = ALL_CATCHABLE.entities.head;
             gr.load = 0 ;
             cl.cd.setS("has_drop",0.001);

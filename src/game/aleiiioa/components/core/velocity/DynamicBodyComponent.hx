@@ -59,6 +59,7 @@ class DynamicBodyComponent {
     }
 
     public function addForce(f:Vector){
+       
         var a = acceleration.clone();
         var c = VectorUtils.clampVector(f,maxSpeed);
         //if(c.length()> 3)
@@ -124,14 +125,15 @@ class DynamicBodyComponent {
     public function accelerationFriction(){
         var af = new Vector();
         var accel = new Vector(M.maxPrecision(acceleration.x,2),M.maxPrecision(acceleration.y,2),0,0);
-        var f = M.fclamp(friction,0,maxSpeed); 
+        var f = M.fclamp(friction,0.01,maxSpeed); 
         
         af.lerp(zero,accel,f);
         
         acceleration = af;
        // acceleration = accel;
 
-        if(af.length()> 4){
+        if(af.length()> 3){
+            acceleration = zero;
             //trace("friction issue");
             //trace(accel.toString());
             //trace(af.toString());
