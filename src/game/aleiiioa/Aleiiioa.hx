@@ -49,7 +49,15 @@ class Aleiiioa extends Game {
 		for (sp in level.data.l_Entities.all_SpawnPoint){
 			EntityBuilders.spawnPoint(sp.cx,sp.cy);
 		}
+
+		for (bs in level.data.l_Entities.all_BrainSucker){
+			EntityBuilders.brainSucker(bs.cx,bs.cy);
+		}
 		
+		for (met in level.data.l_Entities.all_Methanizer){
+			EntityBuilders.methanizer(met.cx,met.cy);
+		}
+
 		//Collision
 		Workflow.addSystem(new GarbageCollectionSystem());
 		Workflow.addSystem(new CollisionsListenerActualizer());

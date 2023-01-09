@@ -261,8 +261,8 @@ class InteractivesSystem extends echoes.System {
 
         if(ac.grab && !inp.ca.isDown(ActionX)){
             ac.grab = false;
-            trace("release gille");
-            trace(gr.state);
+            //trace("release gille");
+            //trace(gr.state);
             var head = ALL_CATCHABLE.entities.head;
             gr.load = 0 ;
             cl.cd.setS("has_drop",0.001);
