@@ -132,7 +132,7 @@ class DynamicBodyComponent {
         acceleration = af;
        // acceleration = accel;
 
-        if(af.length()> 3){
+        if(af.length()> 4){
             acceleration = zero;
             //trace("friction issue");
             //trace(accel.toString());

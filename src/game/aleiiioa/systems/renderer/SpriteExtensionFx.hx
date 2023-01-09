@@ -1,6 +1,8 @@
 package aleiiioa.systems.renderer;
 
 //import aleiiioa.components.core.SpriteExtension;
+import aleiiioa.components.logic.BrainSuckerComponent;
+import aleiiioa.components.logic.MethanizerComponent;
 import aleiiioa.components.logic.ActionComponent;
 import h3d.Vector;
 import aleiiioa.components.logic.GrappleComponent;
@@ -56,5 +58,14 @@ class SpriteExtensionFx extends System {
         spr.colorize(0x022c21);
        } */
     }
-   
+    @u function colorMethanizer(spr:SpriteComponent,se:SpriteExtension,met:MethanizerComponent) {
+        var col = new Vector(se.baseColor.r,met.energyOutput,se.baseColor.b);
+        spr.colorize(col.toColor());
+    }
+    
+    @u function colorBrain(spr:SpriteComponent,se:SpriteExtension,br:BrainSuckerComponent) {
+        var col = new Vector(br.accuracy,se.baseColor.g,se.baseColor.b);
+        spr.colorize(col.toColor());
+    }
+
 }

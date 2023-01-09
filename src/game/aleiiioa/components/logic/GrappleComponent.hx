@@ -5,7 +5,7 @@ class GrappleComponent {
     public var load:Float = 0;
     public var state:GrappleState = Idle;
     public var home:Bool = true;
-    
+    public var bonus:Float = 0.;
     public function new() {
         
     }

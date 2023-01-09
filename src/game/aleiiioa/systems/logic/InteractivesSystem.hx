@@ -21,7 +21,8 @@ class InteractivesSystem extends echoes.System {
     var ALL_GRAPPLE :View<GridPosition,GrappleComponent>;
     var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent>;
     var lastActionX:Bool = false;
-    var grapplePower:Float = 3;
+    var baseGrapplePower:Float = 3.;
+    var grapplePower:Float = 3.;
     var rewind:Float = 0.05;
     var droneLastState:GrappleState;
     var droneIsDocked:Bool = false;
@@ -140,7 +141,10 @@ class InteractivesSystem extends echoes.System {
         }
         
     }
-    
+    @u function grapplePoweUpdate(met:MethanizerComponent) {
+        grapplePower = baseGrapplePower + met.energyOutput;
+    }
+
     @u function grappleStateAction(en:echoes.Entity,gr:GrappleComponent,tpos:TargetGridPosition,dpc:DynamicBodyComponent,cl:CollisionsListener,inp:InputComponent){
         
         if(gr.state == Idle){
@@ -149,7 +153,9 @@ class InteractivesSystem extends echoes.System {
         }
 
         if(gr.state == Rewind){
-            dpc.seek(tpos.gpToVector(),1.4);
+            //if(droneLastState != Rewind)
+              //  trace(grapplePower);
+            dpc.seek(tpos.gpToVector(),1.2+gr.bonus);
             dpc.arrival(tpos.gpToVector());
         }
 
@@ -158,6 +164,7 @@ class InteractivesSystem extends echoes.System {
             dpc.arrival(tpos.gpToVector());
             if(gr.load < gr.maxLoad){
                 gr.load += 0.05;
+                gr.bonus = 0.;
                 //trace("charge");
             }
         }
@@ -191,7 +198,7 @@ class InteractivesSystem extends echoes.System {
         droneIsDocked = false;
         droneIsReleased = false;
         
-        if(dpc.location.distance(tpos.gpToVector())<20)
+        if(dpc.location.distance(tpos.gpToVector())<30)
             gr.home = true;
         
         lastHome  = gr.home;
@@ -212,6 +219,7 @@ class InteractivesSystem extends echoes.System {
                 if(gr.state == Charge){
                     gr.state = Launch;
                     droneIsReleased = true;
+                    
                 }
             }
         }
@@ -222,6 +230,7 @@ class InteractivesSystem extends echoes.System {
 
         if(inp.ca.isDown(ActionX) && !gr.home){
             gr.state = Rewind;
+            gr.bonus = gr.load;
         }
 
         if(gr.state == Launch && gr.load <= 0 ){

@@ -1,5 +1,10 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.components.logic.BrainSuckerComponent;
+import aleiiioa.components.core.rendering.SquashComponent;
+import h3d.Vector;
+import aleiiioa.components.core.rendering.SpriteExtension;
+import aleiiioa.components.logic.MethanizerComponent;
 import aleiiioa.components.core.rendering.SpriteComponent;
 import aleiiioa.components.core.velocity.VelocityAnalogSpeed;
 import aleiiioa.builders.EntityBuilders;
@@ -16,9 +21,17 @@ class EntityLogicSystem  extends echoes.System{
     public var lastSpawnState:Bool = false;
     public var level(get,never) : Level; inline function get_level() return Game.ME.level;
 
+    var sysEnergyOutput:Float = 0.; // nb de gilles dans methaniseur;
+    var sysEnergyConsumption:Float = 0.001; // nb de gilles dans IA;
+
+    var addCorpse:Bool = false;
+    var addBrain:Bool = false;
+    var addEscape:Bool = false;
+
     public function new() {
         
     }
+
     @u function onGilleAdded(spr:SpriteComponent,gil:GilleFlag){
         spr.set(Assets.gille);
         spr.scale(2);
@@ -39,26 +52,90 @@ class EntityLogicSystem  extends echoes.System{
     @u function gillecollide(en:echoes.Entity,pos:GridPosition,gille:GilleFlag) {
             if(level.hasMethaniseur(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
                 en.add(new IsDiedFlag());
+                addCorpse = true;
                 //trace(" is methanize ");
             }
 
             if(level.hasShredder(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
                 en.add(new IsDiedFlag());
+                addBrain = true;
                 //trace(" is shred");
             }
 
             if(level.hasMetro(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
                 en.add(new IsDiedFlag());
+                addEscape = true;
                 //trace(" is on Metro");
             }
     }
     
+    @u function methanizerUpdate(met:MethanizerComponent,spr:SpriteComponent,se:SpriteExtension,sq:SquashComponent){
+        met.energyConsomption = sysEnergyConsumption;
+
+        if(addCorpse){
+            addCorpse = false;
+            met.corpse += 1;
+            sq.squashX *=1.6;
+            sq.squashY *=0.8;
+            //trace(met.corpse);
+            //trace("add corpse");
+            //trace(met.energyOutput);
+        }
+
+        met.digestion -= sysEnergyConsumption;
+
+        if(met.digestion <=0 ){
+           met.corpse -= 1;
+           met.digestion = met.digestTime;
+           sq.squashX *=0.3;
+           sq.squashY *=1.8;
+           //trace("digest");
+        }
+
+        met.energyOutput = 1-(1/met.corpse);
+        sysEnergyOutput = met.energyOutput;
+        //var col = new Vector(se.baseColor.r,se.baseColor.b,se.baseColor.g + met.energyOutput);
+        //spr.colorize(col.toColor());
+
+    }
+
+    @u function brainUpdate(br:BrainSuckerComponent,spr:SpriteComponent,se:SpriteExtension,sq:SquashComponent){
+        //met.energyConsomption = sysEnergyConsumption;
+
+        var factor =  0.01*sysEnergyOutput;
+
+        if(addBrain){
+            addBrain = false;
+            br.brains += 1;
+            sq.squashX *=1.6;
+            sq.squashY *=0.8;
+           
+        }
+
+        if(br.brains > 1){
+            br.digestion -= factor;
+        }
+        //met.digestion -= sysEnergyConsumption;
+
+        if(br.digestion <=1 ){
+           br.brains -= 1;
+           br.digestion = br.digestTime;
+           sq.squashX *=0.3;
+           sq.squashY *=1.8;
+           trace("digest brain");
+           trace('factor $factor');
+        }
+
+        br.accuracy =  1-(1/br.brains);
+        br.energyConsumption = br.brains;
+
+    }
 
 
     
     @u function spawnerUpdate(pos:GridPosition,spp:SpawnerPointComponent,cl:CollisionsListener){
         
-
+        
         if(!cl.cd.has("spawn_cooldown")){
             cl.cd.setS("spawn_cooldown",spp.spawnRest);
             if(lastSpawnState == true){
