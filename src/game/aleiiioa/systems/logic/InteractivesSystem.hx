@@ -27,6 +27,7 @@ class InteractivesSystem extends echoes.System {
     var droneIsDocked:Bool = false;
     var droneIsReleased:Bool = false;
     var lastHome:Bool;
+    var diedWithoutUnlink:Bool = false;
     
 
     public function new() {
@@ -252,6 +253,12 @@ class InteractivesSystem extends echoes.System {
 
 
     @u function playerThrowCatchable(gr:GrappleComponent,inp:InputComponent,ac:ActionComponent,vc:VelocityComponent,cl:CollisionsListener){
+        //if(ac.grab && !en.exists())
+        if(diedWithoutUnlink){
+            diedWithoutUnlink = false;
+            ac.grab = false;
+        }
+
         if(ac.grab && !inp.ca.isDown(ActionX)){
             ac.grab = false;
             trace("release gille");
@@ -273,6 +280,7 @@ class InteractivesSystem extends echoes.System {
     }
 
     @u function catchableIsGrabbedByPlayer(en:echoes.Entity,catchable:CatchableFlag,cl:CollisionsListener) {
+
         if(cl.onInteract){
             var head = ALL_GRAPPLE.entities.head;
             while (head != null){
@@ -290,6 +298,12 @@ class InteractivesSystem extends echoes.System {
         }
     }
     
+    @r function onRemoveGrabbedGilles(en:echoes.Entity,catchable:CatchableFlag,g:GilleFlag){
+        if(en.exists(ChildFlag)){
+            //trace("Died without unlink");
+            diedWithoutUnlink = true;
+        }
+    }
 
     function linkObject(en:echoes.Entity,mgp:MasterGridPosition) {
         en.add(new GridPositionOffset(0,1));
