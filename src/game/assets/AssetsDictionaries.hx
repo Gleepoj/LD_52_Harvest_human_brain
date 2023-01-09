@@ -13,4 +13,6 @@ package assets;
 class AssetsDictionaries {
 	public static var tiles =  dn.heaps.assets.Aseprite.getDict(hxd.Res.atlas.tiles);
 	public static var anim_gille =  dn.heaps.assets.Aseprite.getDict(hxd.Res.atlas.gilles);
+	public static var anim_drone =  dn.heaps.assets.Aseprite.getDict(hxd.Res.atlas.drone);
+	public static var anim_launcher =  dn.heaps.assets.Aseprite.getDict(hxd.Res.atlas.launcher);
 }

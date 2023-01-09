@@ -1,5 +1,6 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.components.core.rendering.SpriteComponent;
 import aleiiioa.builders.UIBuilders;
 import h3d.Vector;
 import echoes.Entity;
@@ -22,20 +23,135 @@ class InteractivesSystem extends echoes.System {
     var lastActionX:Bool = false;
     var grapplePower:Float = 3;
     var rewind:Float = 0.05;
-    var lastState:GrappleState;
+    var droneLastState:GrappleState;
+    var droneIsDocked:Bool = false;
+    var droneIsReleased:Bool = false;
     var lastHome:Bool;
+    
 
     public function new() {
         UIBuilders.slider("GrapplePower",function() return  grapplePower, function(v)  grapplePower = v, 0.5,5);
         UIBuilders.slider("RewindPower",function() return  rewind, function(v)  rewind = v, 0.05,0.9);
     }
-   
+
+    @a function onLauncherAdded(en:echoes.Entity,pl:PlayerFlag,spr:SpriteComponent){
+        spr.set(Assets.launcher);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.idle,1);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.recall,1);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.home,1);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.load,1);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.docked,1);
+    }
+
+    @a function onGrappleAdded(en:echoes.Entity,gr:GrappleComponent,spr:SpriteComponent){
+        spr.set(Assets.drone);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_open,1,3);
+        //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_close,3,2);
+        //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_release,3,2);
+        //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.grab,1);
+        //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.docked,1);
+        //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.load,1,1);
+        //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.release,1);
+        
+    }
+
+    @u function launcherState(en:echoes.Entity,inp:InputComponent,launch:LauncherComponent){
+        if(!inp.ca.isDown(ActionX)){
+            launch.state = Idle;
+            if(droneIsReleased){
+                launch.state = Expulse;
+            }
+        }
+        if(inp.ca.isDown(ActionX)){
+            if(lastHome == true){
+                if(!droneIsDocked)
+                    launch.state = Load;
+                if(droneIsDocked)
+                    launch.state = Docked;
+            }
+            if(lastHome == false){
+                launch.state = Recall;
+            }
+
+        }
+    }
+    
+    @u function launcherAnim(en:echoes.Entity,pl:PlayerFlag,spr:SpriteComponent,launch:LauncherComponent){
+        if(launch.state == Idle){
+            spr.anim.play(AssetsDictionaries.anim_launcher.idle);
+        }
+           
+        if(launch.state == Load){
+            spr.anim.play(AssetsDictionaries.anim_launcher.load);
+            spr.anim.stopOnLastFrame();
+        }
+        
+        if(launch.state == Docked){
+            spr.anim.play(AssetsDictionaries.anim_launcher.docked);
+        }
+        
+        if(launch.state == Recall){
+            spr.anim.play(AssetsDictionaries.anim_launcher.recall);
+        }
+        
+        if(launch.state == Expulse){
+            spr.anim.play(AssetsDictionaries.anim_launcher.home);
+        }
+
+    }
+
+    @u function grappleStateAnim(en:echoes.Entity,gr:GrappleComponent,tpos:TargetGridPosition,spr:SpriteComponent,ac:ActionComponent){
+        var stateChange:Bool = gr.state != droneLastState; 
+
+        if(stateChange){
+            if(gr.state == Idle){
+            //spr.anim.play(AssetsDictionaries.anim_drone.fly_release);
+            spr.anim.playAndLoop(AssetsDictionaries.anim_drone.fly_release);
+            
+            //spr.anim.loop();
+            }
+            if(gr.state == Launch){
+                spr.anim.playAndLoop(AssetsDictionaries.anim_drone.fly_open);
+            
+            }
+
+            if(gr.state == Rewind){
+            if(ac.grab == true)
+                spr.anim.playAndLoop(AssetsDictionaries.anim_drone.fly_close);
+            
+            if(ac.grab == false)
+                spr.anim.playAndLoop(AssetsDictionaries.anim_drone.fly_release);
+                
+            }
+
+            if(gr.state == Charge){
+                spr.anim.play(AssetsDictionaries.anim_drone.load);
+                spr.anim.stopOnLastFrame();
+
+            }
+
+            if(gr.state == Autorewind){
+                /* if(ac.grab == true)
+                    spr.anim.play(AssetsDictionaries.anim_drone.fly_close);
+        
+                if(ac.grab == false)
+                    spr.anim.play(AssetsDictionaries.anim_drone.fly_release);
+    */        }
+
+            if(gr.load > gr.maxLoad){
+            
+            }
+        }
+        
+    }
+    
     @u function grappleStateAction(en:echoes.Entity,gr:GrappleComponent,tpos:TargetGridPosition,dpc:DynamicBodyComponent,cl:CollisionsListener,inp:InputComponent){
         
         if(gr.state == Idle){
             dpc.seek(tpos.gpToVector(),0.3);
             dpc.arrival(tpos.gpToVector());
         }
+
         if(gr.state == Launch){
             dpc.seek(tpos.gpToVector(),0.3+gr.load);
             dpc.arrival(tpos.gpToVector());
@@ -74,10 +190,15 @@ class InteractivesSystem extends echoes.System {
 
     @u function grappleCommand(en:echoes.Entity,ac:ActionComponent,gr:GrappleComponent,dpc:DynamicBodyComponent,tpos:TargetGridPosition,cl:CollisionsListener,vas:VelocityAnalogSpeed,inp:InputComponent){
         gr.home = false;
+        droneIsDocked = false;
+        droneIsReleased = false;
         
         if(dpc.location.distance(tpos.gpToVector())<20)
             gr.home = true;
         
+        lastHome  = gr.home;
+        droneLastState = gr.state;
+
         if(lastHome != gr.home){
            /*  if(gr.home == false)
                 trace("left home");
@@ -86,59 +207,42 @@ class InteractivesSystem extends echoes.System {
                 trace("homing"); */
         }
         
-        lastHome  = gr.home;
-        lastState = gr.state;
+
 
         
         if(!inp.ca.isDown(ActionX)){
             if(gr.home == true && gr.state != Launch)
                 gr.state = Idle;
             
-            if(lastActionX != inp.ca.isDown(ActionX))
-                if(gr.home == true)
+            if(lastActionX != inp.ca.isDown(ActionX)){
+                if(gr.home == true){
                     gr.state = Launch;
+                    droneIsReleased = true;
+                }
+            }
         }
 
-        if(inp.ca.isDown(ActionX)){
+        if(inp.ca.isDown(ActionX) && gr.home){
             gr.state = Charge;
         }
 
+        if(inp.ca.isDown(ActionX) && !gr.home){
+            gr.state = Rewind;
+        }
+
         if(gr.state == Launch && gr.load <= 0 ){
-            gr.state = Rewind;
+            gr.state = Idle;
         }
 
-      /*   if(lastActionX != inp.ca.isDown(ActionX)){
-            gr.state = Launch;
-        } */
-
-      /*   if(lastActionX != inp.ca.isDown(ActionX)){
-            if(!inp.ca.isDown(ActionX) && !cl.cd.has("grapple_is_launch")){
-                cl.cd.setS("grapple_is_launch",0.1);
-                gr.state = Launch;
-            }
-        }
-      
-        if(gr.state == Launch && gr.load <= 0 ){
-            gr.state = Rewind;
-        }
-
-        if(gr.state == Launch && inp.ca.isPressed(ActionX)){
-            cl.cd.unset("grapple_is_launch");
-            gr.state = Rewind;
-        }
-        
-        if(gr.state == Launch && cl.onGround){
-            gr.state = Autorewind;
-        } */
-
-        if(gr.load > gr.maxLoad){
+        if(gr.load >= gr.maxLoad){
             gr.load = gr.maxLoad;
+            droneIsDocked = true;
             //trace("max load");
         }
         
         lastActionX = inp.ca.isDown(ActionX);
         
-        if(lastState != gr.state){
+        if(droneLastState != gr.state){
             var s = gr.state;
             //
             //trace('State : $s');

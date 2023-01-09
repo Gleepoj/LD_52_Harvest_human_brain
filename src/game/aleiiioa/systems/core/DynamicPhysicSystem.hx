@@ -43,8 +43,7 @@ class  DynamicPhysicSystem extends System {
     }
 
     @u function updateVehicule(dpc:DynamicBodyComponent,gp:GridPosition){
-        
-                 
+                   
         dpc.location.x = gp.attachX;
         dpc.location.y = gp.attachY;
              

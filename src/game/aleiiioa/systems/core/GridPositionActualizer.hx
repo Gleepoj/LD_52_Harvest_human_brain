@@ -28,7 +28,7 @@ class GridPositionActualizer extends echoes.System {
 		
 	@u function updateTargetedGridPosition(tgp:TargetGridPosition,gp:GridPosition,tflag:TargetedFlag) {
 	  tgp.cx = gp.cx;
-	  tgp.cy = gp.cy+1;
+	  tgp.cy = gp.cy+2;
 	  tgp.xr = gp.xr;
 	  tgp.yr = gp.yr;
   	}

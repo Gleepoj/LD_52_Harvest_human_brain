@@ -17,6 +17,8 @@ class Assets {
 	/** Main atlas **/
 	public static var tiles : SpriteLib;
 	public static var gille : SpriteLib;
+	public static var launcher:SpriteLib;
+	public static var drone : SpriteLib;
 
 	/** LDtk world data **/
 	public static var worldData : World;
@@ -36,12 +38,14 @@ class Assets {
 		fontPixel = new hxd.res.BitmapFont( hxd.Res.fonts.pixel_unicode_regular_12_xml.entry ).toFont();
 		// Texture
 		texture = hxd.Res.texture.test_alpha.toTile();
-		alpha = hxd.Res.texture.alpha_channel.toTile();	
-		smoke = hxd.Res.texture.smoke.toTile();
+		alpha   = hxd.Res.texture.alpha_channel.toTile();	
+		smoke   = hxd.Res.texture.smoke.toTile();
 		
 		// build sprite atlas directly from Aseprite file
-		tiles = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.tiles.toAseprite());
-		gille = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.gilles.toAseprite());
+		tiles    = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.tiles.toAseprite());
+		gille    = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.gilles.toAseprite());
+		launcher = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.launcher.toAseprite());
+		drone    = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.drone.toAseprite());
 
 		// CastleDB file hot reloading
 		#if debug

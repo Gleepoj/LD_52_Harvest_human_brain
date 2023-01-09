@@ -2,6 +2,7 @@ package aleiiioa.builders;
 
 
 
+import aleiiioa.components.logic.LauncherComponent;
 import hxd.Math;
 import aleiiioa.components.logic.SpawnerPointComponent;
 import aleiiioa.components.flags.hierarchy.TargetedFlag;
@@ -188,11 +189,14 @@ class EntityBuilders {
         var master = new MasterFlag();
 
         //Rendering Component
-        var spr = new SpriteComponent(D.tiles.fxCircle15);
+        var spr = new SpriteComponent(D.tiles.gille);
         spr.pivot.setCenterRatio(0.5,0.5);
+       
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
-        se.baseColor = new Vector(0.5,0.2,0.6);
+        se.sprScaleX = 2.;
+        se.sprScaleY = 2.;
+        se.baseColor = new Vector(1,1,1);
         var bb  = new BoundingBox(spr);
         
     
@@ -202,6 +206,7 @@ class EntityBuilders {
         var em = new EmitterComponent();
         var ac = new ActionComponent();
         var inp= new InputComponent();
+        var launcher = new LauncherComponent();
         
         //Flags
         var body   = new BodyFlag();   
@@ -211,7 +216,7 @@ class EntityBuilders {
         var td = new TopDownPhysicsFlag();
 
         
-        new echoes.Entity().add(pos,vas,vc,cl,tpos,mpos,spr,bb,sq,se,ic,em,ac,inp,body,player,master,kinematic,td,targeted);
+        new echoes.Entity().add(pos,vas,vc,cl,tpos,mpos,spr,bb,sq,se,ic,em,ac,inp,body,player,master,kinematic,td,launcher,targeted);
 
         //Grapple 
          
@@ -227,12 +232,12 @@ class EntityBuilders {
          //Hierarchy Component and Flag (to attach any entity depending on player position)
 
          //Rendering Component
-         var spr = new SpriteComponent(D.tiles.fxCircle15);
+         var spr = new SpriteComponent(D.tiles.drone);
          spr.pivot.setCenterRatio(0.5,0.5);
          var sq  = new SquashComponent();
          var se  = new SpriteExtension();
          var bb  = new BoundingBox(spr);
-         se.baseColor = new Vector(0,0.2,0.2);
+         se.baseColor = new Vector(1,1,1);
          
      
  

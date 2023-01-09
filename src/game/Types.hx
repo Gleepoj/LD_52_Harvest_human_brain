@@ -54,6 +54,16 @@ enum abstract GrappleState(String) to String {
 	var Rewind;
 	var Autorewind;
 }
+
+enum abstract LauncherState(String) to String {
+	var Idle;
+	var Recall;
+	var Load;
+	var Docked;
+	var Expulse;
+}
+
+
 	
 
 enum abstract LevelSubMark(Int) to Int {
