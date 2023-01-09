@@ -2,6 +2,8 @@ package aleiiioa.builders;
 
 
 
+import aleiiioa.components.logic.StaticBouleComponent;
+import aleiiioa.components.logic.StaticBrainComponent;
 import aleiiioa.components.logic.MethanizerComponent;
 import aleiiioa.components.logic.BrainSuckerComponent;
 import aleiiioa.components.logic.LauncherComponent;
@@ -69,6 +71,50 @@ class EntityBuilders {
         // new echoes.Entity().add(pos,vas,vc,cl,spr,sq,se,ic,em,yarn,pnj,body);
     }
 
+    public static function boule(cx:Int,cy:Int,id:Int) {
+        //Physics Component
+        var pos = new GridPosition(cx,cy);
+        var cl  = new CollisionsListener();
+        
+        //Rendering Component
+        var spr = new SpriteComponent(D.tiles.gille_boule);
+        spr.pivot.setCenterRatio(0.5,0.5);
+        //spr.visible = false;
+        var sq  = new SquashComponent();
+        var se  = new SpriteExtension();
+        var bb  = new BoundingBox(spr);
+        se.baseColor = new Vector(1,1,1);
+
+        var boule = new StaticBouleComponent(id);
+        //var spp = new SpawnerPointComponent();
+        
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,boule);
+
+    }
+
+    public static function brain(cx:Int,cy:Int,id:Int) {
+        //Physics Component
+        var pos = new GridPosition(cx,cy);
+        var cl  = new CollisionsListener();
+        
+        //Rendering Component
+        var spr = new SpriteComponent(D.tiles.brain);
+        spr.pivot.setCenterRatio(0.5,0.5);
+        //spr.visible = false;
+        var sq  = new SquashComponent();
+        var se  = new SpriteExtension();
+        var bb  = new BoundingBox(spr);
+        se.baseColor = new Vector(1,1,1);
+
+        var brain = new StaticBrainComponent(id);
+        //var spp = new SpawnerPointComponent();
+        
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,brain);
+
+    }
+
+    
+    
     public static function spawnPoint(cx:Int,cy:Int) {
         //Physics Component
         var pos = new GridPosition(cx,cy);
@@ -77,6 +123,7 @@ class EntityBuilders {
         //Rendering Component
         var spr = new SpriteComponent(D.tiles.Square);
         spr.pivot.setCenterRatio(0.5,0.5);
+        spr.visible = false;
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
         var bb  = new BoundingBox(spr);
@@ -101,7 +148,7 @@ class EntityBuilders {
         var se  = new SpriteExtension();
         var bb  = new BoundingBox(spr);
 
-        se.baseColor = new Vector(0.3,0.3,0.3);
+        se.baseColor = new Vector(0.5,0.05,0.05);
 
         var brainsucker = new BrainSuckerComponent();
         
@@ -122,7 +169,7 @@ class EntityBuilders {
         var se  = new SpriteExtension();
         var bb  = new BoundingBox(spr);
 
-        se.baseColor = new Vector(0.3,0.5,0.5);
+        se.baseColor = new Vector(0.05,0.5,0.05);
 
         var methanizer = new MethanizerComponent();
         

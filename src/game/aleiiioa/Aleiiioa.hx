@@ -58,6 +58,17 @@ class Aleiiioa extends Game {
 			EntityBuilders.methanizer(met.cx,met.cy);
 		}
 
+		var brainID:Int = 0;
+		for (b in level.data.l_Entities.all_Brain){
+			brainID +=1;
+			EntityBuilders.brain(b.cx,b.cy,brainID);
+		}
+		var bouleID:Int = 0;
+		for (bo in level.data.l_Entities.all_Boule){
+			bouleID += 1;
+			EntityBuilders.boule(bo.cx,bo.cy,bouleID);
+		}
+
 		//Collision
 		Workflow.addSystem(new GarbageCollectionSystem());
 		Workflow.addSystem(new CollisionsListenerActualizer());

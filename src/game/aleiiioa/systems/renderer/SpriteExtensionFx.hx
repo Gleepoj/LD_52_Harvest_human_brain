@@ -1,6 +1,8 @@
 package aleiiioa.systems.renderer;
 
 //import aleiiioa.components.core.SpriteExtension;
+import aleiiioa.components.logic.StaticBouleComponent;
+import aleiiioa.components.logic.StaticBrainComponent;
 import aleiiioa.components.logic.BrainSuckerComponent;
 import aleiiioa.components.logic.MethanizerComponent;
 import aleiiioa.components.logic.ActionComponent;
@@ -11,6 +13,10 @@ import aleiiioa.components.core.rendering.*;
 import echoes.System;
 
 class SpriteExtensionFx extends System {
+    
+    var NB_BRAIN:Int =0;
+    var NB_BOULE:Int =0;
+
     public function new() {
         
     }
@@ -20,7 +26,30 @@ class SpriteExtensionFx extends System {
             spr.colorize(se.baseColor.toColor());
     }
 
- 
+    @u function getCurrentBoule(met:MethanizerComponent){
+        NB_BOULE = met.corpse;
+    }
+    @u function getCurrentBrain(br:BrainSuckerComponent){
+        NB_BRAIN = br.brains;
+    }
+
+    @u function visibilytybrain(b:StaticBrainComponent,spr:SpriteComponent){
+        if(b.id > NB_BRAIN)
+           spr.visible = false; 
+
+        if(b.id <= NB_BRAIN)
+            spr.visible = true; 
+    }
+
+    @u function visibilytyboule(b:StaticBouleComponent,spr:SpriteComponent){
+        if(b.id > NB_BOULE)
+           spr.visible = false; 
+
+        if(b.id <= NB_BOULE)
+            spr.visible = true; 
+    }
+
+    
 
     @u function collideDebug(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener) {
         spr.colorize(se.baseColor.toColor());
@@ -59,12 +88,12 @@ class SpriteExtensionFx extends System {
        } */
     }
     @u function colorMethanizer(spr:SpriteComponent,se:SpriteExtension,met:MethanizerComponent) {
-        var col = new Vector(se.baseColor.r,met.energyOutput,se.baseColor.b);
+        var col = new Vector(se.baseColor.r,se.baseColor.g+(met.corpse*0.1),se.baseColor.b);
         spr.colorize(col.toColor());
     }
     
     @u function colorBrain(spr:SpriteComponent,se:SpriteExtension,br:BrainSuckerComponent) {
-        var col = new Vector(br.accuracy,se.baseColor.g,se.baseColor.b);
+        var col = new Vector(se.baseColor.r+(br.brains*0.1),se.baseColor.g,se.baseColor.b);
         spr.colorize(col.toColor());
     }
 
