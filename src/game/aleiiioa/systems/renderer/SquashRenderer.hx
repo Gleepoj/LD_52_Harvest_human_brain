@@ -10,7 +10,7 @@ class SquashRenderer extends System {
     }
 
     @u function updateSquash(sq:SquashComponent, cl:CollisionsListener) {
-        if(cl.onFall)
+       /*  if(cl.onFall)
             sq.squashX = 0.90;
 
         if(cl.onJump)
@@ -18,5 +18,5 @@ class SquashRenderer extends System {
 
         if(cl.cd.has("landing"))
             sq.squashY = 0.6;
-    }
+ */    }
 }
