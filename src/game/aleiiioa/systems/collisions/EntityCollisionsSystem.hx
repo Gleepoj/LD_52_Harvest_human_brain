@@ -1,5 +1,6 @@
 package aleiiioa.systems.collisions;
 
+import aleiiioa.components.logic.BrainSuckerComponent;
 import aleiiioa.components.logic.GrappleComponent;
 import aleiiioa.components.flags.logic.CatchableFlag;
 import aleiiioa.components.logic.InteractiveComponent;
@@ -15,11 +16,17 @@ class EntityCollisionsSystem extends echoes.System {
     var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent>;
     var PLAYER :View<GridPosition,PlayerFlag>;
     var GRAPPLE:View<GridPosition,GrappleComponent>;
+    
+    var ACCURACY:Int=0;
 
     var events:InstancedCollisionEvent;
 
     public function new() {
         events = new InstancedCollisionEvent();
+    }
+    
+    @u function getAccuracy(br:BrainSuckerComponent){
+        ACCURACY = br.brains;
     }
 
     @u function playerInDialogArea(gp:GridPosition,flag:PlayerFlag,cl:CollisionsListener) {
@@ -59,7 +66,7 @@ class EntityCollisionsSystem extends echoes.System {
         while (head != null){
             var obj = head.value;
             var objPos = obj.get(GridPosition).gpToVector();
-            if(playerPos.distance(objPos)<25){
+            if(playerPos.distance(objPos)<25 + (ACCURACY *1.5)){
                 cl.lastEvent = events.allowInteract;
                 orderListener(cl);
             }

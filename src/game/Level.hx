@@ -96,6 +96,10 @@ class Level extends dn.Process {
 			var tile = layer.tileset.getAutoLayerTile(autoTile);
 			tg.add(autoTile.renderX, autoTile.renderY, tile);
 		}
+
+		var layer = data.l_Decor;
+		layer.render(tg);
+
 	}
 
 	override function postUpdate() {

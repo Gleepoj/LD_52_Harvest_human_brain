@@ -5,8 +5,8 @@ class BrainSuckerComponent {
     public var accuracy:Float;
     public var energyConsumption:Float;
     
-    public var digestTime:Float = 4.;
-    public var digestion:Float = 4.;
+    public var digestTime:Float = 8.;
+    public var digestion:Float = 8.;
     
     public function new() {
         

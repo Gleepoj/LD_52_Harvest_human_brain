@@ -122,8 +122,8 @@ class EntityLogicSystem  extends echoes.System{
            br.digestion = br.digestTime;
            sq.squashX *=0.3;
            sq.squashY *=1.8;
-           trace("digest brain");
-           trace('factor $factor');
+           //trace("digest brain");
+           //trace('factor $factor');
         }
 
         br.accuracy =  1-(1/br.brains);

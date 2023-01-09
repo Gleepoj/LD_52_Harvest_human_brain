@@ -198,7 +198,7 @@ class InteractivesSystem extends echoes.System {
         droneIsDocked = false;
         droneIsReleased = false;
         
-        if(dpc.location.distance(tpos.gpToVector())<30)
+        if(dpc.location.distance(tpos.gpToVector())<45)
             gr.home = true;
         
         lastHome  = gr.home;
