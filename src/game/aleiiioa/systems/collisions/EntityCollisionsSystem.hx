@@ -1,5 +1,9 @@
 package aleiiioa.systems.collisions;
 
+import echoes.core.RestrictedLinkedList;
+import echoes.utils.LinkedList.LinkedNode;
+import h3d.Vector;
+import echoes.Entity;
 import aleiiioa.components.core.rendering.BoundingBox;
 import aleiiioa.components.logic.BrainSuckerComponent;
 import aleiiioa.components.logic.GrappleComponent;
@@ -14,7 +18,7 @@ import aleiiioa.components.core.position.GridPosition;
 
 class EntityCollisionsSystem extends echoes.System {
     var ALL_PNJ:View<GridPosition,PNJFlag>;
-    var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent>;
+    var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent,GridPosition,BoundingBox,CollisionsListener>;
     var PLAYER :View<GridPosition,PlayerFlag>;
     var GRAPPLE:View<GridPosition,GrappleComponent>;
     
@@ -25,42 +29,73 @@ class EntityCollisionsSystem extends echoes.System {
     public function new() {
         events = new InstancedCollisionEvent();
     }
+
+    function orderListener(cl:CollisionsListener){
+        if (cl.lastEvent!=null)
+            cl.lastEvent.send(cl);
+    }
     
     @u function getAccuracy(br:BrainSuckerComponent){
         ACCURACY = br.brains;
     }
 
-    @u function playerInDialogArea(gp:GridPosition,flag:PlayerFlag,cl:CollisionsListener) {
-        var head = ALL_PNJ.entities.head;
-        var playerPos = gp.gpToVector();
+    @u function grappleGetCatchable(flag:GrappleComponent,gp:GridPosition,cl:CollisionsListener,bb:BoundingBox){
+     
+        preCollide(gp,bb,cl,ALL_CATCHABLE.entities.head);
+        collide(gp,bb,cl,ALL_CATCHABLE.entities.head);
+    }
+
+    function preCollide(gp:GridPosition,bb:BoundingBox,cl:CollisionsListener,_head:Dynamic){
+        var head = _head;
+        var grapplePos = gp.gpToVector();
 
         while (head != null){
-            var pnj = head.value;
-            var pnjPos = pnj.get(GridPosition).gpToVector();
-            if(playerPos.distance(pnjPos)<30){
-                cl.lastEvent = events.allowDialog;
+            var object:echoes.Entity   = head.value;
+            var objectBB :BoundingBox  = object.get(BoundingBox);
+            var objectPos:Vector       = object.get(GridPosition).gpToVector();
+            
+
+            var collision_radius = (bb.outerRadius + objectBB.outerRadius);
+
+            if(grapplePos.distance(objectPos) < collision_radius ){
+                var objectCL  = object.get(CollisionsListener);
+                cl.lastEvent = events.allowInteract;
                 orderListener(cl);
+                objectCL.lastEvent = events.allowInteract;
+                orderListener(objectCL);
             }
             head = head.next;
         }
     }
 
-    @u function pnjInDialogArea(gp:GridPosition,flag:PNJFlag,cl:CollisionsListener) {
-        var player = PLAYER.entities.head.value;
-        var pgp = player.get(GridPosition);
-        var playerPos = pgp.gpToVector();
-        var pnjPos = gp.gpToVector();
+    function collide(gp:GridPosition,bb:BoundingBox,cl:CollisionsListener,_head:Dynamic){
+        var head = _head;
+        var grapplePos = gp.gpToVector();
 
-        if(playerPos.distance(pnjPos)<30){
-            cl.lastEvent = events.allowDialog;
-            orderListener(cl);
+        while (head != null){
+            var object:echoes.Entity   = head.value;
+            var objectBB :BoundingBox  = object.get(BoundingBox);
+            var objectPos:Vector       = object.get(GridPosition).gpToVector();
+            
+
+            var collision_radius = (bb.innerRadius + objectBB.innerRadius);
+
+            if(grapplePos.distance(objectPos) < collision_radius ){
+                var objectCL  = object.get(CollisionsListener);
+                cl.lastEvent = events.allowContact;
+                orderListener(cl);
+                objectCL.lastEvent = events.allowContact;
+                orderListener(objectCL);
+            }
+            head = head.next;
         }
-        
     }
-   
 
+/*     function collide(collider:Entity,collided:View<>){
+        
+    } */
 
-    @u function grappleInInteractArea(gp:GridPosition,flag:GrappleComponent,cl:CollisionsListener,bb:BoundingBox) {
+   /*  @u function grappleInInteractArea(gp:GridPosition,flag:GrappleComponent,cl:CollisionsListener,bb:BoundingBox) {
         var head = ALL_CATCHABLE.entities.head;
         var grapplePos = gp.gpToVector();
 
@@ -68,6 +103,7 @@ class EntityCollisionsSystem extends echoes.System {
             var object = head.value;
             var objectPos = object.get(GridPosition).gpToVector();
             var objectBB  = object.get(BoundingBox);
+            
 
             var collision_radius = (bb.outerRadius + objectBB.outerRadius);
             if(grapplePos.distance(objectPos) < collision_radius ){
@@ -93,11 +129,8 @@ class EntityCollisionsSystem extends echoes.System {
             orderListener(cl);
         }
         
-    }
+    } */
 
 
-    function orderListener(cl:CollisionsListener){
-        if (cl.lastEvent!=null)
-            cl.lastEvent.send(cl);
-    }
+
 }
