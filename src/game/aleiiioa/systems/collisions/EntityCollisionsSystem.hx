@@ -1,5 +1,6 @@
 package aleiiioa.systems.collisions;
 
+import aleiiioa.components.core.rendering.BoundingBox;
 import aleiiioa.components.logic.BrainSuckerComponent;
 import aleiiioa.components.logic.GrappleComponent;
 import aleiiioa.components.flags.logic.CatchableFlag;
@@ -59,14 +60,17 @@ class EntityCollisionsSystem extends echoes.System {
    
 
 
-    @u function grappleInInteractArea(gp:GridPosition,flag:GrappleComponent,cl:CollisionsListener) {
+    @u function grappleInInteractArea(gp:GridPosition,flag:GrappleComponent,cl:CollisionsListener,bb:BoundingBox) {
         var head = ALL_CATCHABLE.entities.head;
-        var playerPos = gp.gpToVector();
+        var grapplePos = gp.gpToVector();
 
         while (head != null){
-            var obj = head.value;
-            var objPos = obj.get(GridPosition).gpToVector();
-            if(playerPos.distance(objPos)<25 + (ACCURACY *1.5)){
+            var object = head.value;
+            var objectPos = object.get(GridPosition).gpToVector();
+            var objectBB  = object.get(BoundingBox);
+
+            var collision_radius = (bb.outerRadius + objectBB.outerRadius);
+            if(grapplePos.distance(objectPos) < collision_radius ){
                 cl.lastEvent = events.allowInteract;
                 orderListener(cl);
             }
@@ -75,13 +79,16 @@ class EntityCollisionsSystem extends echoes.System {
     }
 
     
-    @u function CatchableInInteractArea(catchable:CatchableFlag,gp:GridPosition,cl:CollisionsListener) {
-        var player = GRAPPLE.entities.head.value;
-        var pgp = player.get(GridPosition);
-        var playerPos = pgp.gpToVector();
-        var objPos = gp.gpToVector();
+    @u function CatchableInInteractArea(catchable:CatchableFlag,gp:GridPosition,cl:CollisionsListener,bb:BoundingBox) {
+        var grabber = GRAPPLE.entities.head.value;
+        
+        var grabberPos= grabber.get(GridPosition).gpToVector();
+        var grabberBB = grabber.get(BoundingBox); 
+        
+        var objectPos = gp.gpToVector();
+        var collision_radius = (bb.outerRadius + grabberBB.outerRadius);
 
-        if(playerPos.distance(objPos)<25){
+        if(grabberPos.distance(objectPos) < collision_radius){
             cl.lastEvent = events.allowInteract;
             orderListener(cl);
         }
