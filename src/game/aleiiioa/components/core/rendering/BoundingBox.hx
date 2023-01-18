@@ -2,7 +2,10 @@ package aleiiioa.components.core.rendering;
 
 class BoundingBox {
 	public var invalidateDebugBounds:Bool = false;
-	public var debugBounds : Null<h2d.Graphics> ;
+	public var debugBounds : Null<h2d.Graphics>;
+
+	public var invalidateCollisions:Bool = false;
+	public var debugCollisions: Null<h2d.Graphics>;
 
 	/** Pixel width of entity **/
 	public var wid(default,set) : Float = Const.GRID;
@@ -22,7 +25,8 @@ class BoundingBox {
 	public var pivotY :Float ;
 
 	//Global xy ratio for collision ex: une sprite fait trois case de haut gxy = 1.5;
-	
+	public var logicalCollisionsStatus:Int = 0x00b3b0;
+	public var physicalCollisionsStatus:Int = 0x00ff80;
 	// mid box
 	public var gxr:Float;// inline function get_gxr()  return M.maxPrecision((wid/Const.GRID)/2,2);
 	public var gyr:Float;// inline function get_gyr()  return M.maxPrecision((hei/Const.GRID)/2,2);
@@ -55,6 +59,9 @@ class BoundingBox {
 	/** "Large" radius in pixels (ie. biggest value between width/height, then divided by 2) **/
 	public var largeRadius(get,never) : Float;
 		inline function get_largeRadius() return M.fmax(wid,hei)*0.5;
+
+	public var outerRadius(get,never) : Float;
+		inline function get_outerRadius() return Math.sqrt(wid*wid + hei*hei)*0.5;
 
 
 	public function new(spr:SpriteComponent) {

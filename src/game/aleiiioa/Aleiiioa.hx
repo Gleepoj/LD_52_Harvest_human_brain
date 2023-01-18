@@ -90,10 +90,11 @@ class Aleiiioa extends Game {
 		Workflow.add60FpsSystem(new ParticuleRenderer());
 		
 		//Graphics
+		Workflow.add60FpsSystem(new BoundingBoxRenderer(Game.ME.scroller));
 		Workflow.add60FpsSystem(new SquashRenderer());
 		Workflow.add60FpsSystem(new SpriteExtensionFx());
 		Workflow.add60FpsSystem(new SpriteRenderer(Game.ME.scroller,Game.ME));
-		Workflow.add60FpsSystem(new BoundingBoxRenderer(Game.ME.scroller));
+		
 		
 		//Dialog
 		Workflow.add60FpsSystem(new DialogYarnSystem());

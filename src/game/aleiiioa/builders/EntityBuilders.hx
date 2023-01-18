@@ -284,11 +284,13 @@ class EntityBuilders {
         //Rendering Component
         var spr = new SpriteComponent(D.tiles.gille);
         spr.pivot.setCenterRatio(0.5,0.5);
+        spr.scale(2.);
        
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
         se.sprScaleX = 2.;
         se.sprScaleY = 2.;
+
         se.baseColor = new Vector(1,1,1);
         var bb  = new BoundingBox(spr);
         

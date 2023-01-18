@@ -1,11 +1,14 @@
 package aleiiioa.systems.renderer;
 
+import aleiiioa.components.core.collision.CollisionsListener;
 import aleiiioa.components.core.rendering.BoundingBox;
 import aleiiioa.components.core.position.GridPosition;
 
 class BoundingBoxRenderer extends echoes.System{
     var gameScroller:h2d.Layers;
-    
+    var IDLE_LOGICAL_COLOR :Int = 0x00b3b0;
+	var IDLE_PHYSICAL_COLOR:Int = 0x00ff80;
+
     public function new(scroller:h2d.Layers){
         this.gameScroller = scroller;
     }
@@ -16,13 +19,42 @@ class BoundingBoxRenderer extends echoes.System{
     }
     @r function onEntityRemove(bb:BoundingBox) {
         bb.debugBounds.remove();
+		bb.debugCollisions.remove();
     }
-    @u function updateDebugBounds(bb:BoundingBox,gp:GridPosition) {
+	@u function updateCollisions(bb:BoundingBox,gp:GridPosition,cl:CollisionsListener) {
+		if(ui.Console.ME.hasFlag("collisions")){
+			bb.physicalCollisionsStatus = IDLE_PHYSICAL_COLOR;
+			bb.logicalCollisionsStatus  = IDLE_LOGICAL_COLOR;
+			
+			if(cl.onInteract){
+				bb.logicalCollisionsStatus = 0xf98602;
+			}
+		}
+	}
+
+    @u function updateDebugBounds(bb:BoundingBox,gp:GridPosition,cl:CollisionsListener) {
         bb.attachX = gp.attachX;
         bb.attachY = gp.attachY;
         debugRequest(bb);
         renderAllDebugs(bb);
     }
+	
+	private function renderDebugCollisions(bb:BoundingBox){
+
+
+		bb.debugCollisions.clear();
+
+		// Inner Radius
+		bb.debugCollisions.lineStyle(3,bb.physicalCollisionsStatus,1);
+		bb.debugCollisions.drawCircle(bb.centerX - bb.attachX, bb.centerY - bb.attachY,bb.innerRadius);
+
+		// Outer Radius
+		bb.debugCollisions.lineStyle(4,bb.logicalCollisionsStatus,1);
+		bb.debugCollisions.drawCircle(bb.centerX - bb.attachX, bb.centerY - bb.attachY,bb.outerRadius);
+
+	
+	}
+
 
     private function renderDebugBounds(bb:BoundingBox) {
 		var c = Col.randomRGB(0.9,0.3,0.3);
@@ -41,6 +73,10 @@ class BoundingBoxRenderer extends echoes.System{
 		// Center
 		bb.debugBounds.lineStyle(1, c, 0.3);
 		bb.debugBounds.drawCircle(bb.centerX - bb.attachX, bb.centerY - bb.attachY, 3);
+
+		/* // Radius
+		bb.debugBounds.lineStyle(3,Blue,1);
+		bb.debugBounds.drawCircle(bb.centerX - bb.attachX, bb.centerY - bb.attachY,bb.innerRadius); */
 	}
 
 	private function disableDebugBounds(bb:BoundingBox) {
@@ -57,6 +93,21 @@ class BoundingBoxRenderer extends echoes.System{
 		}
 		bb.invalidateDebugBounds = true;
 	}
+
+	private function disableDebugCollisions(bb:BoundingBox) {
+		if (bb.debugCollisions != null) {
+			bb.debugCollisions.remove();
+			bb.debugCollisions = null;
+		}
+	}
+
+	private function enableDebugCollisions(bb:BoundingBox) {
+		if (bb.debugCollisions == null) {
+			bb.debugCollisions = new h2d.Graphics();
+			this.gameScroller.add(bb.debugCollisions, Const.DP_TOP);
+		}
+		bb.invalidateCollisions = true;
+	}
 	
 	function renderAllDebugs(bb:BoundingBox) {
 
@@ -69,6 +120,17 @@ class BoundingBoxRenderer extends echoes.System{
 			bb.debugBounds.x = Std.int(bb.attachX);
 			bb.debugBounds.y = Std.int(bb.attachY);
 		}
+		// Debug Collisions
+		if (bb.debugCollisions != null) {
+			if (bb.invalidateCollisions) {
+				bb.invalidateCollisions = false;
+				
+			}	
+			renderDebugCollisions(bb);
+			bb.debugCollisions.x = Std.int(bb.attachX);
+			bb.debugCollisions.y = Std.int(bb.attachY);
+		}
+
 	}
 
 	function debugRequest(bb:BoundingBox) {
@@ -80,6 +142,13 @@ class BoundingBoxRenderer extends echoes.System{
 		// Hide bounds
 		if (!ui.Console.ME.hasFlag("bounds") && bb.debugBounds != null)
 			disableDebugBounds(bb);
+
+		if (ui.Console.ME.hasFlag("collisions") && bb.debugCollisions == null)
+			enableDebugCollisions(bb);
+
+		// Hide bounds
+		if (!ui.Console.ME.hasFlag("collisions") && bb.debugCollisions != null)
+			disableDebugCollisions(bb);
 		#end
 	}
 }
