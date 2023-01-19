@@ -23,20 +23,40 @@ class DebugLabelRenderer extends System{
     @r function onEntityRemove(dl:DebugLabel) {
         dl.debugLabel.remove();
     }
-/* 
-    @u function updateDebugBounds(dl:DebugLabel,gp:GridPosition,veil:VeilComponent) {
-        debugFloat(dl,);
-        renderAllDebugs(dl,gp);
-    } */
-
 	 
-	function renderAllDebugs(dl:DebugLabel,gp:GridPosition) {
-
-        		// Debug label
+	@u function renderAllDebugs(dl:DebugLabel,gp:GridPosition) {
+	
+	if(ui.Console.ME.hasFlag("label")){
+        // Debug label
 		if( dl.debugLabel!=null ) {
 			dl.debugLabel.x = Std.int(gp.attachX - dl.debugLabel.textWidth*0.5);
 			dl.debugLabel.y = Std.int(gp.attachY+1);
 		}
+		var all = [];
+
+		if(dl.float != null)
+			all.push(dl.float);
+
+		if(dl.v != null)
+			all.push(dl.v);
+
+		debug(dl,all);
+	}
+
+	if(!ui.Console.ME.hasFlag("label")){
+        // Debug label
+		if( dl.debugLabel!=null ) {
+			dl.debugLabel.remove();
+			dl.debugLabel = null;
+		}
+	}
+
+
+	/* 	
+		for(k in affects.keys())
+			all.push( k+"=>"+M.pretty( getAffectRemainingS(k) , 1) ); */
+		
+
 	}
     	/** Print some numeric value below entity **/
 	public inline function debugFloat(dl:DebugLabel,v:Float, ?c=0xffffff) {
@@ -51,6 +71,7 @@ class DebugLabelRenderer extends System{
 			dl.debugLabel.remove();
 			dl.debugLabel = null;
 		}
+
 		if( v!=null ) {
 			if( dl.debugLabel==null ) {
 				dl.debugLabel = new h2d.Text(Assets.fontPixel, gameScroller);

@@ -32,7 +32,7 @@ class InteractivesSystem extends echoes.System {
     
 
     public function new() {
-      //  UIBuilders.slider("GrapplePower",function() return  grapplePower, function(v)  grapplePower = v, 0.5,5);
+        //UIBuilders.slider("GrapplePower",function() return  grapplePower, function(v)  grapplePower = v, 0.5,5);
         //UIBuilders.slider("RewindPower",function() return  rewind, function(v)  rewind = v, 0.05,0.9);
     }
 
@@ -50,11 +50,6 @@ class InteractivesSystem extends echoes.System {
         spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_open,1,3);
         spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_close,1,3);
         spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_release,1,3);
-        //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.grab,1);
-        //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.docked,1);
-        //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.load,1,1);
-        //spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.release,1);
-        
     }
 
     @u function launcherState(en:echoes.Entity,inp:InputComponent,launch:LauncherComponent){
@@ -64,6 +59,7 @@ class InteractivesSystem extends echoes.System {
                 launch.state = Expulse;
             }
         }
+        
         if(inp.ca.isDown(ActionX)){
             if(lastHome == true && droneLastState == Charge){
                 if(!droneIsDocked)

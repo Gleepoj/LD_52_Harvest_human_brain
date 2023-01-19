@@ -107,9 +107,12 @@ class EntityBuilders {
         se.baseColor = new Vector(1,1,1);
 
         var brain = new StaticBrainComponent(id);
+        var dl = new DebugLabel();
+        
+  
         //var spp = new SpawnerPointComponent();
         
-        new echoes.Entity().add(pos,cl,spr,sq,se,bb,brain);
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,brain,dl);
 
     }
 
@@ -264,8 +267,9 @@ class EntityBuilders {
         var plateformer = new PlateformerPhysicsFlag();
         var kinematic = new KinematicBodyFlag();
         
+        var dl = new DebugLabel();
         
-        new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,body,bomb,catchable,plateformer,kinematic,gille);
+        new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,body,bomb,catchable,plateformer,kinematic,gille,dl);
     }
 
     public static function player(cx:Int,cy:Int) {

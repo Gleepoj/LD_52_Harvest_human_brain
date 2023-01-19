@@ -47,6 +47,29 @@ enum abstract LevelMark(Int) to Int {
 	var Coll_Wall;
 }
 
+
+enum abstract GrappleFSM_State(String) to String {
+	var Idle;
+	var Recall;
+	var Docked;
+	var Load;
+	var Loaded;
+	var Launch;
+}
+
+enum abstract GrappleFSM_Transition(String) to String {
+	var Idle_to_Recall;
+	var Recall_to_Idle;
+	var Recall_to_Docked;
+	var Docked_to_Load;
+	var Load_to_Loaded;
+	var Load_to_Launch;
+	var Loaded_to_Launch;
+	var Launch_to_Idle;
+	var Launch_to_Recall;
+	var Empty_Transition;
+}
+
 enum abstract GrappleState(String) to String {
 	var Idle;
 	var Charge;

@@ -35,17 +35,13 @@ class EntityCollisionsSystem extends echoes.System {
             cl.lastEvent.send(cl);
     }
     
-    @u function getAccuracy(br:BrainSuckerComponent){
-        ACCURACY = br.brains;
-    }
-
     @u function grappleGetCatchable(flag:GrappleComponent,gp:GridPosition,cl:CollisionsListener,bb:BoundingBox){
      
-        preCollide(gp,bb,cl,ALL_CATCHABLE.entities.head);
-        collide(gp,bb,cl,ALL_CATCHABLE.entities.head);
+        preCollide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.interact);
+        collide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.contact);
     }
 
-    function preCollide(gp:GridPosition,bb:BoundingBox,cl:CollisionsListener,_head:Dynamic){
+    function preCollide(gp:GridPosition,bb:BoundingBox,cl:CollisionsListener,_head:Dynamic,_order:CollisionEvent){
         var head = _head;
         var grapplePos = gp.gpToVector();
 
@@ -53,22 +49,21 @@ class EntityCollisionsSystem extends echoes.System {
             var object:echoes.Entity   = head.value;
             var objectBB :BoundingBox  = object.get(BoundingBox);
             var objectPos:Vector       = object.get(GridPosition).gpToVector();
-            
-
+    
             var collision_radius = (bb.outerRadius + objectBB.outerRadius);
 
             if(grapplePos.distance(objectPos) < collision_radius ){
-                var objectCL  = object.get(CollisionsListener);
-                cl.lastEvent = events.allowInteract;
+                var objectCL = object.get(CollisionsListener);
+                cl.lastEvent = _order;
                 orderListener(cl);
-                objectCL.lastEvent = events.allowInteract;
+                objectCL.lastEvent = _order;
                 orderListener(objectCL);
             }
             head = head.next;
         }
     }
 
-    function collide(gp:GridPosition,bb:BoundingBox,cl:CollisionsListener,_head:Dynamic){
+    function collide(gp:GridPosition,bb:BoundingBox,cl:CollisionsListener,_head:Dynamic,_order:CollisionEvent){
         var head = _head;
         var grapplePos = gp.gpToVector();
 
@@ -77,60 +72,17 @@ class EntityCollisionsSystem extends echoes.System {
             var objectBB :BoundingBox  = object.get(BoundingBox);
             var objectPos:Vector       = object.get(GridPosition).gpToVector();
             
-
             var collision_radius = (bb.innerRadius + objectBB.innerRadius);
 
             if(grapplePos.distance(objectPos) < collision_radius ){
                 var objectCL  = object.get(CollisionsListener);
-                cl.lastEvent = events.allowContact;
+                cl.lastEvent = _order;
                 orderListener(cl);
-                objectCL.lastEvent = events.allowContact;
+                objectCL.lastEvent =_order;
                 orderListener(objectCL);
             }
             head = head.next;
         }
     }
-
-/*     function collide(collider:Entity,collided:View<>){
-        
-    } */
-
-   /*  @u function grappleInInteractArea(gp:GridPosition,flag:GrappleComponent,cl:CollisionsListener,bb:BoundingBox) {
-        var head = ALL_CATCHABLE.entities.head;
-        var grapplePos = gp.gpToVector();
-
-        while (head != null){
-            var object = head.value;
-            var objectPos = object.get(GridPosition).gpToVector();
-            var objectBB  = object.get(BoundingBox);
-            
-
-            var collision_radius = (bb.outerRadius + objectBB.outerRadius);
-            if(grapplePos.distance(objectPos) < collision_radius ){
-                cl.lastEvent = events.allowInteract;
-                orderListener(cl);
-            }
-            head = head.next;
-        }
-    }
-
-    
-    @u function CatchableInInteractArea(catchable:CatchableFlag,gp:GridPosition,cl:CollisionsListener,bb:BoundingBox) {
-        var grabber = GRAPPLE.entities.head.value;
-        
-        var grabberPos= grabber.get(GridPosition).gpToVector();
-        var grabberBB = grabber.get(BoundingBox); 
-        
-        var objectPos = gp.gpToVector();
-        var collision_radius = (bb.outerRadius + grabberBB.outerRadius);
-
-        if(grabberPos.distance(objectPos) < collision_radius){
-            cl.lastEvent = events.allowInteract;
-            orderListener(cl);
-        }
-        
-    } */
-
-
 
 }

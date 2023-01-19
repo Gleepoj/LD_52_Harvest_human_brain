@@ -129,6 +129,7 @@ class Console extends h2d.Console {
 
 		// Misc flag aliases
 		addFlagCommandAlias("bounds");
+		addFlagCommandAlias("label");
 		addFlagCommandAlias("collisions");
 		addFlagCommandAlias("affect");
 		addFlagCommandAlias("scroll");

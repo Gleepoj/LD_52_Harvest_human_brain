@@ -26,7 +26,7 @@ class Event_OnDialogArea implements  CollisionEvent {
     }
 }
 
-class Event_OnInteractArea implements CollisionEvent {
+class Event_OnInteract implements CollisionEvent {
     public function new() {
         
     }
@@ -47,15 +47,15 @@ class Event_OnContact implements CollisionEvent {
 class InstancedCollisionEvent {
     
     public var allowDialog  :Event_OnDialogArea;
-    public var allowInteract:Event_OnInteractArea;
-    public var allowContact :Event_OnContact;
+    public var interact:Event_OnInteract;
+    public var contact :Event_OnContact;
 
     public var reset :Event_Reset;
 
     public function new() {
-        allowInteract = new Event_OnInteractArea();
-        allowDialog   = new Event_OnDialogArea();
-        allowContact  = new Event_OnContact();
+        interact     = new Event_OnInteract();
+        allowDialog  = new Event_OnDialogArea();
+        contact      = new Event_OnContact();
         
         reset  = new Event_Reset();
     }
