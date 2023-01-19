@@ -3,13 +3,15 @@ package aleiiioa.components.tools;
 class GrappleFSM {
     
     
-    previous_state:GrappleFSM_State = Idle ;
-    state:GrappleFSM_State = Idle;
-    transition:GrappleFSM_Transition = Empty_Transition;
-    cd:Cooldown;
+    var previous_state:GrappleFSM_State;
+    var state:GrappleFSM_State;
+    var transition:GrappleFSM_Transition;
+   // var cd:Cooldown;
     
     public function new(){
-        
+        previous_state = Idle;
+        state = Idle;
+        transition = Empty_Transition;
     }
 
     public function request(new_state:GrappleFSM_State) {
