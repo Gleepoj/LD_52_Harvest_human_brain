@@ -2,6 +2,7 @@ package aleiiioa.builders;
 
 
 
+import aleiiioa.components.tools.GrappleFSM;
 import aleiiioa.components.logic.StaticBouleComponent;
 import aleiiioa.components.logic.StaticBrainComponent;
 import aleiiioa.components.logic.MethanizerComponent;
@@ -138,7 +139,7 @@ class EntityBuilders {
 
     }
 
-    public static function brainSucker(cx:Int,cy:Int) {
+    public static function bis_brainSucker(cx:Int,cy:Int) {
         //Physics Component
         var pos = new GridPosition(cx,cy);
         var cl  = new CollisionsListener();
@@ -158,6 +159,28 @@ class EntityBuilders {
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,brainsucker);
     }
 
+    public static function brainSucker(cx:Int,cy:Int) {
+        //Physics Component
+        var pos = new GridPosition(cx+15,cy);
+        var cl  = new CollisionsListener();
+        
+        //Rendering Component
+        var spr = new SpriteComponent(D.tiles.methanizer);
+        spr.pivot.setCenterRatio(0.5,0.5);
+        
+        var sq  = new SquashComponent();
+        var se  = new SpriteExtension();
+        var bb  = new BoundingBox(spr);
+        
+        var inp = new InputComponent();
+
+        se.baseColor = new Vector(0.0,0.2,0.95);
+
+        var launcher = new GrappleFSM();
+        var label = new DebugLabel();
+
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,inp,launcher,label);
+    }
     
     public static function methanizer(cx:Int,cy:Int) {
         //Physics Component

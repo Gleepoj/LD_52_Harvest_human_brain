@@ -1,5 +1,6 @@
 package aleiiioa;
 
+import aleiiioa.systems.logic.GrappleLogicSystem;
 import echoes.Entity;
 import aleiiioa.systems.logic.EntityLogicSystem;
 import aleiiioa.systems.logic.InteractivesSystem;
@@ -83,6 +84,7 @@ class Aleiiioa extends Game {
 		//Interaction
 		Workflow.add60FpsSystem(new InteractivesSystem());
 		Workflow.add60FpsSystem(new EntityLogicSystem());
+		Workflow.addSystem(new GrappleLogicSystem());
 		
 		//Particles
 		Workflow.addSystem(new ParticulesVelocitySystem());

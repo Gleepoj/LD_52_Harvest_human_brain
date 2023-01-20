@@ -48,13 +48,11 @@ enum abstract LevelMark(Int) to Int {
 }
 
 
-enum abstract GrappleFSM_State(String) to String {
+enum abstract Grapple_State(String) to String {
 	var Idle;
 	var Recall;
 	var Docked;
-	var Load;
 	var Loaded;
-	var Launch;
 }
 
 enum abstract GrappleFSM_Transition(String) to String {
