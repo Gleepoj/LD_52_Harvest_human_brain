@@ -2,7 +2,7 @@ package aleiiioa.builders;
 
 
 
-import aleiiioa.components.tools.GrappleFSM;
+import aleiiioa.components.tools.LauncherFSM;
 import aleiiioa.components.logic.StaticBouleComponent;
 import aleiiioa.components.logic.StaticBrainComponent;
 import aleiiioa.components.logic.MethanizerComponent;
@@ -176,7 +176,7 @@ class EntityBuilders {
 
         se.baseColor = new Vector(0.0,0.2,0.95);
 
-        var launcher = new GrappleFSM();
+        var launcher = new LauncherFSM();
         var label = new DebugLabel();
 
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,inp,launcher,label);

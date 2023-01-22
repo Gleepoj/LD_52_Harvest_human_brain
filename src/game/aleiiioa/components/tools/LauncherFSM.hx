@@ -1,12 +1,12 @@
-/* package aleiiioa.components.tools;
+package aleiiioa.components.tools;
 
 import aleiiioa.components.core.rendering.DebugLabel;
 import dn.Cooldown;
 
-//typedef Transition = {from:Launcher_State,to:Array<Launcher_State>};
-//typedef Order      = {from:Launcher_State,to:Launcher_State};
+typedef Transition = {from:Launcher_State,to:Array<Launcher_State>};
+typedef Order      = {from:Launcher_State,to:Launcher_State};
 
-class GrappleFSM {
+class LauncherFSM {
     
     var state:Launcher_State = Idle;
     var allowed_transitions:Array<Transition>;
@@ -64,4 +64,3 @@ class GrappleFSM {
     }
 
 }
- */
