@@ -27,6 +27,7 @@ class DynamicBodyComponent {
 
     public var isFleeing:Bool = false;
     public var isSeeking:Bool = false;
+    public var isStick  :Bool = false;
 
     public var steeringAngle(get,never):Float; inline function get_steeringAngle() return steering.getPolar();
     public var vehiculeAngle(get,never):Float; inline function get_vehiculeAngle() return orientation.getPolar();
@@ -59,7 +60,7 @@ class DynamicBodyComponent {
     }
 
     public function addForce(f:Vector){
-       
+        isStick = false;
         var a = acceleration.clone();
         var c = VectorUtils.clampVector(f,maxSpeed);
         //if(c.length()> 3)
@@ -69,12 +70,23 @@ class DynamicBodyComponent {
     }
 
     public function addTorque(a:Float){
+        isStick = false;
         var o = steeringAngle;
         steering =  new Vector(Math.cos(o+a)*1,Math.sin(o+a)*1).normalized();
     }
+    
+    public function stick(target_location:Vector){
+        isStick = true;
+        clearForce();
+        var tar = target_location;
+    
+        location.x = tar.x;
+        location.y = tar.y;
+    }
 
     public function seek(target_location:Vector,?scale:Float = 0.01){
-        
+        isStick = false;
+
         var tar = target_location;
         var at = M.angTo(location.x,location.y,tar.x,tar.y);
             
@@ -86,6 +98,8 @@ class DynamicBodyComponent {
     }
 
     public function flee(predator_location:Vector,?fear:Float = 1.2) {
+        isStick = false;
+
         var target = predator_location;
         var t = target.sub(location);
         var dist = t.length();
@@ -102,6 +116,8 @@ class DynamicBodyComponent {
 
 
     public function arrival(target_location:Vector) {
+        isStick = false;
+
         var target = target_location;
         
         if(target.x > 1 && target.y > 1){

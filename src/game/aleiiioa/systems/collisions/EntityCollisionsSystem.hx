@@ -43,7 +43,8 @@ class EntityCollisionsSystem extends echoes.System {
      
         preCollide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.interact);
         collide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.contact);
-        preCollide(gp,bb,cl,LAUNCHER.entities.head,events.drone_interact_launcher);
+        halfCollide(gp,bb,cl,LAUNCHER.entities.head,events.drone_interact_launcher);
+        
     }
 
     function preCollide(gp:GridPosition,bb:BoundingBox,cl:CollisionsListener,_head:Dynamic,_order:CollisionEvent){
@@ -56,6 +57,28 @@ class EntityCollisionsSystem extends echoes.System {
             var objectPos:Vector       = object.get(GridPosition).gpToVector();
     
             var collision_radius = (bb.outerRadius + objectBB.outerRadius);
+
+            if(grapplePos.distance(objectPos) < collision_radius ){
+                var objectCL = object.get(CollisionsListener);
+                cl.lastEvent = _order;
+                orderListener(cl);
+                objectCL.lastEvent = _order;
+                orderListener(objectCL);
+            }
+            head = head.next;
+        }
+    }
+
+    function halfCollide(gp:GridPosition,bb:BoundingBox,cl:CollisionsListener,_head:Dynamic,_order:CollisionEvent){
+        var head = _head;
+        var grapplePos = gp.gpToVector();
+
+        while (head != null){
+            var object:echoes.Entity   = head.value;
+            var objectBB :BoundingBox  = object.get(BoundingBox);
+            var objectPos:Vector       = object.get(GridPosition).gpToVector();
+    
+            var collision_radius = (bb.outerRadius + objectBB.innerRadius);
 
             if(grapplePos.distance(objectPos) < collision_radius ){
                 var objectCL = object.get(CollisionsListener);

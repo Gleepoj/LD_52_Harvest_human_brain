@@ -44,8 +44,21 @@ class  DynamicPhysicSystem extends System {
 
     @u function updateVehicule(dpc:DynamicBodyComponent,gp:GridPosition){
                    
-        dpc.location.x = gp.attachX;
-        dpc.location.y = gp.attachY;
+         
+        if(!dpc.isStick){
+            dpc.location.x = gp.attachX;
+            dpc.location.y = gp.attachY;
+        }
+
+        if(dpc.isStick){
+            var x = dpc.location.x;
+            var y = dpc.location.y;
+            gp.cx = Std.int(x/Const.GRID);
+            gp.cy = Std.int(y/Const.GRID);
+            gp.xr = (x-gp.cx*Const.GRID)/Const.GRID;
+            gp.yr = (y-gp.cy*Const.GRID)/Const.GRID;
+        }
+        
              
     }
 
@@ -71,8 +84,15 @@ class  DynamicPhysicSystem extends System {
     }
 
     @u function computeNewPosition(dpc:DynamicBodyComponent,dyn:DynamicBodyFlag) {
-        dpc.accelerationFriction();
-        dpc.euler = eulerIntegration(dpc);
+        
+        if(!dpc.isStick){
+            dpc.accelerationFriction();
+            dpc.euler = eulerIntegration(dpc);
+        }
+        if(dpc.isStick){
+            dpc.euler.x = 0;
+            dpc.euler.y = 0;
+        }
         
     }
 

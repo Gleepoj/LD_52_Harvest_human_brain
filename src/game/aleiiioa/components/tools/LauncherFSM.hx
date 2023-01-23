@@ -21,10 +21,11 @@ class LauncherFSM {
         state = Idle;
         
         allowed_transitions = [
-            {from:Idle,  to : [Recall]},
-            {from:Recall,to : [Idle,Docked]},
-            {from:Docked,to : [Idle,Loaded]},
-            {from:Loaded,to : [Idle]}  
+            {from:Idle,   to : [Recall]},
+            {from:Recall, to : [Idle,Docked]},
+            {from:Docked, to : [Expulse,Loaded]},
+            {from:Loaded, to : [Expulse]},
+            {from:Expulse,to : [Recall]}
         ];
         
     }

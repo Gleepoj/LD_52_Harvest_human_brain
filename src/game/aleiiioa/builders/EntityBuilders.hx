@@ -377,10 +377,11 @@ class EntityBuilders {
          var sw     = new DynamicBodyComponent();
          
          var dyn = new DynamicBodyFlag();
-         var targeter = new TargeterFlag();  
+         var targeter = new TargeterFlag();
+         var label = new DebugLabel();  
         
 
-         new echoes.Entity().add(pos,vas,vc,sw,cl,tpos,mpos,master,spr,bb,gr,sq,se,ic,em,ac,inp,body,dyn,targeter);
+         new echoes.Entity().add(pos,vas,vc,sw,cl,tpos,mpos,master,spr,bb,gr,sq,se,ic,em,ac,inp,body,dyn,targeter,label);
 
  
     }
