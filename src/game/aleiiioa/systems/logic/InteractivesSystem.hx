@@ -22,13 +22,6 @@ class InteractivesSystem extends echoes.System {
     var ALL_GRAPPLE :View<GridPosition,GrappleFSM>;
     var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent>;
     var lastActionX:Bool = false;
-    var baseGrapplePower:Float = 3.;
-    var grapplePower:Float = 3.;
-    var rewind:Float = 0.05;
-    var droneLastState:GrappleState;
-    var droneIsDocked:Bool = false;
-    var droneIsReleased:Bool = false;
-    var lastHome:Bool;
     var diedWithoutUnlink:Bool = false;
     
 
@@ -55,7 +48,7 @@ class InteractivesSystem extends echoes.System {
             diedWithoutUnlink = false;
             ac.grab = false;
         }
-
+        
         if(ac.grab && !inp.ca.isDown(ActionX)){
             ac.grab = false;
             //trace("release gille");

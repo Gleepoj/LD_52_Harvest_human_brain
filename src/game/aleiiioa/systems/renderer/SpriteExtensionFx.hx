@@ -77,8 +77,8 @@ class SpriteExtensionFx extends System {
     }
 
     @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,ac:ActionComponent,gr:GrappleComponent) {
-       var col:Vector = new Vector(gr.load,se.baseColor.g,se.baseColor.b);
-       spr.colorize(col.toColor());
+       //var col:Vector = new Vector(gr.load,se.baseColor.g,se.baseColor.b);
+       //spr.colorize(col.toColor());
        /* if(ac.grab == true){
         spr.colorize(0x008e68);
        }
@@ -87,6 +87,7 @@ class SpriteExtensionFx extends System {
         spr.colorize(0x022c21);
        } */
     }
+    
     @u function colorMethanizer(spr:SpriteComponent,se:SpriteExtension,met:MethanizerComponent) {
         var col = new Vector(se.baseColor.r,se.baseColor.g+(met.corpse*0.1),se.baseColor.b);
         spr.colorize(col.toColor());

@@ -58,23 +58,10 @@ enum abstract Launcher_State(String) to String {
 	var Expulse;
 }
 
-
-// Old version 
-enum abstract GrappleState(String) to String {
-	var Idle;
-	var Charge;
-	var Launch;
-	var Rewind;
-	var Autorewind;
-}
-
-// Old Version
-enum abstract LauncherState(String) to String {
-	var Idle;
-	var Recall;
+enum abstract Claw_State(String) to String {
+	var Open;
+	var Close;
 	var Load;
-	var Docked;
-	var Expulse;
 }
 
 

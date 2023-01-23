@@ -10,6 +10,7 @@ class GrappleFSM {
     
     public var state(get,never):Launcher_State; inline function get_state() return synchronized_state;
     
+    public var claw_state:Claw_State = Open;
     public var maxLoad:Float = 1.;
     public var load:Float = 0;
     
