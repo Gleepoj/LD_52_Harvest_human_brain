@@ -30,6 +30,9 @@ class CollisionsListener {
     public var onInteract(get,never):Bool;
         inline function get_onInteract() return cd.has("interact");
 
+    public var onDroneInteractLauncher(get,never):Bool;
+        inline function get_onDroneInteractLauncher() return cd.has("drone_launcher");
+
     public var onContact(get,never):Bool;
         inline function get_onContact() return cd.has("contact");
     

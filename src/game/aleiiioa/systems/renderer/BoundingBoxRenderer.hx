@@ -29,7 +29,10 @@ class BoundingBoxRenderer extends echoes.System{
 			if(cl.onInteract){
 				bb.logicalCollisionsStatus = 0xf98602;
 			}
-
+			if(cl.onDroneInteractLauncher){
+				bb.logicalCollisionsStatus = 0x02f91b;
+			}
+			
 			if(cl.onContact){
 				bb.physicalCollisionsStatus = 0xb50000;
 			}

@@ -19,6 +19,7 @@ class InputSystem extends echoes.System {
 	@u function getEnergyOutput(met:MethanizerComponent){
 		energyOutput = met.energyOutput/8;
 	}
+	
 
 	@u function updatePlayer(inp:InputComponent,vas:VelocityAnalogSpeed,cl:CollisionsListener){
 	

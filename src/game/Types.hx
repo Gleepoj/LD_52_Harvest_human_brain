@@ -1,4 +1,6 @@
 /**	This enum is used by the Controller class to bind general game actions to actual keyboard keys or gamepad buttons. **/
+
+
 enum abstract GameAction(Int) to Int {
 	var MoveLeft;
 	var MoveRight;
@@ -53,9 +55,11 @@ enum abstract Launcher_State(String) to String {
 	var Recall;
 	var Docked;
 	var Loaded;
+	var Expulse;
 }
 
 
+// Old version 
 enum abstract GrappleState(String) to String {
 	var Idle;
 	var Charge;
@@ -64,6 +68,7 @@ enum abstract GrappleState(String) to String {
 	var Autorewind;
 }
 
+// Old Version
 enum abstract LauncherState(String) to String {
 	var Idle;
 	var Recall;
