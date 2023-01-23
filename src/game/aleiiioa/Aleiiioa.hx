@@ -22,7 +22,7 @@ class Aleiiioa extends Game {
 	var cameraFocus:Entity;
 	var cameraFocusPosition:GridPosition;
 
-	public function new() {
+	public function new() { 
 		super();
 		Workflow.reset();
 		
