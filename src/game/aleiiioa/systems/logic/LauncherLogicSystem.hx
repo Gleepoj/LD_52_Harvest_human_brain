@@ -15,6 +15,7 @@ class LauncherLogicSystem extends echoes.System {
     var droneLoad:Float;
     var rewind:Float = 0.05;
     var grapplePower:Float = 3.;
+    var debug:Float =0.;
 
     public function new() {
     
@@ -61,9 +62,9 @@ class LauncherLogicSystem extends echoes.System {
         launcher_currentState = launcher.currentState;
     }
     
-    @u function synchronizeState(en:echoes.Entity,gr:GrappleFSM,spr:SpriteComponent,lab:DebugLabel,tgp:TargetGridPosition){
+    @u function synchronizeState(en:echoes.Entity,gr:GrappleFSM,dpc:DynamicBodyComponent,lab:DebugLabel,tgp:TargetGridPosition){
         gr.set_synchronized_state(launcher_currentState);
-        lab.v =gr.load;
+        lab.float =debug; //dpc.euler.toString();
         droneLoad = gr.load;
     }
 
@@ -72,10 +73,12 @@ class LauncherLogicSystem extends echoes.System {
         
         switch gr.state {
             case Idle:
-                dpc.seek(tpos.gpToVector(),0.8);
+                gr.load = 0;
+                dpc.seek(tpos.gpToVector(),1.11);
                 dpc.arrival(tpos.gpToVector());
             case Recall:
-                dpc.seek(tpos.gpToVector(),2);
+                gr.load = 0;
+                dpc.seek(tpos.gpToVector(),2.2);
                 dpc.arrival(tpos.gpToVector());
             case Docked:
                 dpc.stick(tpos.gpToVector());
@@ -86,7 +89,7 @@ class LauncherLogicSystem extends echoes.System {
             case Expulse:
                 if(gr.load >= 0)
                     gr.load -= rewind/10;
-                dpc.seek(tpos.gpToVector(),0.3+gr.load);
+                dpc.seek(tpos.gpToVector(),1+gr.load);
                 dpc.arrival(tpos.gpToVector());
                 dpc.addForce(new Vector(0,gr.load*grapplePower));
         }

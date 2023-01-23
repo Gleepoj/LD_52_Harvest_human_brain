@@ -61,10 +61,8 @@ class DynamicBodyComponent {
 
     public function addForce(f:Vector){
         isStick = false;
-        var a = acceleration.clone();
-        var c = VectorUtils.clampVector(f,maxSpeed);
-        //if(c.length()> 3)
-          //  trace("add force issue");
+        //var a = acceleration.clone();
+        var a:Vector = new Vector(M.maxPrecision(f.x,4),M.maxPrecision(f.y,4),0,0);
         
         acceleration = a.add(f);
     }
@@ -141,11 +139,13 @@ class DynamicBodyComponent {
     public function accelerationFriction(){
         var af = new Vector();
         var accel = new Vector(M.maxPrecision(acceleration.x,2),M.maxPrecision(acceleration.y,2),0,0);
-        var f = M.fclamp(friction,0.01,maxSpeed); 
+        // beware of friction at 0 ;
+        var f = M.fclamp(friction,0.1,maxSpeed); 
         
         af.lerp(zero,accel,f);
         
-        acceleration = af;
+        var af_bis = new Vector(M.maxPrecision(af.x,4),M.maxPrecision(af.y,4),0,0);
+        acceleration = af_bis;
        // acceleration = accel;
 
         if(af.length()> 4){
