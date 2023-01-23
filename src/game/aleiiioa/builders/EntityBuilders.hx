@@ -369,7 +369,6 @@ class EntityBuilders {
          var ic  = new InteractiveComponent();
          var em  = new EmitterComponent();
          var ac  = new ActionComponent();
-         //var gr  = new GrappleComponent();
          var gr  = new GrappleFSM();
          
          //Flags 

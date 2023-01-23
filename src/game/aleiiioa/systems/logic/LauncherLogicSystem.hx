@@ -40,11 +40,11 @@ class LauncherLogicSystem extends echoes.System {
     @u function inputStateMachine(dt:Float,launcher:LauncherFSM,input:InputComponent,label:DebugLabel,cl:CollisionsListener){
         launcher.cd.update(dt);
         
-        if(input.ca.isDown(ActionY)){
+        if(input.ca.isDown(ActionX)){
             launcher.next(Recall);
         }
 
-        if(!input.ca.isDown(ActionY)){
+        if(!input.ca.isDown(ActionX)){
             launcher.next(Idle);
             launcher.next(Expulse);
         }
@@ -79,26 +79,22 @@ class LauncherLogicSystem extends echoes.System {
                 dpc.arrival(tpos.gpToVector());
             case Docked:
                 dpc.stick(tpos.gpToVector());
-                if(gr.load < gr.maxLoad){
+                if(gr.load < gr.maxLoad)
                     gr.load += 0.05;
-                    gr.bonus = 0.;
-                }
             case Loaded:
                 dpc.stick(tpos.gpToVector());
             case Expulse:
-                //dpc.seek(tpos.gpToVector(),0.3+gr.load);
-                //dpc.arrival(tpos.gpToVector());
-                dpc.addForce(new Vector(0,gr.load*grapplePower));
-                
                 if(gr.load >= 0)
                     gr.load -= rewind/10;
+                dpc.seek(tpos.gpToVector(),0.3+gr.load);
+                dpc.arrival(tpos.gpToVector());
+                dpc.addForce(new Vector(0,gr.load*grapplePower));
         }
         
-        if(gr.load > gr.maxLoad){
+        if(gr.load > gr.maxLoad)
             gr.load = gr.maxLoad;
-            //trace("ok max load");
-        }
-        if(gr.load <= 0)
+        
+        if(gr.load < 0)
             gr.load = 0;
         
     }
