@@ -1,6 +1,8 @@
 package aleiiioa.systems.renderer;
 
 //import aleiiioa.components.core.SpriteExtension;
+import aleiiioa.components.core.velocity.DynamicBodyComponent;
+import aleiiioa.components.tools.GrappleFSM;
 import aleiiioa.components.logic.StaticBouleComponent;
 import aleiiioa.components.logic.StaticBrainComponent;
 import aleiiioa.components.logic.BrainSuckerComponent;
@@ -76,7 +78,7 @@ class SpriteExtensionFx extends System {
         }   */
     }
 
-    @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,ac:ActionComponent,gr:GrappleComponent) {
+    @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,ac:ActionComponent,gr:GrappleFSM,dpc:DynamicBodyComponent) {
        //var col:Vector = new Vector(gr.load,se.baseColor.g,se.baseColor.b);
        //spr.colorize(col.toColor());
        /* if(ac.grab == true){
@@ -86,6 +88,15 @@ class SpriteExtensionFx extends System {
        if(ac.grab == false){
         spr.colorize(0x022c21);
        } */
+       //spr.rotation = 0;
+       
+       spr.rotation = M.PIHALF + M.angTo(dpc.location.x,dpc.location.y,dpc.target.x,dpc.target.y-100);
+
+       if(gr.state == Expulse )
+            spr.rotation = 0 ;
+
+       
+
     }
     
     @u function colorMethanizer(spr:SpriteComponent,se:SpriteExtension,met:MethanizerComponent) {

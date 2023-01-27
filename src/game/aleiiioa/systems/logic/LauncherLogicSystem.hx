@@ -1,5 +1,6 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.components.core.velocity.VelocityAnalogSpeed;
 import h3d.Vector;
 import aleiiioa.components.core.collision.CollisionsListener;
 import aleiiioa.components.core.velocity.DynamicBodyComponent;
@@ -41,6 +42,31 @@ class LauncherLogicSystem extends echoes.System {
 
     }
 
+    @u function launcherDirection(launcher:LauncherFSM,vas:VelocityAnalogSpeed,spr:SpriteComponent){
+        
+        var accel = 0.05;
+        var moment = 0.06;
+
+        if(launcher.cd.has("OnChangeDir")){
+            //launcher.xSpeed *= -1;
+            //launcher.angleOffset *= -1;
+            //trace("changedir");
+        }
+
+        if(launcher.direction == 1 && launcher.xSpeed <=0.3){
+            launcher.xSpeed += accel;
+            launcher.angleOffset += moment;
+        }
+
+        if(launcher.direction == -1 && launcher.xSpeed >=-0.3){
+            launcher.xSpeed -= accel;
+            launcher.angleOffset -= moment;
+        }
+
+        vas.xSpeed = launcher.xSpeed;
+        spr.rotation =  launcher.angleOffset;
+        
+    }
     @u function setAutoRecall(en:echoes.Entity,gr:GrappleFSM,cl:CollisionsListener){
         if(gr.state == Expulse && cl.onHitHorizontal)
             autoRecall = true;
@@ -84,6 +110,7 @@ class LauncherLogicSystem extends echoes.System {
 
     @u function dronePhysics(en:echoes.Entity,gr:GrappleFSM,tpos:TargetGridPosition,dpc:DynamicBodyComponent,cl:CollisionsListener,inp:InputComponent){
         
+        dpc.target = tpos.gpToVector();
         switch gr.state {
             case Idle:
                 gr.load = 0;
@@ -103,11 +130,14 @@ class LauncherLogicSystem extends echoes.System {
                 dpc.stick(tpos.gpToVector());
             case Expulse:
                 if(gr.load >= 0)
-                    gr.load -= rewind/10;
-                dpc.seek(tpos.gpToVector(),1+gr.load);
+                    gr.load -= rewind/7;
+                
+                
+                dpc.seek(tpos.gpToVector(),1.8+(gr.load*0.75));
                 dpc.arrival(tpos.gpToVector());
-                dpc.addForce(new Vector(0,gr.load*grapplePower));
+                dpc.addForce(new Vector(0,(gr.load*grapplePower)*0.5));
         }
+
         
         if(gr.load > gr.maxLoad)
             gr.load = gr.maxLoad;

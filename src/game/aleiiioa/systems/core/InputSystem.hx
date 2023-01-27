@@ -1,6 +1,7 @@
 package aleiiioa.systems.core;
 
 
+import aleiiioa.components.tools.LauncherFSM;
 import aleiiioa.components.logic.MethanizerComponent;
 import aleiiioa.components.core.collision.CollisionsListener;
 import aleiiioa.components.core.velocity.VelocityAnalogSpeed;
@@ -21,14 +22,23 @@ class InputSystem extends echoes.System {
 	}
 	
 
-	@u function updatePlayer(inp:InputComponent,vas:VelocityAnalogSpeed,cl:CollisionsListener){
-	
+	@u function updatePlayer(inp:InputComponent,vas:VelocityAnalogSpeed,cl:CollisionsListener,launcher:LauncherFSM){
+		
+		var dir = launcher.direction;
+
 		if(inp.ca.isDown(MoveRight)){
-			vas.xSpeed = (0.3 + energyOutput);
+			launcher.direction = 1;
+			
 		}
 		if(inp.ca.isDown(MoveLeft)){
-			vas.xSpeed = -(0.3 +energyOutput);
+			launcher.direction = -1;
 		}
+
+		if(dir != launcher.direction && !launcher.cd.has("OnChangeDir") )
+			launcher.cd.setS("OnChangeDir",0.001);
+			
+		
+
 		if(inp.ca.isPressed(Jump) && cl.cd.has("recentlyOnGround")){
 			//vas.ySpeed = -0.9;
 			//cl.cd.unset("recentlyOnGround");

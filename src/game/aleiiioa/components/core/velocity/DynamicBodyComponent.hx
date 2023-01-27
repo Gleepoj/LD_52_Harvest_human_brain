@@ -118,7 +118,7 @@ class DynamicBodyComponent {
 
         var target = target_location;
         
-        if(target.x > 1 && target.y > 1){
+        if(target.x > 0 && target.y > 0){
             var t = target.sub(location);
             var dist = 5/t.length();// 5 
             var frict = 1-dist;

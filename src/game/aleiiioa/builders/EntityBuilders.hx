@@ -342,7 +342,7 @@ class EntityBuilders {
         
         new echoes.Entity().add(pos,vas,vc,cl,tpos,mpos,spr,bb,sq,se,ic,em,ac,inp,body,player,master,kinematic,td,launcher,targeted,label);
 
-        //Grapple 
+        /////DRONE////
          
          var mpos   = new MasterGridPosition(cx,cy);
          var master = new MasterFlag();
