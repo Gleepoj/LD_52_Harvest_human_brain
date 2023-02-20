@@ -8,16 +8,18 @@ typedef Order      = {from:Launcher_State,to:Launcher_State};
 
 class LauncherFSM {
     
-    var state:Launcher_State = Idle;
-    var allowed_transitions:Array<Transition>;
     var legal:String = "";
+    var state:Launcher_State = Idle;
+   
+    var allowed_transitions:Array<Transition>;
     var registered_transition:Null<Order>;
     
     public var xSpeed:Float = 0;
     public var angleOffset:Float = 0 ;
-    
+        
     public var direction:Int = 0;
     public var currentState(get,never):Launcher_State; inline function get_currentState() return state;
+    
     public var cd:Cooldown;
     
     public function new(){
@@ -26,8 +28,8 @@ class LauncherFSM {
         
         allowed_transitions = [
             {from:Idle,   to : [Recall]},
-            {from:Recall, to : [Idle,Docked]},
-            {from:Docked, to : [Expulse,Loaded]},
+            {from:Recall, to : [Docked]},// remove idle
+            {from:Docked, to : [Loaded]},// remove expulse
             {from:Loaded, to : [Expulse]},
             {from:Expulse,to : [Recall]}
         ];
@@ -49,9 +51,10 @@ class LauncherFSM {
                 }
             }
         }
+        switchToRegisteredTransition();
     }
 
-    public function switchToRegisteredTransition() {
+    function switchToRegisteredTransition() {
         if(registered_transition != null){
             state = registered_transition.to;
             registered_transition = null;            
@@ -63,9 +66,7 @@ class LauncherFSM {
             var state = currentState;
             var trans = registered_transition;
             var leg   = legal;
-       
             label.v = 'cur:$state t:$trans leg:$leg';
-            
     }
 
 }

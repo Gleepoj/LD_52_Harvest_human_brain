@@ -89,11 +89,15 @@ class SpriteExtensionFx extends System {
         spr.colorize(0x022c21);
        } */
        //spr.rotation = 0;
-       
+       spr.visible = true;
+
+       if(gr.state == Docked || gr.state == Loaded)
+            spr.visible = false;
+
        spr.rotation = M.PIHALF + M.angTo(dpc.location.x,dpc.location.y,dpc.target.x,dpc.target.y-100);
 
-       if(gr.state == Expulse )
-            spr.rotation = 0 ;
+       //if(gr.state == Expulse )
+         //   spr.rotation = 0 ;
 
        
 

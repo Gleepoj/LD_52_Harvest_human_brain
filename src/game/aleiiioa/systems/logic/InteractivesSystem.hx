@@ -35,14 +35,14 @@ class InteractivesSystem extends echoes.System {
         ic.cd.update(dt);
     }
 
-    @u function playerGrabObject(gr:GrappleFSM,cl:CollisionsListener,inp:InputComponent,ac:ActionComponent) {
+    @u function grappleGrabObject(gr:GrappleFSM,cl:CollisionsListener,inp:InputComponent,ac:ActionComponent) {
         if(cl.onInteract && inp.ca.isPressed(ActionX)){
             ac.query = true;
         }
     }
 
 
-    @u function playerThrowCatchable(gr:GrappleFSM,inp:InputComponent,ac:ActionComponent,vc:VelocityComponent,cl:CollisionsListener){
+    @u function releaseCatchable(gr:GrappleFSM,inp:InputComponent,ac:ActionComponent,vc:VelocityComponent,cl:CollisionsListener){
         //if(ac.grab && !en.exists())
         if(diedWithoutUnlink){
             diedWithoutUnlink = false;
@@ -51,10 +51,9 @@ class InteractivesSystem extends echoes.System {
         
         if(ac.grab && !inp.ca.isDown(ActionX)){
             ac.grab = false;
-            //trace("release gille");
-            //trace(gr.state);
+            gr.load = 0;
+            
             var head = ALL_CATCHABLE.entities.head;
-            gr.load = 0 ;
             cl.cd.setS("has_drop",0.001);
 
             while (head != null){

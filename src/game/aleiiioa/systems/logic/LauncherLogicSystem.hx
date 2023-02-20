@@ -1,5 +1,6 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.components.logic.ActionComponent;
 import aleiiioa.components.core.velocity.VelocityAnalogSpeed;
 import h3d.Vector;
 import aleiiioa.components.core.collision.CollisionsListener;
@@ -16,6 +17,7 @@ class LauncherLogicSystem extends echoes.System {
     var droneLoad:Float;
     var rewind:Float = 0.05;
     var grapplePower:Float = 3.;
+    var grabState:Bool;
     var debug:Float =0.;
     var autoRecall:Bool = false;
 
@@ -35,10 +37,11 @@ class LauncherLogicSystem extends echoes.System {
     @a function onLauncherAdded(en:echoes.Entity,launcher:LauncherFSM,spr:SpriteComponent){
        
         spr.set(Assets.launcher);
-        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.idle,1,  ()->launcher.currentState == Idle);
-        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.recall,1,()->launcher.currentState == Recall);
-        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.home,1,()->launcher.currentState == Docked);
-        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.load,1,()->launcher.currentState == Loaded);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.idle,      1,()->launcher.currentState == Idle);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.recall,    1,()->launcher.currentState == Recall);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.dock_empty,1,()->launcher.currentState == Docked);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.load,      1,()->launcher.currentState == Loaded);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.expulse,   1,()->launcher.currentState == Expulse);
 
     }
 
@@ -67,12 +70,25 @@ class LauncherLogicSystem extends echoes.System {
         spr.rotation =  launcher.angleOffset;
         
     }
-    @u function setAutoRecall(en:echoes.Entity,gr:GrappleFSM,cl:CollisionsListener){
+    @u function setAutoRecall(en:echoes.Entity,gr:GrappleFSM,cl:CollisionsListener,ac:ActionComponent,input:InputComponent){
         if(gr.state == Expulse && cl.onHitHorizontal)
             autoRecall = true;
 
         if(gr.state == Recall)
             autoRecall = false;
+
+        
+        if(input.ca.isDown(ActionX)){
+            if(launcher_currentState == Docked){
+                 if(gr.load < gr.maxLoad)
+                    gr.load += 0.05;
+            }
+
+        }
+        
+
+        grabState = gr.onGrab;
+        gr.grab_state = ac.grab;
     }
   
     @u function inputStateMachine(dt:Float,launcher:LauncherFSM,input:InputComponent,label:DebugLabel,cl:CollisionsListener){
@@ -80,30 +96,36 @@ class LauncherLogicSystem extends echoes.System {
 
         if(input.ca.isDown(ActionX) || autoRecall){
             launcher.next(Recall);
+            //if(launcher.currentState == Docked)
         }
 
         if(!input.ca.isDown(ActionX)){
-            launcher.next(Idle);
+            //launcher.next(Idle);
             launcher.next(Expulse);
+            
+             
+            //launcher.next(Loaded);
         }
 
+        
         if(launcher.currentState == Recall && cl.onDroneInteractLauncher )
             launcher.next(Docked);
 
-        if(launcher.currentState == Docked && droneLoad >= 1.)
+        if(launcher.currentState == Docked && droneLoad >= 1. && grabState == false)
             launcher.next(Loaded);
         
         
         
-        launcher.switchToRegisteredTransition();
+        //launcher.switchToRegisteredTransition();
         launcher.debugLabelUpdate(label);
         launcher_currentState = launcher.currentState;
     }
     
-    @u function synchronizeState(en:echoes.Entity,gr:GrappleFSM,dpc:DynamicBodyComponent,lab:DebugLabel,tgp:TargetGridPosition){
-        
+    @u function synchronizeState(en:echoes.Entity,dt:Float,gr:GrappleFSM,dpc:DynamicBodyComponent,lab:DebugLabel,tgp:TargetGridPosition){
+        gr.cd.update(dt);
         gr.set_synchronized_state(launcher_currentState);
-        lab.v = autoRecall; //dpc.euler.toString();
+        
+        lab.v = gr.onRelease;//gr.claw_state; //dpc.euler.toString();
         droneLoad = gr.load;
     }
 
@@ -120,19 +142,20 @@ class LauncherLogicSystem extends echoes.System {
                 }
             case Recall:
                 gr.load = 0;
+                //gr.lock();
                 dpc.seek(tpos.gpToVector(),2.2);
                 dpc.arrival(tpos.gpToVector());
             case Docked:
                 dpc.stick(tpos.gpToVector());
-                if(gr.load < gr.maxLoad)
-                    gr.load += 0.05;
+                //if(gr.load < gr.maxLoad)
+                 //   gr.load += 0.05;
             case Loaded:
+                //gr.released();
                 dpc.stick(tpos.gpToVector());
             case Expulse:
                 if(gr.load >= 0)
                     gr.load -= rewind/7;
-                
-                
+                //gr.released();
                 dpc.seek(tpos.gpToVector(),1.8+(gr.load*0.75));
                 dpc.arrival(tpos.gpToVector());
                 dpc.addForce(new Vector(0,(gr.load*grapplePower)*0.5));
