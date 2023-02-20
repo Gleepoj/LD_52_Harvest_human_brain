@@ -56,14 +56,18 @@ class LauncherLogicSystem extends echoes.System {
             //trace("changedir");
         }
 
-        if(launcher.direction == 1 && launcher.xSpeed <=0.3){
+        if(launcher.direction == 1 && launcher.xSpeed <=0.4){
             launcher.xSpeed += accel;
             launcher.angleOffset += moment;
         }
 
-        if(launcher.direction == -1 && launcher.xSpeed >=-0.3){
+        if(launcher.direction == -1 && launcher.xSpeed >=-0.4){
             launcher.xSpeed -= accel;
             launcher.angleOffset -= moment;
+        }
+
+        if(launcher.direction == 0 ){
+            launcher.xSpeed *= 0.985;
         }
 
         vas.xSpeed = launcher.xSpeed;

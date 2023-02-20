@@ -34,6 +34,9 @@ class InputSystem extends echoes.System {
 			launcher.direction = -1;
 		}
 
+		if(!inp.ca.isDown(MoveLeft) && !inp.ca.isDown(MoveRight))
+			launcher.direction = 0;
+
 		if(dir != launcher.direction && !launcher.cd.has("OnChangeDir") )
 			launcher.cd.setS("OnChangeDir",0.001);
 			
