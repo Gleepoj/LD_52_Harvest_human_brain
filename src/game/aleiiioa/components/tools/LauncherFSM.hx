@@ -9,13 +9,17 @@ typedef Order      = {from:Launcher_State,to:Launcher_State};
 class LauncherFSM {
     
     var legal:String = "";
-    var state:Launcher_State = Idle;
+    var state:Launcher_State = Recall;
    
     var allowed_transitions:Array<Transition>;
     var registered_transition:Null<Order>;
     
     public var xSpeed:Float = 0;
     public var angleOffset:Float = 0 ;
+    public var angle:Float = 0 - Math.PI/4;
+    public var velocity:Float = 0;
+    public var acceleration:Float =0;
+    public var damping:Float = 0.995;
         
     public var direction:Int = 0;
     public var currentState(get,never):Launcher_State; inline function get_currentState() return state;
@@ -24,7 +28,7 @@ class LauncherFSM {
     
     public function new(){
         cd = new Cooldown(Const.FIXED_UPDATE_FPS);
-        state = Idle;
+        state = Recall;
         
         allowed_transitions = [
             {from:Idle,   to : [Recall]},

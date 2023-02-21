@@ -48,22 +48,32 @@ class LauncherLogicSystem extends echoes.System {
     @u function launcherDirection(launcher:LauncherFSM,vas:VelocityAnalogSpeed,spr:SpriteComponent){
         
         var accel = 0.05;
-        var moment = 0.06;
+        var moment = 0.3;
+        var len = 1;
+        var gravity = 0.6;
+        var sx = launcher.xSpeed;
+        //var force = gravity + sx;
+
+        launcher.acceleration = (-1*gravity/len)*Math.sin(launcher.angle) + (1*sx/len)*Math.cos(launcher.angle);
+        launcher.velocity += launcher.acceleration ;
+        launcher.velocity *= 0.93;
+        launcher.angle += launcher.velocity;
 
         if(launcher.cd.has("OnChangeDir")){
             //launcher.xSpeed *= -1;
-            //launcher.angleOffset *= -1;
+            //launcher.angle *= -1;
+            //launcher.angle += moment;
             //trace("changedir");
         }
 
         if(launcher.direction == 1 && launcher.xSpeed <=0.4){
             launcher.xSpeed += accel;
-            launcher.angleOffset += moment;
+            //launcher.angle += moment;
         }
 
         if(launcher.direction == -1 && launcher.xSpeed >=-0.4){
             launcher.xSpeed -= accel;
-            launcher.angleOffset -= moment;
+           // launcher.angle -= moment;
         }
 
         if(launcher.direction == 0 ){
@@ -71,7 +81,8 @@ class LauncherLogicSystem extends echoes.System {
         }
 
         vas.xSpeed = launcher.xSpeed;
-        spr.rotation =  launcher.angleOffset;
+        //spr.rotation =  launcher.angleOffset;
+        spr.rotation =  launcher.angle;
         
     }
     @u function setAutoRecall(en:echoes.Entity,gr:GrappleFSM,cl:CollisionsListener,ac:ActionComponent,input:InputComponent){
