@@ -1,5 +1,8 @@
 package aleiiioa.builders;
 
+import aleiiioa.components.flags.logic.FixedDebugLabel;
+import aleiiioa.components.core.position.GridPosition;
+import aleiiioa.components.core.rendering.DebugLabel;
 import aleiiioa.components.dialog.DialogReferenceComponent;
 import aleiiioa.components.dialog.UIBubble;
 import aleiiioa.components.dialog.UIOption;
@@ -17,6 +20,15 @@ class UIBuilders {
         public static function slider(label : String, get : Void -> Float, set : Float -> Void, min : Float = 0., max : Float = 1.) {
             var usc = new UISliderComponent(label,get,set,min,max);
             new echoes.Entity().add(usc);
+        }
+
+        public static function debugFloat(float:Float,cx:Int,cy:Int){
+            var dl = new DebugLabel();
+            var gp = new GridPosition(cx,cy);
+            var fl = new FixedDebugLabel();
+            dl.v = float;
+
+            new echoes.Entity().add(dl,gp,fl);
         }
 
         public static function check(label : String, get : Void -> Bool, set : Bool -> Void) {
