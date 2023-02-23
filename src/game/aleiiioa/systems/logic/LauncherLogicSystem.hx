@@ -42,17 +42,19 @@ class LauncherLogicSystem extends echoes.System {
     var flabel = 0.;
 
     public function new() {
-        UIBuilders.slider("accel",  function() return accel,   function(v) accel = v, 0.01,0.5);
-        UIBuilders.slider("len",    function() return len,     function(v) len = v, 0.1,4);
-        UIBuilders.slider("gravity",function() return gravity, function(v) gravity = v, 0.1,4);
-        UIBuilders.slider("damping",function() return damping, function(v) damping = v, 0.1,4);     
-        UIBuilders.slider("recall", function() return recallSpeed , function(v) recallSpeed = v, 2.2,5);
-        UIBuilders.slider("expulse",function() return expulseSpeed, function(v) expulseSpeed = v, 1.8,5); 
-        UIBuilders.slider("linearDamping",function()  return linearDamping, function(v) linearDamping = v, 0.800,0.999);    
-        UIBuilders.slider("maxSpeed",     function()  return maxSpeed,      function(v) maxSpeed = v, 0.3,0.9);  
-        UIBuilders.slider("grapplePower", function()  return grapplePower,  function(v) grapplePower = v, 2.,9.);  
-        UIBuilders.slider("loadSpeed",    function()  return loadSpeed,     function(v) loadSpeed = v, 0.03,0.09);  
-        UIBuilders.debugFloat(flabel,40,30);
+        #if debug
+            UIBuilders.slider("accel",  function() return accel,   function(v) accel = v, 0.01,0.5);
+            UIBuilders.slider("len",    function() return len,     function(v) len = v, 0.1,4);
+            UIBuilders.slider("gravity",function() return gravity, function(v) gravity = v, 0.1,4);
+            UIBuilders.slider("damping",function() return damping, function(v) damping = v, 0.1,4);     
+            UIBuilders.slider("recall", function() return recallSpeed , function(v) recallSpeed = v, 2.2,5);
+            UIBuilders.slider("expulse",function() return expulseSpeed, function(v) expulseSpeed = v, 1.8,5); 
+            UIBuilders.slider("linearDamping",function()  return linearDamping, function(v) linearDamping = v, 0.800,0.999);    
+            UIBuilders.slider("maxSpeed",     function()  return maxSpeed,      function(v) maxSpeed = v, 0.3,0.9);  
+            UIBuilders.slider("grapplePower", function()  return grapplePower,  function(v) grapplePower = v, 2.,9.);  
+            UIBuilders.slider("loadSpeed",    function()  return loadSpeed,     function(v) loadSpeed = v, 0.03,0.09);  
+            UIBuilders.debugFloat(flabel,40,30);
+        #end
     }
 
     @a function onGrappleAdded(en:echoes.Entity,gr:GrappleFSM,spr:SpriteComponent){
@@ -75,7 +77,6 @@ class LauncherLogicSystem extends echoes.System {
         
         var sx = launcher.xSpeed * launcher.direction;
 
-
         launcher.acceleration = (-1*gravity/len)*Math.sin(launcher.angle) + (1*sx/len)*Math.cos(launcher.angle);
         launcher.velocity += launcher.acceleration ;
         launcher.velocity *= damping;
@@ -84,15 +85,7 @@ class LauncherLogicSystem extends echoes.System {
         if(launcher.cd.has("OnChangeDir")){
             boost = 1.5;
         }
-/* 
-        if(launcher.direction == 1 && launcher.xSpeed <=maxSpeed){
-            launcher.xSpeed += (accel*boost);
-        }
 
-        if(launcher.direction == -1 && launcher.xSpeed >=-maxSpeed){
-            launcher.xSpeed -= (accel*boost);
-        }
-         */
         if(inp.ca.isDown(MoveRight) && launcher.xSpeed <=maxSpeed){
             launcher.xSpeed += accel;
         }
@@ -104,14 +97,7 @@ class LauncherLogicSystem extends echoes.System {
         if(launcher.xSpeed > maxSpeed){
             launcher.xSpeed = maxSpeed;
         }
-        if(launcher.direction == 0 ){
-           // launcher.xSpeed *= linearDamping;
-        }
-  /*       if(boost > 1)
-            boost -= 0.01;
-        //launcher.xSpeed *= linearDamping;
-        if(boost < 1)
-            boost = 1; */
+
         launcher.xSpeed *= linearDamping;
         flabel = M.pretty(launcher.xSpeed,2);
         vas.xSpeed = launcher.xSpeed * launcher.direction;
