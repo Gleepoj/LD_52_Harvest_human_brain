@@ -1,6 +1,6 @@
 package aleiiioa.systems.logic;
 
-import aleiiioa.components.flags.logic.FixedDebugLabel;
+
 import aleiiioa.builders.UIBuilders;
 import aleiiioa.components.logic.ActionComponent;
 import aleiiioa.components.core.velocity.VelocityAnalogSpeed;
@@ -15,45 +15,42 @@ import aleiiioa.components.core.rendering.DebugLabel;
 import aleiiioa.components.tools.LauncherFSM;
 
 class LauncherLogicSystem extends echoes.System {
+    //Shared State component
+
     var launcher_currentState:Launcher_State;
     var droneLoad:Float;
-    var rewind:Float = 0.05;
-    var grapplePower:Float = 6.;
     var grabState:Bool;
-    var debug:Float =0.;
     var autoRecall:Bool = false;
-    var ss = 0;
-
-    var boost = 1.;
     
+    // Launcher parameter
     var accel = 0.5;
-
     var len = 2.4;
     var gravity = 0.71;
-    var damping = 0.79;
-
-    var recallSpeed  = 3.4;
-    var expulseSpeed = 3.4;
-
+    var angularDamping = 0.79;
     var linearDamping = 0.91;
     var maxSpeed = 0.41;
+
+    // Drone Parameter
+    var recallSpeed  = 3.4;
+    var expulseSpeed = 3.4;
+    var slowdown:Float = 0.05;
+    var grapplePower:Float = 6.;
     var loadSpeed = 0.08;
 
-    var flabel = 0.;
 
     public function new() {
         #if debug
             UIBuilders.slider("accel",  function() return accel,   function(v) accel = v, 0.01,0.5);
             UIBuilders.slider("len",    function() return len,     function(v) len = v, 0.1,4);
             UIBuilders.slider("gravity",function() return gravity, function(v) gravity = v, 0.1,4);
-            UIBuilders.slider("damping",function() return damping, function(v) damping = v, 0.1,4);     
-            UIBuilders.slider("recall", function() return recallSpeed , function(v) recallSpeed = v, 2.2,5);
-            UIBuilders.slider("expulse",function() return expulseSpeed, function(v) expulseSpeed = v, 1.8,5); 
+            UIBuilders.slider("angularDamping",function() return angularDamping, function(v) angularDamping = v, 0.1,4);     
             UIBuilders.slider("linearDamping",function()  return linearDamping, function(v) linearDamping = v, 0.800,0.999);    
             UIBuilders.slider("maxSpeed",     function()  return maxSpeed,      function(v) maxSpeed = v, 0.3,0.9);  
-            UIBuilders.slider("grapplePower", function()  return grapplePower,  function(v) grapplePower = v, 2.,9.);  
-            UIBuilders.slider("loadSpeed",    function()  return loadSpeed,     function(v) loadSpeed = v, 0.03,0.09);  
-            UIBuilders.debugFloat(flabel,40,30);
+            
+            UIBuilders.slider("Drone : launchSpeed", function()  return grapplePower,  function(v) grapplePower = v, 2.,9.);  
+            UIBuilders.slider("Drone : reloadSpeed",    function()  return loadSpeed,     function(v) loadSpeed = v, 0.03,0.09);  
+            UIBuilders.slider("Drone : recallSpeed", function() return recallSpeed , function(v) recallSpeed = v, 2.2,5);
+            UIBuilders.slider("Drone : expulseOffset",function() return expulseSpeed, function(v) expulseSpeed = v, 1.8,5); 
         #end
     }
 
@@ -79,12 +76,8 @@ class LauncherLogicSystem extends echoes.System {
 
         launcher.acceleration = (-1*gravity/len)*Math.sin(launcher.angle) + (1*sx/len)*Math.cos(launcher.angle);
         launcher.velocity += launcher.acceleration ;
-        launcher.velocity *= damping;
+        launcher.velocity *= angularDamping;
         launcher.angle    += launcher.velocity;
-
-        if(launcher.cd.has("OnChangeDir")){
-            boost = 1.5;
-        }
 
         if(inp.ca.isDown(MoveRight) && launcher.xSpeed <=maxSpeed){
             launcher.xSpeed += accel;
@@ -99,7 +92,6 @@ class LauncherLogicSystem extends echoes.System {
         }
 
         launcher.xSpeed *= linearDamping;
-        flabel = M.pretty(launcher.xSpeed,2);
         vas.xSpeed = launcher.xSpeed * launcher.direction;
         spr.rotation =  launcher.angle;
         
@@ -150,10 +142,6 @@ class LauncherLogicSystem extends echoes.System {
         droneLoad = gr.load;
     }
 
-    @u function flabelrender(f:FixedDebugLabel,dl:DebugLabel){
-        dl.v = flabel;
-    }
-
     @u function dronePhysics(en:echoes.Entity,gr:GrappleFSM,tpos:TargetGridPosition,dpc:DynamicBodyComponent,cl:CollisionsListener,inp:InputComponent){
         
         dpc.target = tpos.gpToVector();
@@ -174,7 +162,7 @@ class LauncherLogicSystem extends echoes.System {
                 dpc.stick(tpos.gpToVector());
             case Expulse:
                 if(gr.load >= 0)
-                    gr.load -= rewind/7;    
+                    gr.load -= slowdown/7;    
                 dpc.seek(tpos.gpToVector(),expulseSpeed+(gr.load*0.75));
                 dpc.arrival(tpos.gpToVector());
                 dpc.addForce(new Vector(0,(gr.load*grapplePower)*0.5));

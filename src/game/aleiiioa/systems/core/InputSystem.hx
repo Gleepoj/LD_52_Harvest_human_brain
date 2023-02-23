@@ -30,18 +30,6 @@ class InputSystem extends echoes.System {
 		if(inp.ca.isDown(MoveLeft)){
 			launcher.direction =-1;
 		}
-		//if(!inp.ca.isDown(MoveLeft) && !inp.ca.isDown(MoveRight))
-		//	launcher.direction = 0;
 
-		if(dir != launcher.direction && !launcher.cd.has("OnChangeDir") )
-			launcher.cd.setS("OnChangeDir",0.001);
-			
-		if(inp.ca.isPressed(Jump) && cl.cd.has("recentlyOnGround")){
-			//vas.ySpeed = -0.9;
-			//cl.cd.unset("recentlyOnGround");
-		}
-		if(inp.ca.isDown(MoveUp)){
-			//vas.ySpeed = -0.3;
-		}
 	}
 }

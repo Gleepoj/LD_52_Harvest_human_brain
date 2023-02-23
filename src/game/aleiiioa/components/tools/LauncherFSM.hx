@@ -15,7 +15,6 @@ class LauncherFSM {
     var registered_transition:Null<Order>;
     
     public var xSpeed:Float = 0;
-    public var angleOffset:Float = 0 ;
     public var angle:Float = 0 - Math.PI/4;
     public var velocity:Float = 0;
     public var acceleration:Float =0;
