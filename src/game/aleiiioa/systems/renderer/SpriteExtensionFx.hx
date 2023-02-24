@@ -1,6 +1,8 @@
 package aleiiioa.systems.renderer;
 
 //import aleiiioa.components.core.SpriteExtension;
+import aleiiioa.components.tools.DigesterFSM;
+import aleiiioa.components.logic.DoorComponent;
 import aleiiioa.components.core.velocity.DynamicBodyComponent;
 import aleiiioa.components.tools.GrappleFSM;
 import aleiiioa.components.logic.StaticBouleComponent;
@@ -51,8 +53,6 @@ class SpriteExtensionFx extends System {
             spr.visible = true; 
     }
 
-    
-
     @u function collideDebug(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener) {
         spr.colorize(se.baseColor.toColor());
         
@@ -76,6 +76,33 @@ class SpriteExtensionFx extends System {
         if(cl.onCeil){
             spr.colorize(0xeea990);
         }   */
+    }
+    
+    @u function doorDebug(spr:SpriteComponent,se:SpriteExtension,door:DoorComponent){
+        //spr.colorize(se.baseColor.toColor());
+
+        if(door.isOpen)
+            spr.colorize(0x00ff00);
+
+        if(!door.isOpen)
+            spr.colorize(0xaa0000);
+    }
+
+     
+    @u function digestDebug(spr:SpriteComponent,se:SpriteExtension,dig:DigesterFSM){
+        //spr.colorize(se.baseColor.toColor());
+
+        if(dig.currentState == Free)
+            spr.colorize(0x1679e4);
+        
+        if(dig.currentState == Digest)
+            spr.colorize(0x5e16e4);
+
+        if(dig.currentState == Accept)
+            spr.colorize(0x16e46c);
+
+        if(dig.currentState == Spit)
+            spr.colorize(0xe1e416);
     }
 
     @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,ac:ActionComponent,gr:GrappleFSM,dpc:DynamicBodyComponent) {

@@ -44,6 +44,14 @@ class Event_OnContact implements CollisionEvent {
     }
 }
 
+class Event_OnContactDoor implements CollisionEvent {
+    public function new() {
+        
+    }
+    public function send(cl:CollisionsListener){
+        cl.cd.setS("contact_door",0.001);
+    }
+}
 class Event_OnDroneInteractLauncher implements CollisionEvent {
     public function new() {
         
@@ -59,6 +67,7 @@ class InstancedCollisionEvent {
     public var interact:Event_OnInteract;
     public var contact :Event_OnContact;
     public var drone_interact_launcher : Event_OnDroneInteractLauncher;
+    public var contact_door:Event_OnContactDoor;
 
     public var reset :Event_Reset;
 
@@ -66,6 +75,7 @@ class InstancedCollisionEvent {
         interact     = new Event_OnInteract();
         allowDialog  = new Event_OnDialogArea();
         contact      = new Event_OnContact();
+        contact_door = new Event_OnContactDoor();
         drone_interact_launcher = new Event_OnDroneInteractLauncher();
 
         

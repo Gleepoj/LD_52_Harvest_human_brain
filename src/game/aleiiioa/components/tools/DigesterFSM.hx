@@ -3,44 +3,36 @@ package aleiiioa.components.tools;
 import aleiiioa.components.core.rendering.DebugLabel;
 import dn.Cooldown;
 
+typedef Transition_Digest = {from:Digester_State,to:Array<Digester_State>};
+typedef Order_Digest      = {from:Digester_State,to:Digester_State};
 
-typedef Transition = {from:Launcher_State,to:Array<Launcher_State>};
-typedef Order      = {from:Launcher_State,to:Launcher_State};
-
-class LauncherFSM {
+class DigesterFSM {
         
     var legal:String = "";
-    var state:Launcher_State = Recall;
+    var state:Digester_State;
    
-    var allowed_transitions:Array<Transition>;
-    var registered_transition:Null<Order>;
+    var allowed_transitions:Array<Transition_Digest>;
+    var registered_transition:Null<Order_Digest>;
     
-    public var xSpeed:Float = 0;
-    public var angle:Float = 0 - Math.PI/4;
-    public var velocity:Float = 0;
-    public var acceleration:Float =0;
-    public var damping:Float = 0.995;
-        
-    public var direction:Int = 0;
-    public var currentState(get,never):Launcher_State; inline function get_currentState() return state;
-    
+    public var currentState(get,never):Digester_State; inline function get_currentState() return state;    
     public var cd:Cooldown;
     
     public function new(){
+        
         cd = new Cooldown(Const.FIXED_UPDATE_FPS);
-        state = Recall;
+        state = Free;
         
         allowed_transitions = [
-            {from:Idle,   to : [Recall]},
-            {from:Recall, to : [Docked]},// remove idle
-            {from:Docked, to : [Loaded]},// remove expulse
-            {from:Loaded, to : [Expulse]},
-            {from:Expulse,to : [Recall]}
+            {from:Free,   to : [Digest]},
+            {from:Digest, to : [Accept,Reject]},
+            {from:Accept, to : [Spit]},
+            {from:Reject, to : [Spit]},
+            {from:Spit,   to : [Free]}
         ];
         
     }
     
-    public function next(next_state:Launcher_State){
+    public function next(next_state:Digester_State){
        
         if(currentState == next_state){
             return;
@@ -74,3 +66,4 @@ class LauncherFSM {
     }
 
 }
+

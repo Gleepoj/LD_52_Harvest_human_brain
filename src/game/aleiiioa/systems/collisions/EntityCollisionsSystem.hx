@@ -1,5 +1,6 @@
 package aleiiioa.systems.collisions;
 
+import aleiiioa.components.logic.DoorComponent;
 import aleiiioa.components.tools.LauncherFSM;
 import aleiiioa.components.tools.GrappleFSM;
 import echoes.core.RestrictedLinkedList;
@@ -25,6 +26,7 @@ class EntityCollisionsSystem extends echoes.System {
     var PLAYER :View<GridPosition,PlayerFlag>;
     var GRAPPLE:View<GridPosition,GrappleFSM>;
     var LAUNCHER:View<GridPosition,LauncherFSM>;
+    //var DOOR:View<GridPosition,DoorComponent>;
     
     var ACCURACY:Int=0;
 
@@ -45,6 +47,10 @@ class EntityCollisionsSystem extends echoes.System {
         collide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.contact);
         halfCollide(gp,bb,cl,LAUNCHER.entities.head,events.drone_interact_launcher);
         
+    }
+
+    @u function doorCollisions(flag:DoorComponent,gp:GridPosition,cl:CollisionsListener,bb:BoundingBox){
+        collide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.contact_door);
     }
 
     function preCollide(gp:GridPosition,bb:BoundingBox,cl:CollisionsListener,_head:Dynamic,_order:CollisionEvent){

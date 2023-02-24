@@ -18,29 +18,31 @@ class LauncherLogicSystem extends echoes.System {
     //Shared State component
 
     var launcher_currentState:Launcher_State;
-    var droneLoad:Float;
-    var grabState:Bool;
+    var droneLoad :Float;
+    var grabState :Bool;
     var autoRecall:Bool = false;
     
     // Launcher parameter
-    var accel = 0.5;
-    var len = 2.4;
-    var gravity = 0.71;
-    var angularDamping = 0.79;
-    var linearDamping = 0.91;
-    var maxSpeed = 0.41;
+
+    var accel  :Float = 0.5;
+    var len    :Float = 2.4;
+    var gravity:Float = 0.71;
+    var angularDamping:Float = 0.79;
+    var linearDamping :Float = 0.91;
+    var maxSpeed      :Float = 0.41;
 
     // Drone Parameter
-    var recallSpeed  = 3.4;
-    var expulseSpeed = 3.4;
-    var slowdown:Float = 0.05;
-    var grapplePower:Float = 6.;
-    var loadSpeed = 0.08;
+
+    var recallSpeed  :Float = 3.4;
+    var expulseSpeed :Float = 3.4;
+    var slowdown     :Float = 0.05;
+    var grapplePower :Float = 6.;
+    var loadSpeed    :Float = 0.08;
 
 
     public function new() {
         #if debug
-            UIBuilders.slider("accel",  function() return accel,   function(v) accel = v, 0.01,0.5);
+         /*    UIBuilders.slider("accel",  function() return accel,   function(v) accel = v, 0.01,0.5);
             UIBuilders.slider("len",    function() return len,     function(v) len = v, 0.1,4);
             UIBuilders.slider("gravity",function() return gravity, function(v) gravity = v, 0.1,4);
             UIBuilders.slider("angularDamping",function() return angularDamping, function(v) angularDamping = v, 0.1,4);     
@@ -50,7 +52,7 @@ class LauncherLogicSystem extends echoes.System {
             UIBuilders.slider("Drone : launchSpeed", function()  return grapplePower,  function(v) grapplePower = v, 2.,9.);  
             UIBuilders.slider("Drone : reloadSpeed",    function()  return loadSpeed,     function(v) loadSpeed = v, 0.03,0.09);  
             UIBuilders.slider("Drone : recallSpeed", function() return recallSpeed , function(v) recallSpeed = v, 2.2,5);
-            UIBuilders.slider("Drone : expulseOffset",function() return expulseSpeed, function(v) expulseSpeed = v, 1.8,5); 
+            UIBuilders.slider("Drone : expulseOffset",function() return expulseSpeed, function(v) expulseSpeed = v, 1.8,5);  */
         #end
     }
 

@@ -1,5 +1,7 @@
 package aleiiioa;
 
+import aleiiioa.systems.logic.DigesterLogicSystem;
+//import aleiiioa.components.logic.DigesterComponent;
 import aleiiioa.systems.logic.LauncherLogicSystem;
 import echoes.Entity;
 import aleiiioa.systems.logic.EntityLogicSystem;
@@ -85,6 +87,7 @@ class Aleiiioa extends Game {
 		Workflow.add60FpsSystem(new InteractivesSystem());
 		Workflow.add60FpsSystem(new EntityLogicSystem());
 		Workflow.addSystem(new LauncherLogicSystem());
+		Workflow.addSystem(new DigesterLogicSystem()); 
 		
 		//Particles
 		Workflow.addSystem(new ParticulesVelocitySystem());

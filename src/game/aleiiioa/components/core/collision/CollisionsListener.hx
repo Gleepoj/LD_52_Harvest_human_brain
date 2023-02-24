@@ -35,6 +35,9 @@ class CollisionsListener {
 
     public var onContact(get,never):Bool;
         inline function get_onContact() return cd.has("contact");
+
+    public var onContactDoor(get,never):Bool;
+        inline function get_onContactDoor() return cd.has("contact_door");
     
     public var onArea(get,never):Bool;
         inline function get_onArea() return cd.has("pnj ready");

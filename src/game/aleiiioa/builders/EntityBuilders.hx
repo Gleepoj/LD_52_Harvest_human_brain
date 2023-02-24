@@ -2,6 +2,8 @@ package aleiiioa.builders;
 
 
 
+import aleiiioa.components.logic.DoorComponent;
+import aleiiioa.components.tools.DigesterFSM;
 import aleiiioa.components.tools.GrappleFSM;
 import aleiiioa.components.tools.LauncherFSM;
 import aleiiioa.components.logic.StaticBouleComponent;
@@ -159,31 +161,8 @@ class EntityBuilders {
         
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,brainsucker);
     }
-
-/*     public static function brainSucker(cx:Int,cy:Int) {
-        //Physics Component
-        var pos = new GridPosition(cx+15,cy);
-        var cl  = new CollisionsListener();
-        
-        //Rendering Component
-        var spr = new SpriteComponent(D.tiles.methanizer);
-        spr.pivot.setCenterRatio(0.5,0.5);
-        
-        var sq  = new SquashComponent();
-        var se  = new SpriteExtension();
-        var bb  = new BoundingBox(spr);
-        
-        var inp = new InputComponent();
-
-        se.baseColor = new Vector(0.0,0.2,0.95);
-
-        var launcher = new LauncherFSM();
-        var label = new DebugLabel();
-
-        new echoes.Entity().add(pos,cl,spr,sq,se,bb,inp,launcher,label);
-    } */
     
-    public static function methanizer(cx:Int,cy:Int) {
+/*     public static function methanizer(cx:Int,cy:Int) {
         //Physics Component
         var pos = new GridPosition(cx,cy);
         var cl  = new CollisionsListener();
@@ -201,8 +180,47 @@ class EntityBuilders {
         var methanizer = new MethanizerComponent();
         
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,methanizer);
-    }
+    } */
 
+    public static function methanizer(cx:Int,cy:Int) {
+        //Physics Component
+        var pos = new GridPosition(cx,cy);
+        var cl  = new CollisionsListener();
+        
+        //Rendering Component
+        var spr = new SpriteComponent(D.tiles.methanizer);
+        spr.pivot.setCenterRatio(0.5,0.5);
+        
+        var sq  = new SquashComponent();
+        var se  = new SpriteExtension();
+        var bb  = new BoundingBox(spr);
+
+        se.baseColor = new Vector(0.05,0.5,0.05);
+
+        var digester = new DigesterFSM();
+        
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,digester);
+
+        var pos = new GridPosition(cx,cy-4);
+        var cl  = new CollisionsListener();
+        
+        //Rendering Component
+        var spr = new SpriteComponent(D.tiles.fxCircle15);
+        var sq  = new SquashComponent();
+        var se  = new SpriteExtension();
+        
+        spr.pivot.setCenterRatio(0.5,0.5);
+        spr.scale(2);
+        se.sprScaleX = 2;
+        se.sprScaleY = 2;
+        se.baseColor = new Vector(0.3,0.1,0.6);
+        
+        var bb  = new BoundingBox(spr);
+        var door = new DoorComponent();
+
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,door);
+
+    }
 
     
     
@@ -408,91 +426,4 @@ class EntityBuilders {
 
 
 }
-
-/* public static function player(cx:Int,cy:Int) {
-        
-    //Physics Component
-    var pos = new GridPosition(cx,cy);
-    var vas = new VelocityAnalogSpeed(0,0);
-    var vc  = new VelocityComponent(true,true);
-    var cl  = new CollisionsListener();
-    
-    //Hierarchy Component and Flag (to attach any entity depending on player position)
-    var mpos   = new MasterGridPosition(cx,cy);
-    var tpos   = new TargetGridPosition(cx,cy);
-    var master = new MasterFlag();
-
-    //Rendering Component
-    var spr = new SpriteComponent(D.tiles.gille);
-    spr.pivot.setCenterRatio(0.5,0.5);
-    spr.scale(2.);
-   
-    var sq  = new SquashComponent();
-    var se  = new SpriteExtension();
-    se.sprScaleX = 2.;
-    se.sprScaleY = 2.;
-
-    se.baseColor = new Vector(1,1,1);
-    var bb  = new BoundingBox(spr);
-    
-
-
-    //Logic and Dialog Component
-    var ic = new InteractiveComponent();
-    var em = new EmitterComponent();
-    var ac = new ActionComponent();
-    var inp= new InputComponent();
-    var launcher = new LauncherComponent();
-    
-    //Flags
-    var body   = new BodyFlag();   
-    var player = new PlayerFlag();
-    var kinematic = new KinematicBodyFlag();
-    var targeted = new TargetedFlag();
-    var td = new TopDownPhysicsFlag();
-
-    
-    new echoes.Entity().add(pos,vas,vc,cl,tpos,mpos,spr,bb,sq,se,ic,em,ac,inp,body,player,master,kinematic,td,launcher,targeted);
-
-    //Grapple 
-     
-     var mpos   = new MasterGridPosition(cx,cy);
-     var master = new MasterFlag();
-
-     //Physics Component
-     var pos = new GridPosition(cx,cy+6);
-     var vas = new VelocityAnalogSpeed(0,0);
-     var vc  = new VelocityComponent(true,true);
-     var cl  = new CollisionsListener();
-     
-     //Hierarchy Component and Flag (to attach any entity depending on player position)
-
-     //Rendering Component
-     var spr = new SpriteComponent(D.tiles.drone);
-     spr.pivot.setCenterRatio(0.5,0.5);
-     var sq  = new SquashComponent();
-     var se  = new SpriteExtension();
-     var bb  = new BoundingBox(spr);
-     se.baseColor = new Vector(1,1,1);
-     
- 
-
-     //Logic and Dialog Component
-     var ic  = new InteractiveComponent();
-     var em  = new EmitterComponent();
-     var ac  = new ActionComponent();
-     var gr  = new GrappleComponent();
-     
-     //Flags 
-     var body   = new BodyFlag(); 
-     var sw     = new DynamicBodyComponent();
-     
-     var dyn = new DynamicBodyFlag();
-     var targeter = new TargeterFlag();  
-    
-
-     new echoes.Entity().add(pos,vas,vc,sw,cl,tpos,mpos,master,spr,bb,gr,sq,se,ic,em,ac,inp,body,dyn,targeter);
-
-
-} */
 

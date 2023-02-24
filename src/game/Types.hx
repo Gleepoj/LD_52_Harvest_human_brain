@@ -64,6 +64,13 @@ enum abstract Claw_State(String) to String {
 	var Load;
 }
 
+enum abstract Digester_State(String) to String {
+	var Free;
+	var Digest;
+	var Accept;
+	var Reject;
+	var Spit;
+}
 
 	
 

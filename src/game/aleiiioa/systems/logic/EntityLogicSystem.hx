@@ -49,11 +49,16 @@ class EntityLogicSystem  extends echoes.System{
         }
     }
 
-    @u function gillecollide(en:echoes.Entity,pos:GridPosition,gille:GilleFlag) {
-            if(level.hasMethaniseur(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
+    @u function gillecollide(en:echoes.Entity,pos:GridPosition,gille:GilleFlag,cl:CollisionsListener) {
+ /*            if(level.hasMethaniseur(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
                 en.add(new IsDiedFlag());
                 addCorpse = true;
                 //trace(" is methanize ");
+            } */
+
+            if(cl.onContactDoor && !en.exists(IsDiedFlag)){
+                en.add(new IsDiedFlag());
+                addCorpse = true;
             }
 
             if(level.hasShredder(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
