@@ -49,8 +49,9 @@ class EntityCollisionsSystem extends echoes.System {
         
     }
 
-    @u function doorCollisions(flag:DoorComponent,gp:GridPosition,cl:CollisionsListener,bb:BoundingBox){
-        collide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.contact_door);
+    @u function doorCollisions(door:DoorComponent,gp:GridPosition,cl:CollisionsListener,bb:BoundingBox){
+        if(door.isOpen)
+            collide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.contact_door);
     }
 
     function preCollide(gp:GridPosition,bb:BoundingBox,cl:CollisionsListener,_head:Dynamic,_order:CollisionEvent){

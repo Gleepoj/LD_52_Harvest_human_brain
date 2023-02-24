@@ -54,7 +54,7 @@ class Aleiiioa extends Game {
 		}
 
 		for (bs in level.data.l_Entities.all_BrainSucker){
-			EntityBuilders.brainSucker(bs.cx,bs.cy);
+			EntityBuilders.methanizer(bs.cx,bs.cy);
 		}
 		
 		for (met in level.data.l_Entities.all_Methanizer){

@@ -2,6 +2,7 @@ package aleiiioa.builders;
 
 
 
+import aleiiioa.components.logic.DigesterSharedComponent;
 import aleiiioa.components.logic.DoorComponent;
 import aleiiioa.components.tools.DigesterFSM;
 import aleiiioa.components.tools.GrappleFSM;
@@ -186,6 +187,7 @@ class EntityBuilders {
         //Physics Component
         var pos = new GridPosition(cx,cy);
         var cl  = new CollisionsListener();
+        var dsc = new DigesterSharedComponent();
         
         //Rendering Component
         var spr = new SpriteComponent(D.tiles.methanizer);
@@ -199,7 +201,7 @@ class EntityBuilders {
 
         var digester = new DigesterFSM();
         
-        new echoes.Entity().add(pos,cl,spr,sq,se,bb,digester);
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,digester,dsc);
 
         var pos = new GridPosition(cx,cy-4);
         var cl  = new CollisionsListener();
@@ -218,7 +220,7 @@ class EntityBuilders {
         var bb  = new BoundingBox(spr);
         var door = new DoorComponent();
 
-        new echoes.Entity().add(pos,cl,spr,sq,se,bb,door);
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,door,dsc);
 
     }
 
