@@ -1,5 +1,6 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.systems.collisions.CollisionEvent.Event_OnContact;
 import aleiiioa.components.tools.GrappleFSM;
 import aleiiioa.components.core.rendering.SpriteComponent;
 import aleiiioa.builders.UIBuilders;
@@ -36,7 +37,7 @@ class InteractivesSystem extends echoes.System {
     }
 
     @u function grappleGrabObject(gr:GrappleFSM,cl:CollisionsListener,inp:InputComponent,ac:ActionComponent) {
-        if(cl.onInteract && inp.ca.isPressed(ActionX)){
+        if(cl.onContact && inp.ca.isPressed(ActionX)){
             ac.query = true;
         }
     }

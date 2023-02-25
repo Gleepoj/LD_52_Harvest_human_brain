@@ -45,7 +45,7 @@ class EntityCollisionsSystem extends echoes.System {
      
         preCollide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.interact);
         collide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.contact);
-        collide(gp,bb,cl,LAUNCHER.entities.head,events.drone_interact_launcher);
+        halfCollide(gp,bb,cl,LAUNCHER.entities.head,events.drone_interact_launcher);
         
     }
 
