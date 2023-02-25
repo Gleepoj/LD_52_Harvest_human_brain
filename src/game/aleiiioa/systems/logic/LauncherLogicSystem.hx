@@ -39,6 +39,8 @@ class LauncherLogicSystem extends echoes.System {
     var grapplePower :Float = 6.;
     var loadSpeed    :Float = 0.08;
 
+    var droneBoost  :Float = 0.001;
+
 
     public function new() {
         #if debug
@@ -54,7 +56,9 @@ class LauncherLogicSystem extends echoes.System {
             UIBuilders.slider("Drone : recallSpeed", function() return recallSpeed , function(v) recallSpeed = v, 2.2,5);
             UIBuilders.slider("Drone : expulseOffset",function() return expulseSpeed, function(v) expulseSpeed = v, 1.8,5);  */
         #end
+            UIBuilders.slider("Drone : BoostSpeed", function()  return droneBoost,  function(v) droneBoost = v, 0.05,0.2); 
     }
+
 
     @a function onGrappleAdded(en:echoes.Entity,gr:GrappleFSM,spr:SpriteComponent){
         spr.set(Assets.drone);
@@ -81,6 +85,11 @@ class LauncherLogicSystem extends echoes.System {
         launcher.velocity *= angularDamping;
         launcher.angle    += launcher.velocity;
 
+        if(launcher.cd.has("onDock")){
+            accel += (droneLoad*droneBoost);
+            //trace(droneLoad*droneBoost);
+        }
+
         if(inp.ca.isDown(MoveRight) && launcher.xSpeed <=maxSpeed){
             launcher.xSpeed += accel;
         }
@@ -89,7 +98,7 @@ class LauncherLogicSystem extends echoes.System {
             launcher.xSpeed += accel;
         }
 
-        if(launcher.xSpeed > maxSpeed){
+        if(launcher.xSpeed > maxSpeed && !launcher.cd.has("onDock")){
             launcher.xSpeed = maxSpeed;
         }
 
@@ -126,12 +135,17 @@ class LauncherLogicSystem extends echoes.System {
         if(!input.ca.isDown(ActionX)){
             launcher.next(Expulse);
         }
-        if(launcher.currentState == Recall && cl.onDroneInteractLauncher )
+        if(launcher.currentState == Recall && cl.onDroneInteractLauncher ){
             launcher.next(Docked);
+            launcher.cd.setS("onDock",0.0015);
+        }
 
         if(launcher.currentState == Docked && droneLoad >= 1. && grabState == false)
             launcher.next(Loaded);
         
+        if(launcher.currentState != Docked)
+            launcher.cd.unset("onDock");
+
         launcher.debugLabelUpdate(label);
         launcher_currentState = launcher.currentState;
     }
@@ -140,7 +154,7 @@ class LauncherLogicSystem extends echoes.System {
         gr.cd.update(dt);
         gr.set_synchronized_state(launcher_currentState);
         
-        //lab.v = flabel;//gr.claw_state; //dpc.euler.toString();
+        lab.v = M.pretty(droneLoad,1);//gr.claw_state; //dpc.euler.toString();
         droneLoad = gr.load;
     }
 
