@@ -87,7 +87,6 @@ class LauncherLogicSystem extends echoes.System {
 
         if(launcher.cd.has("onDock")){
             accel += (droneLoad*droneBoost);
-            //trace(droneLoad*droneBoost);
         }
 
         if(inp.ca.isDown(MoveRight) && launcher.xSpeed <=maxSpeed){

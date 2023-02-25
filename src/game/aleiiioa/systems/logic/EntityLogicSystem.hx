@@ -35,7 +35,6 @@ class EntityLogicSystem  extends echoes.System{
     @u function onGilleAdded(spr:SpriteComponent,gil:GilleFlag){
         spr.set(Assets.gille);
         spr.scale(2);
-        //spr.anim.registerStateAnim(AssetsDictionaries.anim_gille.idle_anim, 3);
         spr.anim.registerStateAnim(AssetsDictionaries.anim_gille.walk,1);
     }
 
@@ -50,27 +49,15 @@ class EntityLogicSystem  extends echoes.System{
     }
 
     @u function gillecollide(en:echoes.Entity,pos:GridPosition,gille:GilleFlag,cl:CollisionsListener) {
- /*            if(level.hasMethaniseur(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
-                en.add(new IsDiedFlag());
-                addCorpse = true;
-                //trace(" is methanize ");
-            } */
 
             if(cl.onContactDoor && !en.exists(IsDiedFlag)){
                 en.add(new IsDiedFlag());
                 addCorpse = true;
             }
 
-            if(level.hasShredder(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
-                en.add(new IsDiedFlag());
-                addBrain = true;
-                //trace(" is shred");
-            }
-
             if(level.hasMetro(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
                 en.add(new IsDiedFlag());
                 addEscape = true;
-                //trace(" is on Metro");
             }
     }
     
@@ -82,9 +69,6 @@ class EntityLogicSystem  extends echoes.System{
             met.corpse += 1;
             sq.squashX *=1.6;
             sq.squashY *=0.8;
-            //trace(met.corpse);
-            //trace("add corpse");
-            //trace(met.energyOutput);
         }
 
         met.digestion -= sysEnergyConsumption;
@@ -99,13 +83,10 @@ class EntityLogicSystem  extends echoes.System{
 
         met.energyOutput = 1-(1/met.corpse);
         sysEnergyOutput = met.energyOutput;
-        //var col = new Vector(se.baseColor.r,se.baseColor.b,se.baseColor.g + met.energyOutput);
-        //spr.colorize(col.toColor());
 
     }
 
     @u function brainUpdate(br:BrainSuckerComponent,spr:SpriteComponent,se:SpriteExtension,sq:SquashComponent){
-        //met.energyConsomption = sysEnergyConsumption;
 
         var factor =  0.01*sysEnergyOutput;
 
@@ -120,15 +101,12 @@ class EntityLogicSystem  extends echoes.System{
         if(br.brains > 1){
             br.digestion -= factor;
         }
-        //met.digestion -= sysEnergyConsumption;
 
         if(br.digestion <=1 ){
            br.brains -= 1;
            br.digestion = br.digestTime;
            sq.squashX *=0.3;
            sq.squashY *=1.8;
-           //trace("digest brain");
-           //trace('factor $factor');
         }
 
         br.accuracy =  1-(1/br.brains);

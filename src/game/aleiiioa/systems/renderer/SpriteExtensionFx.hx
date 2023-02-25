@@ -60,7 +60,7 @@ class SpriteExtensionFx extends System {
             spr.colorize(0xFF0000);
         }
 
-        if(cl.onInteract){
+        if(cl.onContact){
             spr.colorize(0x01AA74);
         }
   
