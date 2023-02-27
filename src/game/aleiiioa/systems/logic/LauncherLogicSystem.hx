@@ -29,14 +29,14 @@ class LauncherLogicSystem extends echoes.System {
     var gravity:Float = 0.71;
     var angularDamping:Float = 0.79;
     var linearDamping :Float = 0.91;
-    var maxSpeed      :Float = 0.61;//0.41
+    var maxSpeed      :Float = 0.51;//0.41
 
     // Drone Parameter
 
     var recallSpeed  :Float = 3.4;
     var expulseSpeed :Float = 3.4;
-    var slowdown     :Float = 0.95;
-    var grapplePower :Float = 2.;
+    var slowdown     :Float = 0.99;
+    var grapplePower :Float = 2.5;
     var loadSpeed    :Float = 0.08;
 
     var droneBoost  :Float = 0.002;
