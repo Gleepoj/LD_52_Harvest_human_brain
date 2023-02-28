@@ -19,7 +19,6 @@ import aleiiioa.components.flags.physics.TopDownPhysicsFlag;
 import aleiiioa.components.flags.physics.DynamicBodyFlag;
 import aleiiioa.components.flags.physics.KinematicBodyFlag;
 import aleiiioa.components.flags.physics.PlateformerPhysicsFlag;
-import aleiiioa.components.logic.GrappleComponent;
 import aleiiioa.components.flags.hierarchy.ChildFlag;
 import aleiiioa.components.flags.logic.CatchableFlag;
 import aleiiioa.components.flags.hierarchy.MasterFlag;

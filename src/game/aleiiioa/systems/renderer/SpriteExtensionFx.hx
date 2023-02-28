@@ -9,7 +9,6 @@ import aleiiioa.components.logic.StaticBouleComponent;
 import aleiiioa.components.logic.StaticBrainComponent;
 import aleiiioa.components.logic.ActionComponent;
 import h3d.Vector;
-import aleiiioa.components.logic.GrappleComponent;
 import aleiiioa.components.core.collision.CollisionsListener;
 import aleiiioa.components.core.rendering.*;
 import echoes.System;
