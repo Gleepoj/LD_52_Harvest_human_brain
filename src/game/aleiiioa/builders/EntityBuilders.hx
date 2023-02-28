@@ -9,8 +9,6 @@ import aleiiioa.components.tools.GrappleFSM;
 import aleiiioa.components.tools.LauncherFSM;
 import aleiiioa.components.logic.StaticBouleComponent;
 import aleiiioa.components.logic.StaticBrainComponent;
-import aleiiioa.components.logic.MethanizerComponent;
-import aleiiioa.components.logic.BrainSuckerComponent;
 import aleiiioa.components.logic.LauncherComponent;
 import hxd.Math;
 import aleiiioa.components.logic.SpawnerPointComponent;
@@ -142,46 +140,6 @@ class EntityBuilders {
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,spp);
 
     }
-
-    public static function brainSucker(cx:Int,cy:Int) {
-        //Physics Component
-        var pos = new GridPosition(cx,cy);
-        var cl  = new CollisionsListener();
-        
-        //Rendering Component
-        var spr = new SpriteComponent(D.tiles.methanizer);
-        spr.pivot.setCenterRatio(0.5,0.5);
-        
-        var sq  = new SquashComponent();
-        var se  = new SpriteExtension();
-        var bb  = new BoundingBox(spr);
-
-        se.baseColor = new Vector(0.5,0.05,0.05);
-
-        var brainsucker = new BrainSuckerComponent();
-        
-        new echoes.Entity().add(pos,cl,spr,sq,se,bb,brainsucker);
-    }
-    
-/*     public static function methanizer(cx:Int,cy:Int) {
-        //Physics Component
-        var pos = new GridPosition(cx,cy);
-        var cl  = new CollisionsListener();
-        
-        //Rendering Component
-        var spr = new SpriteComponent(D.tiles.methanizer);
-        spr.pivot.setCenterRatio(0.5,0.5);
-        
-        var sq  = new SquashComponent();
-        var se  = new SpriteExtension();
-        var bb  = new BoundingBox(spr);
-
-        se.baseColor = new Vector(0.05,0.5,0.05);
-
-        var methanizer = new MethanizerComponent();
-        
-        new echoes.Entity().add(pos,cl,spr,sq,se,bb,methanizer);
-    } */
 
     public static function methanizer(cx:Int,cy:Int) {
         //Physics Component

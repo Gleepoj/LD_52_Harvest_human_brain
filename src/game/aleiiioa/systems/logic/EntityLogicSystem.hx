@@ -1,10 +1,8 @@
 package aleiiioa.systems.logic;
 
-import aleiiioa.components.logic.BrainSuckerComponent;
 import aleiiioa.components.core.rendering.SquashComponent;
 import h3d.Vector;
 import aleiiioa.components.core.rendering.SpriteExtension;
-import aleiiioa.components.logic.MethanizerComponent;
 import aleiiioa.components.core.rendering.SpriteComponent;
 import aleiiioa.components.core.velocity.VelocityAnalogSpeed;
 import aleiiioa.builders.EntityBuilders;
@@ -61,59 +59,6 @@ class EntityLogicSystem  extends echoes.System{
             }
     }
     
-    @u function methanizerUpdate(met:MethanizerComponent,spr:SpriteComponent,se:SpriteExtension,sq:SquashComponent){
-        met.energyConsomption = sysEnergyConsumption;
-
-        if(addCorpse){
-            addCorpse = false;
-            met.corpse += 1;
-            sq.squashX *=1.6;
-            sq.squashY *=0.8;
-        }
-
-        met.digestion -= sysEnergyConsumption;
-
-        if(met.digestion <=0 ){
-           met.corpse -= 1;
-           met.digestion = met.digestTime;
-           sq.squashX *=0.3;
-           sq.squashY *=1.8;
-           //trace("digest");
-        }
-
-        met.energyOutput = 1-(1/met.corpse);
-        sysEnergyOutput = met.energyOutput;
-
-    }
-
-    @u function brainUpdate(br:BrainSuckerComponent,spr:SpriteComponent,se:SpriteExtension,sq:SquashComponent){
-
-        var factor =  0.01*sysEnergyOutput;
-
-        if(addBrain){
-            addBrain = false;
-            br.brains += 1;
-            sq.squashX *=1.6;
-            sq.squashY *=0.8;
-           
-        }
-
-        if(br.brains > 1){
-            br.digestion -= factor;
-        }
-
-        if(br.digestion <=1 ){
-           br.brains -= 1;
-           br.digestion = br.digestTime;
-           sq.squashX *=0.3;
-           sq.squashY *=1.8;
-        }
-
-        br.accuracy =  1-(1/br.brains);
-        br.energyConsumption = br.brains;
-
-    }
-
 
     
     @u function spawnerUpdate(pos:GridPosition,spp:SpawnerPointComponent,cl:CollisionsListener){

@@ -15,7 +15,6 @@ import aleiiioa.systems.particules.*;
 import aleiiioa.systems.renderer.*;
 import aleiiioa.systems.collisions.*;
 import aleiiioa.systems.dialog.*;
-
 import echoes.Workflow;
 
 class Aleiiioa extends Game {

@@ -8,7 +8,6 @@ import echoes.utils.LinkedList.LinkedNode;
 import h3d.Vector;
 import echoes.Entity;
 import aleiiioa.components.core.rendering.BoundingBox;
-import aleiiioa.components.logic.BrainSuckerComponent;
 import aleiiioa.components.logic.GrappleComponent;
 import aleiiioa.components.flags.logic.CatchableFlag;
 import aleiiioa.components.logic.InteractiveComponent;
