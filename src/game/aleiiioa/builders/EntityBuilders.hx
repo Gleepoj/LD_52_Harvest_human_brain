@@ -2,6 +2,8 @@ package aleiiioa.builders;
 
 
 
+import aleiiioa.components.logic.ContainerComponent;
+import aleiiioa.components.logic.ContainerSharedComponent;
 import aleiiioa.components.logic.DigesterSharedComponent;
 import aleiiioa.components.logic.DoorComponent;
 import aleiiioa.components.tools.DigesterFSM;
@@ -160,10 +162,10 @@ class EntityBuilders {
         
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,digester,dsc);
 
+        // MOUTH
         var pos = new GridPosition(cx,cy-4);
         var cl  = new CollisionsListener();
         
-        //Rendering Component
         var spr = new SpriteComponent(D.tiles.fxCircle15);
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
@@ -174,10 +176,57 @@ class EntityBuilders {
         se.sprScaleY = 2;
         se.baseColor = new Vector(0.3,0.1,0.6);
         
-        var bb  = new BoundingBox(spr);
+        
         var door = new DoorComponent();
 
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,door,dsc);
+
+        //CONTAINER
+        //Shared
+        var container_shared = new ContainerSharedComponent();
+        
+        var pos = new GridPosition(cx,cy + 4);
+        var cl  = new CollisionsListener();
+        
+        var spr = new SpriteComponent(D.tiles.fxCircle15);
+        var sq  = new SquashComponent();
+        var se  = new SpriteExtension();
+        spr.pivot.setCenterRatio(0.5,0.5);
+        se.baseColor = new Vector(0.9,0.1,0.6);
+        var bb  = new BoundingBox(spr);
+        
+        var container = new ContainerComponent();
+
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,container,container_shared);
+
+        var pos = new GridPosition(cx,cy + 5);
+        var cl  = new CollisionsListener();
+        
+        var spr = new SpriteComponent(D.tiles.fxCircle15);
+        var sq  = new SquashComponent();
+        var se  = new SpriteExtension();
+        spr.pivot.setCenterRatio(0.5,0.5);
+        se.baseColor = new Vector(0.8,0.1,0.6);
+        var bb  = new BoundingBox(spr);
+        
+        var container = new ContainerComponent();
+
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,container,container_shared);
+
+        var pos = new GridPosition(cx,cy + 6);
+        var cl  = new CollisionsListener();
+        
+        var spr = new SpriteComponent(D.tiles.fxCircle15);
+        var sq  = new SquashComponent();
+        var se  = new SpriteExtension();
+        spr.pivot.setCenterRatio(0.5,0.5);
+        se.baseColor = new Vector(0.7,0.1,0.6);
+        var bb  = new BoundingBox(spr);
+        
+        var container = new ContainerComponent();
+
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,container,container_shared);
+
 
     }
 
