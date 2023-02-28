@@ -2,6 +2,8 @@ package aleiiioa.builders;
 
 
 
+import aleiiioa.shaders.PaletteShader;
+import haxe.ds.Map;
 import aleiiioa.components.logic.ContainerComponent;
 import aleiiioa.components.logic.ContainerSharedComponent;
 import aleiiioa.components.logic.DigesterSharedComponent;
@@ -176,6 +178,7 @@ class EntityBuilders {
         se.sprScaleY = 2;
         se.baseColor = new Vector(0.3,0.1,0.6);
         
+        var bb  = new BoundingBox(spr);
         
         var door = new DoorComponent();
 
@@ -281,6 +284,7 @@ class EntityBuilders {
             pos.cx += 1;
             vas.xSpeed = 1;
         }
+        
 
         if(!right){
             pos.cx -= 1;
@@ -300,8 +304,8 @@ class EntityBuilders {
         se.sprScaleX = 2;
         se.sprScaleY = 2;
         se.baseColor = new Vector(1,1,1);
-        var bb  = new BoundingBox(spr);
-      
+        var bb  = new BoundingBox(spr);      
+
 
         //Logic and Dialog Component
         var ic    = new InteractiveComponent();
@@ -310,6 +314,17 @@ class EntityBuilders {
         //Flags
         var gille = new GilleFlag();
         gille.right = right;
+
+        if(gille.right){
+            var colorSwap:Map<Int,Int> = new Map();
+            colorSwap.set(0x505acc,0xd8ab53);
+            colorSwap.set(0x4d5182,0xe2672a);
+            colorSwap.set(0x9badb7,0x56baa1);
+    
+            var shader = new PaletteShader(colorSwap);
+            spr.addShader(shader);
+        }
+
 
         var body = new BodyFlag(); 
         var bomb = new BombFlag();

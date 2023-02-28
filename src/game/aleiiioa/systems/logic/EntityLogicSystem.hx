@@ -1,5 +1,6 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.shaders.PaletteShader;
 import aleiiioa.components.core.rendering.SquashComponent;
 import h3d.Vector;
 import aleiiioa.components.core.rendering.SpriteExtension;
@@ -34,6 +35,7 @@ class EntityLogicSystem  extends echoes.System{
         spr.set(Assets.gille);
         spr.scale(2);
         spr.anim.registerStateAnim(AssetsDictionaries.anim_gille.walk,1);
+
     }
 
     @u function gilleWalk(vas:VelocityAnalogSpeed,ic:InteractiveComponent,gille:GilleFlag) {
