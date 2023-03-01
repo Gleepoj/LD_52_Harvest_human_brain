@@ -127,8 +127,6 @@ class SpriteExtensionFx extends System {
        //if(gr.state == Expulse )
          //   spr.rotation = 0 ;
 
-       
-
     }
 
     @u function container(spr:SpriteComponent,se:SpriteExtension,con:ContainerComponent) {
