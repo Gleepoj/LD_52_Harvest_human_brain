@@ -2,6 +2,7 @@ package aleiiioa.builders;
 
 
 
+import aleiiioa.components.logic.BonhommeComponent;
 import aleiiioa.shaders.PaletteShader;
 import haxe.ds.Map;
 import aleiiioa.components.logic.ContainerComponent;
@@ -198,7 +199,7 @@ class EntityBuilders {
         se.baseColor = new Vector(0.9,0.1,0.6);
         var bb  = new BoundingBox(spr);
         
-        var container = new ContainerComponent();
+        var container = new ContainerComponent(3);
 
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,container,container_shared);
 
@@ -212,7 +213,7 @@ class EntityBuilders {
         se.baseColor = new Vector(0.8,0.1,0.6);
         var bb  = new BoundingBox(spr);
         
-        var container = new ContainerComponent();
+        var container = new ContainerComponent(2);
 
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,container,container_shared);
 
@@ -226,7 +227,7 @@ class EntityBuilders {
         se.baseColor = new Vector(0.7,0.1,0.6);
         var bb  = new BoundingBox(spr);
         
-        var container = new ContainerComponent();
+        var container = new ContainerComponent(1);
 
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,container,container_shared);
 
@@ -267,29 +268,25 @@ class EntityBuilders {
     }
 
     public static function gille(cx:Int,cy:Int) {
-
-        //Physics Component
-        var rand = M.randRange(1,2);
-        var bool:Bool = false;
         
-        if(rand >1)
-            bool = true;
-
-        var right = bool;
-
         var pos = new GridPosition(cx,cy);
         var vas = new VelocityAnalogSpeed(0,0);
-
-        if(right){
-            pos.cx += 1;
-            vas.xSpeed = 1;
-        }
         
+        
+        //Physics Component
+        var rdir = M.randRange(1,2);
+        var rcolor = M.randRange(1,2);
+        
+        if(rdir == 2)
+            rdir = -1;
 
-        if(!right){
-            pos.cx -= 1;
-            vas.xSpeed = -1;
-        }
+        if(rcolor ==2)
+            rcolor = -1;
+
+        var dir = rdir;
+        var color = rcolor;
+
+        var bonhomme = new BonhommeComponent(dir,color);
 
         var vc  = new VelocityComponent(true);
         var cl  = new CollisionsListener();
@@ -309,13 +306,11 @@ class EntityBuilders {
 
         //Logic and Dialog Component
         var ic    = new InteractiveComponent();
-        var em    = new EmitterComponent();
         
         //Flags
-        var gille = new GilleFlag();
-        gille.right = right;
+        //gille.right = color;
 
-        if(gille.right){
+        if(color == -1){
             var colorSwap:Map<Int,Int> = new Map();
             colorSwap.set(0x505acc,0xd8ab53);
             colorSwap.set(0x4d5182,0xe2672a);
@@ -323,18 +318,27 @@ class EntityBuilders {
     
             var shader = new PaletteShader(colorSwap);
             spr.addShader(shader);
+            //gille.color = -1;
         }
 
 
-        var body = new BodyFlag(); 
-        var bomb = new BombFlag();
+        var body = new BodyFlag();
         var catchable = new CatchableFlag();
         var plateformer = new PlateformerPhysicsFlag();
         var kinematic = new KinematicBodyFlag();
         
         var dl = new DebugLabel();
         
-        new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,body,bomb,catchable,plateformer,kinematic,gille,dl);
+        if(bonhomme.color == 1){
+           var gille = new GilleFlag();
+           new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,body,catchable,plateformer,kinematic,gille,bonhomme,dl);
+        }
+
+             
+        if(bonhomme.color == -1){
+            var john = new JohnFlag();
+            new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,body,catchable,plateformer,kinematic,john,bonhomme,dl);
+         }
     }
 
     public static function player(cx:Int,cy:Int) {

@@ -1,6 +1,7 @@
 package aleiiioa.systems.renderer;
 
 //import aleiiioa.components.core.SpriteExtension;
+import aleiiioa.components.logic.ContainerComponent;
 import aleiiioa.components.tools.DigesterFSM;
 import aleiiioa.components.logic.DoorComponent;
 import aleiiioa.components.core.velocity.DynamicBodyComponent;
@@ -118,6 +119,20 @@ class SpriteExtensionFx extends System {
 
        
 
+    }
+
+    @u function container(spr:SpriteComponent,se:SpriteExtension,con:ContainerComponent) {
+        
+        switch con.state {
+            case Empty:
+                spr.colorize(0x4605ea7b);
+            case Waiting:
+                spr.colorize(0x05ea7b);
+            case John:
+                spr.colorize(0xe6d439);
+            case Gilles:
+                spr.colorize(0x3fa8e9);
+        }
     }
     
 }

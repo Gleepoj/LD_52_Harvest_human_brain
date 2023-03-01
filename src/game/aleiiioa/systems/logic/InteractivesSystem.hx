@@ -88,7 +88,7 @@ class InteractivesSystem extends echoes.System {
         }
     }
     
-    @r function onRemoveGrabbedGilles(en:echoes.Entity,catchable:CatchableFlag,g:GilleFlag){
+    @r function onRemoveGrabbedGilles(en:echoes.Entity,catchable:CatchableFlag,g:BonhommeComponent){
         if(en.exists(ChildFlag)){
             //trace("Died without unlink");
             diedWithoutUnlink = true;

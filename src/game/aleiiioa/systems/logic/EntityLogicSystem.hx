@@ -1,5 +1,6 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.components.logic.BonhommeComponent;
 import aleiiioa.shaders.PaletteShader;
 import aleiiioa.components.core.rendering.SquashComponent;
 import h3d.Vector;
@@ -31,24 +32,26 @@ class EntityLogicSystem  extends echoes.System{
         
     }
 
-    @u function onGilleAdded(spr:SpriteComponent,gil:GilleFlag){
+    @u function onGilleAdded(spr:SpriteComponent,bonhomme:BonhommeComponent,vas:VelocityAnalogSpeed){
         spr.set(Assets.gille);
         spr.scale(2);
         spr.anim.registerStateAnim(AssetsDictionaries.anim_gille.walk,1);
 
+        //vas.xSpeed = bonhomme.dir;
+
     }
 
-    @u function gilleWalk(vas:VelocityAnalogSpeed,ic:InteractiveComponent,gille:GilleFlag) {
+    @u function gilleWalk(vas:VelocityAnalogSpeed,ic:InteractiveComponent,bonhomme:BonhommeComponent) {
         if(!ic.isGrabbed){
-            if(gille.right == true)
+             if(bonhomme.dir == 1)
                 vas.xSpeed = 0.03;
 
-            if(gille.right == false)
-                vas.xSpeed = -0.03;
+            if(bonhomme.dir == -1)
+                vas.xSpeed = -0.03; 
         }
     }
 
-    @u function gillecollide(en:echoes.Entity,pos:GridPosition,gille:GilleFlag,cl:CollisionsListener) {
+    @u function gillecollide(en:echoes.Entity,pos:GridPosition,bonhomme:BonhommeComponent,cl:CollisionsListener) {
 
             if(cl.onContactDoor && !en.exists(IsDiedFlag)){
                 en.add(new IsDiedFlag());

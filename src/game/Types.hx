@@ -72,6 +72,13 @@ enum abstract Digester_State(String) to String {
 	var Spit;
 }
 
+enum abstract Container_State(String) to String {
+	var Empty;
+	var Waiting;
+	var Gilles;
+	var John;
+}
+
 	
 
 enum abstract LevelSubMark(Int) to Int {
