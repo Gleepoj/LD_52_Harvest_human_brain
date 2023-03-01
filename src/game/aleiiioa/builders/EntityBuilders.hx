@@ -150,6 +150,7 @@ class EntityBuilders {
         var pos = new GridPosition(cx,cy);
         var cl  = new CollisionsListener();
         var dsc = new DigesterSharedComponent();
+        var container_shared = new ContainerSharedComponent();
         
         //Rendering Component
         var spr = new SpriteComponent(D.tiles.methanizer);
@@ -163,7 +164,7 @@ class EntityBuilders {
 
         var digester = new DigesterFSM();
         
-        new echoes.Entity().add(pos,cl,spr,sq,se,bb,digester,dsc);
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,digester,dsc,container_shared);
 
         // MOUTH
         var pos = new GridPosition(cx,cy-4);
@@ -187,8 +188,7 @@ class EntityBuilders {
 
         //CONTAINER
         //Shared
-        var container_shared = new ContainerSharedComponent();
-        
+               
         var pos = new GridPosition(cx,cy + 4);
         var cl  = new CollisionsListener();
         

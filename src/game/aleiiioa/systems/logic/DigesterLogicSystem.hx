@@ -1,5 +1,7 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.components.logic.ContainerComponent;
+import aleiiioa.components.logic.ContainerSharedComponent;
 import aleiiioa.components.logic.DigesterSharedComponent;
 import aleiiioa.components.tools.DigesterFSM;
 import aleiiioa.components.core.rendering.BoundingBox;
@@ -18,15 +20,25 @@ class DigesterLogicSystem extends echoes.System {
             dsc.feed = true;
         }
 
-        if(dsc.digesterState == Free && !door.isOpen)
+        if(cl.onSwallowGille){
+            dsc.bellyState = Gilles;
+        }
+
+        if(cl.onSwallowJohn){
+            dsc.bellyState = John;
+        }
+
+        if(dsc.digesterState == Free && !door.isOpen){
             door.openDoor();
+            dsc.bellyState = Empty;
+        }
 
         if(dsc.digesterState != Free && door.isOpen)
             door.closeDoor();
         
     }
 
-    @u function synchronizeState(dt:Float,digest:DigesterFSM,dsc:DigesterSharedComponent) {
+    @u function synchronizeState(dt:Float,digest:DigesterFSM,dsc:DigesterSharedComponent,csc:ContainerSharedComponent) {
         digest.cd.update(dt);
         dsc.digesterState = digest.currentState;
 
@@ -47,11 +59,17 @@ class DigesterLogicSystem extends echoes.System {
             digest.cd.setS("spit",0.02);
         }
 
-        if(digest.currentState == Spit && !digest.cd.has("spit"))
+        if(digest.currentState == Spit && !digest.cd.has("spit")){
+            csc.fillContainer(dsc.bellyState);
             digest.next(Free);
-
+        }
         if(digest.currentState == Free)
             dsc.feed = false;
         
+    }
+
+    @u function updateContainers(cc:ContainerComponent,csc:ContainerSharedComponent){
+        var val = csc.containers.get(cc.id);
+        cc.state = val;
     }
 }

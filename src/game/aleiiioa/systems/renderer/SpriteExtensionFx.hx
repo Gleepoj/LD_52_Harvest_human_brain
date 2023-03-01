@@ -1,6 +1,7 @@
 package aleiiioa.systems.renderer;
 
 //import aleiiioa.components.core.SpriteExtension;
+import aleiiioa.components.logic.DigesterSharedComponent;
 import aleiiioa.components.logic.ContainerComponent;
 import aleiiioa.components.tools.DigesterFSM;
 import aleiiioa.components.logic.DoorComponent;
@@ -80,20 +81,29 @@ class SpriteExtensionFx extends System {
     }
 
      
-    @u function digestDebug(spr:SpriteComponent,se:SpriteExtension,dig:DigesterFSM){
-        //spr.colorize(se.baseColor.toColor());
+    @u function digestDebug(spr:SpriteComponent,se:SpriteExtension,dig:DigesterFSM,dsc:DigesterSharedComponent){
+        spr.colorize(se.baseColor.toColor());
 
         if(dig.currentState == Free)
-            spr.colorize(0x1679e4);
+            spr.colorize(0x16e446);
         
         if(dig.currentState == Digest)
             spr.colorize(0x5e16e4);
 
         if(dig.currentState == Accept)
-            spr.colorize(0x16e46c);
+            spr.colorize(0x047131);
 
         if(dig.currentState == Spit)
-            spr.colorize(0xe1e416);
+            spr.colorize(0x028739);
+
+        if(dsc.bellyState == Gilles)
+            spr.colorize(0xab08a5);
+
+        
+        if(dsc.bellyState == John)
+            spr.colorize(0xeeff00);
+
+
     }
 
     @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,ac:ActionComponent,gr:GrappleFSM,dpc:DynamicBodyComponent) {

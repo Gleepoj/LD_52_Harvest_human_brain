@@ -38,6 +38,12 @@ class CollisionsListener {
 
     public var onContactDoor(get,never):Bool;
         inline function get_onContactDoor() return cd.has("contact_door");
+
+    public var onSwallowGille(get,never):Bool;
+        inline function get_onSwallowGille() return cd.has("swallow_gille");
+
+    public var onSwallowJohn(get,never):Bool;
+        inline function get_onSwallowJohn() return cd.has("swallow_john");
     
     public var onArea(get,never):Bool;
         inline function get_onArea() return cd.has("pnj ready");

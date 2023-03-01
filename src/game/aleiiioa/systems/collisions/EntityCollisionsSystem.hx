@@ -20,6 +20,8 @@ import aleiiioa.components.core.position.GridPosition;
 class EntityCollisionsSystem extends echoes.System {
     var ALL_PNJ:View<GridPosition,PNJFlag>;
     var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent,GridPosition,BoundingBox,CollisionsListener>;
+    var ALL_GILLE:View<CatchableFlag,InteractiveComponent,GridPosition,BoundingBox,CollisionsListener,GilleFlag>;
+    var ALL_JOHN:View<CatchableFlag,InteractiveComponent,GridPosition,BoundingBox,CollisionsListener,JohnFlag>;
     
     var PLAYER :View<GridPosition,PlayerFlag>;
     var GRAPPLE:View<GridPosition,GrappleFSM>;
@@ -48,6 +50,10 @@ class EntityCollisionsSystem extends echoes.System {
     }
 
     @u function mouthCollisions(door:DoorComponent,gp:GridPosition,cl:CollisionsListener,bb:BoundingBox){
+        if(door.isOpen)
+            collide(gp,bb,cl,ALL_JOHN.entities.head,events.swallow_john);
+        if(door.isOpen)
+            collide(gp,bb,cl,ALL_GILLE.entities.head,events.swallow_gille);
         if(door.isOpen)
             collide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.contact_door);
         
