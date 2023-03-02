@@ -163,8 +163,10 @@ class EntityBuilders {
         se.baseColor = new Vector(0.05,0.5,0.05);
 
         var digester = new DigesterFSM();
+        var dl = new DebugLabel();
         
-        new echoes.Entity().add(pos,cl,spr,sq,se,bb,digester,dsc,container_shared);
+        
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,digester,dsc,container_shared,dl);
 
         // MOUTH
         var pos = new GridPosition(cx,cy-4);
@@ -187,8 +189,6 @@ class EntityBuilders {
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,door,dsc,container_shared);
 
         //CONTAINER
-        //Shared
-               
         var pos = new GridPosition(cx,cy + 4);
         var cl  = new CollisionsListener();
         

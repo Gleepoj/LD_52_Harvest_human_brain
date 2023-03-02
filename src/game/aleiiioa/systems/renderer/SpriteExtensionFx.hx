@@ -96,10 +96,10 @@ class SpriteExtensionFx extends System {
         if(dig.currentState == Spit)
             spr.colorize(0x028739);
 
+        
         if(dsc.bellyState == Gilles)
             spr.colorize(0xab08a5);
 
-        
         if(dsc.bellyState == John)
             spr.colorize(0xeeff00);
 

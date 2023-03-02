@@ -15,10 +15,11 @@ class ContainerSharedComponent {
     }
 
     public function fillContainer(type:Container_State){
+        //trace(type);
         if(!isFull){
           current_position += 1;
           containers.set(current_position,type);
-          trace(current_position);
+          //trace(current_position);
         }
 
         if(current_position == 3)
