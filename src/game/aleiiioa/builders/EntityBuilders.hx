@@ -184,7 +184,7 @@ class EntityBuilders {
         
         var door = new DoorComponent();
 
-        new echoes.Entity().add(pos,cl,spr,sq,se,bb,door,dsc);
+        new echoes.Entity().add(pos,cl,spr,sq,se,bb,door,dsc,container_shared);
 
         //CONTAINER
         //Shared

@@ -15,7 +15,7 @@ class DigesterLogicSystem extends echoes.System {
 
     }
 
-    @u function updateDoors(door:DoorComponent,dsc:DigesterSharedComponent,gp:GridPosition,cl:CollisionsListener,bb:BoundingBox) {
+    @u function updateDoors(door:DoorComponent,dsc:DigesterSharedComponent,cl:CollisionsListener,csc:ContainerSharedComponent,bb:BoundingBox) {
         if(cl.onContactDoor){
             dsc.feed = true;
         }
@@ -28,7 +28,7 @@ class DigesterLogicSystem extends echoes.System {
             dsc.bellyState = John;
         }
 
-        if(dsc.digesterState == Free && !door.isOpen){
+        if(dsc.digesterState == Free && !door.isOpen && !csc.isFull){
             door.openDoor();
             dsc.bellyState = Empty;
         }
@@ -36,14 +36,17 @@ class DigesterLogicSystem extends echoes.System {
         if(dsc.digesterState != Free && door.isOpen)
             door.closeDoor();
         
+        if(!door.isOpen && csc.isFull)
+            door.closeDoor();
     }
+
 
     @u function synchronizeState(dt:Float,digest:DigesterFSM,dsc:DigesterSharedComponent,csc:ContainerSharedComponent) {
         digest.cd.update(dt);
         dsc.digesterState = digest.currentState;
 
         if(dsc.feed && digest.currentState == Free ){
-            digest.cd.setS("digest",0.06);//0.03 perfect for init value
+            digest.cd.setS("digest",0.03);//0.03 perfect for init value
         }
 
         if(digest.cd.has("digest") && digest.currentState != Digest)
