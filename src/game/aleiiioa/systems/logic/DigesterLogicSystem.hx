@@ -24,11 +24,13 @@ class DigesterLogicSystem extends echoes.System {
         var b:ContainersStatus = {left: [Gilles,John,Gilles], right:[Gilles,John,Gilles]};
         var c:ContainersStatus = {left: [Gilles,Gilles,Gilles], right:[Gilles,Gilles,Gilles]};
         var d:ContainersStatus = {left: [John,John,John], right:[John,John,John]};
+        var e:ContainersStatus = {left: [Empty,Empty,Empty], right:[Empty,Empty,Empty]};
 
         point_map.set(1,{pts: 100, status : a});
         point_map.set(2,{pts: 100, status : b});
         point_map.set(3,{pts: 150, status : c});
         point_map.set(4,{pts: 150, status : d});
+        point_map.set(5,{pts: 150, status : e});
 
     }
 
@@ -37,21 +39,57 @@ class DigesterLogicSystem extends echoes.System {
         container_list.clear();
         var i = 0;
         while (head != null) {
-            var cont = head.value.get(ContainerSharedComponent);
-            container_list.set(i,cont.containers);
+            var csc:ContainerSharedComponent = head.value.get(ContainerSharedComponent);
+            var contain:Array<Container_State> = csc.getContainerArray();
+            container_list.set(i,contain);
             head = head.next;
             i++;
         }
-/* 
-        var actual:ContainersStatus = {left:container_list.get(0),right:container_list.get(1)};
-
-        for(v in point_map){
-            compare(v,actual);
-        } */
     }
-    function compare(v:Points,actual:ContainersStatus){
-        if(v.status == actual)
-            trace(v.pts);
+
+
+    @u function compare(){
+        var left :Array<Container_State> = container_list.get(0);
+        var right:Array<Container_State> = container_list.get(1);
+
+
+        for(k in point_map.keys()){
+            var value:Points = point_map.get(k);
+            var pts = value.pts;
+            var status = value.status;
+            var pleft:Array<Container_State> = status.left;
+            var pright:Array<Container_State> = status.right;
+            var validate:Int = 0;
+            
+            var l0 = left[0];
+            var l1 = left[1];
+            var l2 = left[2];
+
+            var pl0 = pleft[0];
+            var pl1 = pleft[1];
+            var pl2 = pleft[2];
+
+            var r0 = right[0];
+            var r1 = right[1];
+            var r2 = right[2];
+
+            var pr0 = pright[0];
+            var pr1 = pright[1];
+            var pr2 = pright[2];
+            
+            var a = l0 == pl0 ? 1 : 0;
+            var b = l1 == pl1 ? 1 : 0;
+            var c = l2 == pl2 ? 1 : 0;
+            
+            var e = r0 == pr0 ? 1 : 0;
+            var d = r1 == pr1 ? 1 : 0;
+            var f = r2 == pr2 ? 1 : 0;
+
+            var sum = a+b+c+e+d+f;
+
+            if(sum == 6)
+                trace('Motif : $k nb points: $pts'); 
+        }
     }
 
     @u function updateDoors(door:DoorComponent,dsc:DigesterSharedComponent,cl:CollisionsListener,csc:ContainerSharedComponent,bb:BoundingBox) {
