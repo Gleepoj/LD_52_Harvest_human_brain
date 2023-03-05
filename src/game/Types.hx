@@ -74,7 +74,6 @@ enum abstract Digester_State(String) to String {
 
 enum abstract Container_State(String) to String {
 	var Empty;
-	var Waiting;
 	var Gilles;
 	var John;
 }

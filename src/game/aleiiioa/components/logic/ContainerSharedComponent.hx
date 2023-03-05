@@ -37,4 +37,15 @@ class ContainerSharedComponent {
         containers.set(3,Empty);
         emptyContainers();
     }
+
+    public function getContainerArray(){
+        var array:Array<Container_State> = [];
+
+        for(k in containers.keys()){
+            var value = containers.get(k);
+            array.push(value);
+        }
+
+        return array;
+    }
 }

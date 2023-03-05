@@ -134,8 +134,6 @@ class SpriteExtensionFx extends System {
         switch con.state {
             case Empty:
                 spr.colorize(0x4605ea7b);
-            case Waiting:
-                spr.colorize(0x05ea7b);
             case John:
                 spr.colorize(0xe6d439);
             case Gilles:
