@@ -1,5 +1,6 @@
 package aleiiioa.systems.logic;
 
+import dn.Cooldown;
 import echoes.View;
 import aleiiioa.components.core.rendering.DebugLabel;
 import aleiiioa.components.logic.ContainerComponent;
@@ -19,6 +20,8 @@ class DigesterLogicSystem extends echoes.System {
     var container_list = new Map();
     var container_full:Bool = false; 
     var point_map = new Map();
+    var cd:Cooldown;
+    //var best_possible = new Map();
     
     public function new(){
         var a:ContainersStatus = {left: [Gilles,Gilles,Gilles], right:[John,John,John]};
@@ -33,18 +36,29 @@ class DigesterLogicSystem extends echoes.System {
         point_map.set(4,{pts: 150, status : d});
         point_map.set(5,{pts: 150, status : e});
 
+        cd = new Cooldown(Const.FIXED_UPDATE_FPS);
+
     }
 
-    @u function updateGeneral(){
-        getContainerFullness();
-        if(container_full)
-            compare();
+    @u function updateGeneral(dt:Float){
+        cd.update(dt);
+        var last = container_full;
+        container_full = getContainerFullness();
+        
+
+        if(container_full){
+            if(!last){
+                cd.setS("full_cooldown",0.04);
+                compare();
+            }
+            
+        }
         
     }
 
     @u function updateDoors(door:DoorComponent,dsc:DigesterSharedComponent,cl:CollisionsListener,csc:ContainerSharedComponent,bb:BoundingBox) {
         
-        if(container_full)
+        if(container_full && !cd.has("full_cooldown"))
             csc.clearContainer();
 
         if(cl.onContactDoor){
@@ -143,20 +157,37 @@ class DigesterLogicSystem extends echoes.System {
         }
     }
 
+/*     function suggest(){
+        getContainerContent();
+        var l:Array<Container_State> = container_list.get(0);
+        var r:Array<Container_State> = container_list.get(1);
+        
+
+        for(k in point_map.keys()){
+            var value:Points = point_map.get(k);
+            var pts    = value.pts;
+            var status = value.status;
+            var pl:Array<Container_State> = status.left;
+            var pr:Array<Container_State> = status.right;
+        }
+    } */
+
     function getContainerFullness() {
         var head = ALL_CONTAINERS.entities.head;
         container_full = false;
         var i = 0;
+        
         while (head != null) {
             var csc:ContainerSharedComponent = head.value.get(ContainerSharedComponent);
             var e = csc.isFull ? 1:0;
             i +=e;
-            head = head.next;
-            
+            head = head.next;      
         }
 
         if(i == 2)
             container_full = true;
+
+        return container_full;
     }
 
     function getContainerContent() {
