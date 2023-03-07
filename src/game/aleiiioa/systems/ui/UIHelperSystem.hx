@@ -1,5 +1,7 @@
 package aleiiioa.systems.ui;
 
+import aleiiioa.components.core.position.GridPosition;
+import aleiiioa.components.ui.UIMessageComponent;
 import aleiiioa.components.ui.UICheckComponent;
 import aleiiioa.components.ui.UISliderComponent;
 
@@ -60,6 +62,27 @@ class UIHelperSystem extends echoes.System {
             sli.value = v;
             usc.set(v);
         };
+    }
+
+    @a  function onMessageAdded(m:UIMessageComponent){
+              
+        m.flow = new h2d.Flow(fui);
+    
+        var tile = Assets.tiles.getTile(D.tiles.uiBar);
+		m.bubble = new dn.heaps.FlowBg(tile, 2,m.flow);
+        
+        m.bubble.paddingHorizontal = 20;
+        m.bubble.paddingVertical = 20;
+        m.bubble.setPosition(400,20);
+        m.bubble.colorizeBg(0x6A0ED3);
+        m.bubble.alpha = 1;
+      
+        m.text = new h2d.Text(getFont(),m.bubble);
+        m.text.text = m.message;
+    }
+
+    @u  function updateMassage(m:UIMessageComponent){
+        m.text.text = m.message;
     }
 
     @a  function onCheckAdded(ucc:UICheckComponent) {

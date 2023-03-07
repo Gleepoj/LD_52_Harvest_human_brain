@@ -1,5 +1,6 @@
 package aleiiioa.builders;
 
+import aleiiioa.components.ui.UIMessageComponent;
 import aleiiioa.components.flags.logic.FixedDebugLabel;
 import aleiiioa.components.core.position.GridPosition;
 import aleiiioa.components.core.rendering.DebugLabel;
@@ -34,6 +35,11 @@ class UIBuilders {
         public static function check(label : String, get : Void -> Bool, set : Bool -> Void) {
             var ucc = new UICheckComponent(label,get,set);
             new echoes.Entity().add(ucc);
+        }
+
+        public static function message(m:String){
+            var um = new UIMessageComponent(m);
+            new echoes.Entity().add(um);
         }
 
         public static function dialogEntity(_yarnFile:DialogReferenceComponent){

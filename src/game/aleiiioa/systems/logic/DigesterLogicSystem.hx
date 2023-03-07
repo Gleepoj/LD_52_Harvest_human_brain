@@ -1,5 +1,7 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.components.ui.UIMessageComponent;
+import aleiiioa.builders.UIBuilders;
 import dn.Cooldown;
 import echoes.View;
 import aleiiioa.components.core.rendering.DebugLabel;
@@ -16,12 +18,14 @@ typedef ContainersStatus = {left:Array<Container_State>,right:Array<Container_St
 typedef Points = {pts:Int,status:ContainersStatus};
 
 class DigesterLogicSystem extends echoes.System {
+    
     var ALL_CONTAINERS:View<ContainerSharedComponent,DigesterFSM>;
     var container_list = new Map();
     var container_full:Bool = false; 
     var point_map = new Map();
+    var score:Int = 0;
+    var level:Int = 0;
     var cd:Cooldown;
-    //var best_possible = new Map();
     
     public function new(){
         var a:ContainersStatus = {left: [Gilles,Gilles,Gilles], right:[John,John,John]};
@@ -38,6 +42,12 @@ class DigesterLogicSystem extends echoes.System {
 
         cd = new Cooldown(Const.FIXED_UPDATE_FPS);
 
+        UIBuilders.message("Score");
+
+    }
+    @u function updateScore(um:UIMessageComponent){
+        level = M.floor(score/100);
+        um.message = 'Score :: $score  Level :: $level';
     }
 
     @u function updateGeneral(dt:Float){
@@ -152,25 +162,14 @@ class DigesterLogicSystem extends echoes.System {
 
             var sum = a+b+c+e+d+f;
 
+            //if(sum < 6)
+              //  score += 20 ;
+
             if(sum == 6)
-                trace('Motif : $k  + : $pts'); 
+                score += pts;
+                //trace('Motif : $k  + : $pts'); 
         }
     }
-
-/*     function suggest(){
-        getContainerContent();
-        var l:Array<Container_State> = container_list.get(0);
-        var r:Array<Container_State> = container_list.get(1);
-        
-
-        for(k in point_map.keys()){
-            var value:Points = point_map.get(k);
-            var pts    = value.pts;
-            var status = value.status;
-            var pl:Array<Container_State> = status.left;
-            var pr:Array<Container_State> = status.right;
-        }
-    } */
 
     function getContainerFullness() {
         var head = ALL_CONTAINERS.entities.head;
