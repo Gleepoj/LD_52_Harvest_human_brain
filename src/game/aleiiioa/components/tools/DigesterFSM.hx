@@ -3,8 +3,8 @@ package aleiiioa.components.tools;
 import aleiiioa.components.core.rendering.DebugLabel;
 import dn.Cooldown;
 
-typedef Transition_Digest = {from:Digester_State,to:Array<Digester_State>};
-typedef Order_Digest      = {from:Digester_State,to:Digester_State};
+private typedef Transition_Digest = {from:Digester_State,to:Array<Digester_State>};
+private typedef Order_Digest      = {from:Digester_State,to:Digester_State};
 
 class DigesterFSM {
         

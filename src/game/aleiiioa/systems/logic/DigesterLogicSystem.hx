@@ -44,7 +44,12 @@ class DigesterLogicSystem extends echoes.System {
 
         UIBuilders.message("Score");
 
+
     }
+    /* 
+    @a function FSM(dor:DoorComponent){
+        var ping = new BlurFsm();
+    } */
     @u function updateScore(um:UIMessageComponent){
         level = M.floor(score/100);
         um.message = 'Score :: $score  Level :: $level';
@@ -143,7 +148,8 @@ class DigesterLogicSystem extends echoes.System {
         getContainerContent();
         var l:Array<Container_State> = container_list.get(0);
         var r:Array<Container_State> = container_list.get(1);
-
+        
+    
 
         for(k in point_map.keys()){
             var value:Points = point_map.get(k);
@@ -193,6 +199,7 @@ class DigesterLogicSystem extends echoes.System {
         var head = ALL_CONTAINERS.entities.head;
         container_list.clear();
         var i = 0;
+        
         while (head != null) {
             var csc:ContainerSharedComponent = head.value.get(ContainerSharedComponent);
             var contain:Array<Container_State> = csc.getContainerArray();

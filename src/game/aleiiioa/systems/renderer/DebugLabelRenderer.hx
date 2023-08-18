@@ -17,9 +17,6 @@ class DebugLabelRenderer extends System{
         this.gameScroller = scroller;
     }
 
-    @a function onEntityAdd(dl:DebugLabel,gp:GridPosition){
-
-    }
     @r function onEntityRemove(dl:DebugLabel) {
         dl.debugLabel.remove();
     }
@@ -50,12 +47,6 @@ class DebugLabelRenderer extends System{
 			dl.debugLabel = null;
 		}
 	}
-
-
-	/* 	
-		for(k in affects.keys())
-			all.push( k+"=>"+M.pretty( getAffectRemainingS(k) , 1) ); */
-		
 
 	}
     	/** Print some numeric value below entity **/

@@ -1,24 +1,82 @@
 package aleiiioa.components.tools;
 
-abstract class AbstractState {
-    public function new() {
-        
-    }
-}
+import dn.Cooldown;
 
-private typedef Order = {from:AbstractState,to:AbstractState};
 
-abstract class AbstractFSM {
+private typedef Order      = {from:Int, to:Int};
+private typedef Transition = {from:Int, to:Array<Int>};
+
+class FSM {
     
     var legal:String = "";
-    var state:AbstractState;
-   // var allowed_transitions:Array<>;
+    var state:Int;
+    var states = new Map();
+    //var allowed_states:Array<Astate>;
+    var allowed_transitions:Array<Transition>;
     var registered_transition:Null<Order>;
     
-    public function new() {
     
-   }
+    public var currentState(get,never):Int; inline function get_currentState() return state;    
+    public var cd:Cooldown;
 
+    public function new() {
+        cd = new Cooldown(Const.FIXED_UPDATE_FPS);
+    }
+
+    inline public function init(init_state:Int,_allowed_transitions:Array<Transition>) {
+        state = init_state;
+        allowed_transitions = _allowed_transitions;
+    }
+
+    inline public function next(next_state:Int){
+       
+        if(currentState == next_state){
+            return;
+        }
+        
+        for(transition in allowed_transitions){
+            if(transition.from == state){
+                for(to in transition.to){
+                    if(next_state == to){
+                        registered_transition = {from:state,to:next_state};
+                    }
+                }
+            }
+        }
+        switchToRegisteredTransition();
+    }
+
+    function switchToRegisteredTransition() {
+        if(registered_transition != null){
+            state = registered_transition.to;
+            registered_transition = null;            
+        }  
+    }
+
+    public function setTranstion(_from:Dynamic<>,_to:Dynamic<>) {
+        var t:Transition = {from :_from,to:_to};
+        allowed_transitions.push(t);
+    }
+
+} 
+
+class BlurFsm extends FSM{
+    public function new() {
+        super();
+        
+        states.set(1,Idle);
+        states.set(2,Recall);
+        states.set(3,Docked);
+        states.set(4,Loaded);
+        states.set(5,Expulse);
+
+        setTranstion(1,[2]);
+        setTranstion(2,[3]);
+        setTranstion(3,[4]);
+        setTranstion(4,[5]);
+        setTranstion(5,[2]);
+
+    }
 }
 
 /* var legal:String = "";

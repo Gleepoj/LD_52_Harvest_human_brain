@@ -4,8 +4,8 @@ import aleiiioa.components.core.rendering.DebugLabel;
 import dn.Cooldown;
 
 
-typedef Transition = {from:Launcher_State,to:Array<Launcher_State>};
-typedef Order      = {from:Launcher_State,to:Launcher_State};
+private typedef Transition = {from:Launcher_State,to:Array<Launcher_State>};
+private typedef Order      = {from:Launcher_State,to:Launcher_State};
 
 class LauncherFSM {
         
