@@ -160,6 +160,10 @@ class EntityBuilders {
         var se  = new SpriteExtension();
         var bb  = new BoundingBox(spr);
 
+        spr.scale(0.5);
+        se.sprScaleX = 0.5;
+        se.sprScaleY = 0.5;
+
         se.baseColor = new Vector(0.05,0.5,0.05);
 
         var digester = new DigesterFSM();
@@ -169,7 +173,7 @@ class EntityBuilders {
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,digester,dsc,container_shared,dl);
 
         // MOUTH
-        var pos = new GridPosition(cx,cy-4);
+        var pos = new GridPosition(cx,cy-1);
         var cl  = new CollisionsListener();
         
         var spr = new SpriteComponent(D.tiles.fxCircle15);
@@ -177,9 +181,9 @@ class EntityBuilders {
         var se  = new SpriteExtension();
         
         spr.pivot.setCenterRatio(0.5,0.5);
-        spr.scale(2);
-        se.sprScaleX = 2;
-        se.sprScaleY = 2;
+        //spr.scale(2);
+        //se.sprScaleX = 2;
+        //se.sprScaleY = 2;
         se.baseColor = new Vector(0.3,0.1,0.6);
         
         var bb  = new BoundingBox(spr);
@@ -189,7 +193,7 @@ class EntityBuilders {
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,door,dsc,container_shared);
 
         //CONTAINER
-        var pos = new GridPosition(cx,cy + 4);
+        var pos = new GridPosition(cx,cy +2);
         var cl  = new CollisionsListener();
         
         var spr = new SpriteComponent(D.tiles.fxCircle15);
@@ -197,13 +201,16 @@ class EntityBuilders {
         var se  = new SpriteExtension();
         spr.pivot.setCenterRatio(0.5,0.5);
         se.baseColor = new Vector(0.9,0.1,0.6);
+        spr.scale(0.5);
+        se.sprScaleX = 0.5;
+        se.sprScaleY = 0.5;
         var bb  = new BoundingBox(spr);
         
         var container = new ContainerComponent(3);
 
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,container,container_shared);
 
-        var pos = new GridPosition(cx,cy + 5);
+        var pos = new GridPosition(cx,cy + 3);
         var cl  = new CollisionsListener();
         
         var spr = new SpriteComponent(D.tiles.fxCircle15);
@@ -211,13 +218,16 @@ class EntityBuilders {
         var se  = new SpriteExtension();
         spr.pivot.setCenterRatio(0.5,0.5);
         se.baseColor = new Vector(0.8,0.1,0.6);
+        spr.scale(0.5);
+        se.sprScaleX = 0.5;
+        se.sprScaleY = 0.5;
         var bb  = new BoundingBox(spr);
         
         var container = new ContainerComponent(2);
 
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,container,container_shared);
 
-        var pos = new GridPosition(cx,cy + 6);
+        var pos = new GridPosition(cx,cy + 4);
         var cl  = new CollisionsListener();
         
         var spr = new SpriteComponent(D.tiles.fxCircle15);
@@ -225,6 +235,9 @@ class EntityBuilders {
         var se  = new SpriteExtension();
         spr.pivot.setCenterRatio(0.5,0.5);
         se.baseColor = new Vector(0.7,0.1,0.6);
+        spr.scale(0.5);
+        se.sprScaleX = 0.5;
+        se.sprScaleY = 0.5;
         var bb  = new BoundingBox(spr);
         
         var container = new ContainerComponent(1);
@@ -294,12 +307,12 @@ class EntityBuilders {
         //Rendering Component
         var spr = new SpriteComponent(D.tiles.gille);
         spr.pivot.setCenterRatio(0.5,0.5);
-        spr.scale(2);
+        //spr.scale(1);
 
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
-        se.sprScaleX = 2;
-        se.sprScaleY = 2;
+        //se.sprScaleX = 2;
+        //se.sprScaleY = 2;
         se.baseColor = new Vector(1,1,1);
         var bb  = new BoundingBox(spr);      
 
@@ -357,12 +370,12 @@ class EntityBuilders {
         //Rendering Component
         var spr = new SpriteComponent(D.tiles.gille);
         spr.pivot.setCenterRatio(0.5,0.5);
-        spr.scale(2.);
+        //spr.scale(2.);
        
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
-        se.sprScaleX = 2.;
-        se.sprScaleY = 2.;
+        //se.sprScaleX = 2.;
+        //se.sprScaleY = 2.;
 
         se.baseColor = new Vector(1,1,1);
         var bb  = new BoundingBox(spr);
@@ -408,6 +421,9 @@ class EntityBuilders {
          var bb  = new BoundingBox(spr);
          se.baseColor = new Vector(1,1,1);
          
+         spr.scale(0.7);
+         se.sprScaleX = 0.7;
+         se.sprScaleY = 0.7;
      
  
          //Logic and Dialog Component

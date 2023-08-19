@@ -18,6 +18,7 @@
 		If the JSON changes on runtime, the `myValue` field is kept up-to-date, allowing testing without recompiling. IMPORTANT: this hot-reloading only works if the project was built using the `-debug` flag. In release builds, all values become constants and are fully embedded.
 **/
 
+import dn.heaps.Scaler;
 import h3d.Vector;
 import hxd.Window;
 
@@ -64,7 +65,7 @@ class Const {
 	public static var SCALE(get,never) : Int;
 		static inline function get_SCALE() {
 			// can be replaced with another way to determine the game scaling
-			return dn.heaps.Scaler.bestFit_i(4000,4000);
+			return dn.heaps.Scaler.bestFit_i(640,360);
 		}
 
 	/** Specific scaling for top UI elements **/
