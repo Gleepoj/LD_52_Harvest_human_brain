@@ -147,7 +147,7 @@ class EntityBuilders {
 
     public static function methanizer(cx:Int,cy:Int) {
         //Physics Component
-        var pos = new GridPosition(cx,cy,0,0);
+        var pos = new GridPosition(cx,cy+1,0,0);
         var cl  = new CollisionsListener();
         var dsc = new DigesterSharedComponent();
         var container_shared = new ContainerSharedComponent();
@@ -160,9 +160,9 @@ class EntityBuilders {
         var se  = new SpriteExtension();
         var bb  = new BoundingBox(spr);
 
-        spr.scale(0.5);
-        se.sprScaleX = 0.5;
-        se.sprScaleY = 0.5;
+        spr.scale(0.2);
+        se.sprScaleX = 0.2;
+        se.sprScaleY = 0.2;
 
         se.baseColor = new Vector(0.05,0.5,0.05);
 
@@ -173,7 +173,7 @@ class EntityBuilders {
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,digester,dsc,container_shared,dl);
 
         // MOUTH
-        var pos = new GridPosition(cx,cy-1,0,-0.9);
+        var pos = new GridPosition(cx,cy,0,0.3);
         var cl  = new CollisionsListener();
         
         var spr = new SpriteComponent(D.tiles.fxCircle15);
@@ -181,9 +181,9 @@ class EntityBuilders {
         var se  = new SpriteExtension();
         
         spr.pivot.setCenterRatio(0.5,0.5);
-        //spr.scale(2);
-        //se.sprScaleX = 2;
-        //se.sprScaleY = 2;
+        spr.scale(0.5);
+        se.sprScaleX = 0.5;
+        se.sprScaleY = 0.5;
         se.baseColor = new Vector(0.3,0.1,0.6);
         
         var bb  = new BoundingBox(spr);
@@ -193,7 +193,7 @@ class EntityBuilders {
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,door,dsc,container_shared);
 
         //CONTAINER
-        var pos = new GridPosition(cx,cy +2,0);
+        var pos = new GridPosition(cx,cy+1,0,0.5);
         var cl  = new CollisionsListener();
         
         var spr = new SpriteComponent(D.tiles.fxCircle15);
@@ -210,7 +210,7 @@ class EntityBuilders {
 
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,container,container_shared);
 
-        var pos = new GridPosition(cx,cy + 3,0);
+        var pos = new GridPosition(cx,cy+2,0,0);
         var cl  = new CollisionsListener();
         
         var spr = new SpriteComponent(D.tiles.fxCircle15);
@@ -227,7 +227,7 @@ class EntityBuilders {
 
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,container,container_shared);
 
-        var pos = new GridPosition(cx,cy + 4,0);
+        var pos = new GridPosition(cx,cy+2,0,0.5);
         var cl  = new CollisionsListener();
         
         var spr = new SpriteComponent(D.tiles.fxCircle15);

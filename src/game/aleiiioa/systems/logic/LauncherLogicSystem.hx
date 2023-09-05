@@ -36,12 +36,11 @@ class LauncherLogicSystem extends echoes.System {
     var recallSpeed  :Float = 3.4;
     var expulseSpeed :Float = 3.4;
     var slowdown     :Float = 0.99;
-    var grapplePower :Float = 2.5;
+    var grapplePower :Float = 2.3;// grapple launch speed
     var loadSpeed    :Float = 0.08;
 
     var droneBoost  :Float = 0.002;
     var droneMaxLoad:Float = 3.;
-
     
 
 
