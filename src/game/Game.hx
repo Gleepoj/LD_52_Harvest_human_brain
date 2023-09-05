@@ -1,4 +1,5 @@
 
+import hxd.Window;
 import dn.Process;
 
 class Game extends Process {
@@ -40,11 +41,12 @@ class Game extends Process {
 		root.add(scroller, Const.DP_FX_BG);
 		scroller.filter = new h2d.filter.Nothing(); // force rendering for pixel perfect
 
+		//scaleMode = h2d.ScaleMode.LetterBox(640,360,false);
 		fx = new Fx();
 		hud = new ui.Hud();
 		camera = new Camera();
 
-		startLevel(Assets.worldData.all_worlds.Default.all_levels.Level_1);
+		startLevel(Assets.worldData.all_worlds.Default.all_levels.Level_2);
 	}
 
 
@@ -93,6 +95,8 @@ class Game extends Process {
 	/** Window/app resize event **/
 	override function onResize() {
 		super.onResize();
+	
+
 	}
 
 

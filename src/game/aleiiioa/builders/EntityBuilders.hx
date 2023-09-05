@@ -127,7 +127,7 @@ class EntityBuilders {
     
     public static function spawnPoint(cx:Int,cy:Int) {
         //Physics Component
-        var pos = new GridPosition(cx,cy);
+        var pos = new GridPosition(cx,cy,0);
         var cl  = new CollisionsListener();
         
         //Rendering Component
@@ -147,7 +147,7 @@ class EntityBuilders {
 
     public static function methanizer(cx:Int,cy:Int) {
         //Physics Component
-        var pos = new GridPosition(cx,cy);
+        var pos = new GridPosition(cx,cy,0,0);
         var cl  = new CollisionsListener();
         var dsc = new DigesterSharedComponent();
         var container_shared = new ContainerSharedComponent();
@@ -173,7 +173,7 @@ class EntityBuilders {
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,digester,dsc,container_shared,dl);
 
         // MOUTH
-        var pos = new GridPosition(cx,cy-1);
+        var pos = new GridPosition(cx,cy-1,0,-0.9);
         var cl  = new CollisionsListener();
         
         var spr = new SpriteComponent(D.tiles.fxCircle15);
@@ -193,7 +193,7 @@ class EntityBuilders {
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,door,dsc,container_shared);
 
         //CONTAINER
-        var pos = new GridPosition(cx,cy +2);
+        var pos = new GridPosition(cx,cy +2,0);
         var cl  = new CollisionsListener();
         
         var spr = new SpriteComponent(D.tiles.fxCircle15);
@@ -210,7 +210,7 @@ class EntityBuilders {
 
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,container,container_shared);
 
-        var pos = new GridPosition(cx,cy + 3);
+        var pos = new GridPosition(cx,cy + 3,0);
         var cl  = new CollisionsListener();
         
         var spr = new SpriteComponent(D.tiles.fxCircle15);
@@ -227,7 +227,7 @@ class EntityBuilders {
 
         new echoes.Entity().add(pos,cl,spr,sq,se,bb,container,container_shared);
 
-        var pos = new GridPosition(cx,cy + 4);
+        var pos = new GridPosition(cx,cy + 4,0);
         var cl  = new CollisionsListener();
         
         var spr = new SpriteComponent(D.tiles.fxCircle15);

@@ -2,6 +2,7 @@
 	"App" class takes care of all the top-level stuff in the whole application. Any other Process, including Game instance, should be a child of App.
 **/
 
+import h2d.Scene.ScaleMode;
 import aleiiioa.Aleiiioa;
 
 class App extends dn.Process {
@@ -28,6 +29,7 @@ class App extends dn.Process {
 		initEngine();
 		initAssets();
 		initController();
+		
 
 		// Create console (open with [²] key)
 		new ui.Console(Assets.fontPixel, scene); // init debug console
@@ -146,9 +148,10 @@ class App extends dn.Process {
 	**/
 	function initEngine() {
 		// Engine settings
-		engine.backgroundColor = 0xff<<24 | 0x111133;
+		engine.backgroundColor = 0xff<<24 | 0x113331;
         #if( hl && !debug )
         engine.fullScreen = true;
+		
         #end
 
 		#if( hl && !debug)
@@ -163,7 +166,7 @@ class App extends dn.Process {
         #else
       		hxd.Res.initEmbed();
         #end
-
+		
 		// Sound manager (force manager init on startup to avoid a freeze on first sound playback)
 		hxd.snd.Manager.get();
 		hxd.Timer.skip(); // needed to ignore heavy Sound manager init frame
