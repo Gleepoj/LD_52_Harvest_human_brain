@@ -24,13 +24,8 @@ class LauncherLogicSystem extends echoes.System {
     var autoRecall:Bool = false;
     
     // Launcher parameter
-
-    var accel  :Float = 0.5;
-    var len    :Float = 2.4;
-    var gravity:Float = 0.71;
-    var angularDamping:Float = 0.79;
-    var linearDamping :Float = 0.91;
-    //var maxSpeed      :Float = 0.51;//0.41
+    var launcherDamping :Float = 0.;
+  
 
     // Drone Parameter
 
@@ -39,6 +34,8 @@ class LauncherLogicSystem extends echoes.System {
     var slowdown     :Float = 0.99;
     var grapplePower :Float = 2.3;// grapple launch speed
     var loadSpeed    :Float = 0.08;
+    
+    ////shared drone load 
 
     var droneBoost  :Float = 0.002;
     var droneMaxLoad:Float = 3.;
@@ -46,22 +43,6 @@ class LauncherLogicSystem extends echoes.System {
 
 
     public function new() {
-        #if debug
-            //UIBuilders.slider("accel",  function() return accel,   function(v) accel = v, 0.01,0.5);
-            //UIBuilders.slider("len",    function() return len,     function(v) len = v, 0.1,4);
-            //UIBuilders.slider("gravity",function() return gravity, function(v) gravity = v, 0.1,4);
-            //UIBuilders.slider("angularDamping",function() return angularDamping, function(v) angularDamping = v, 0.1,4);     
-            //UIBuilders.slider("linearDamping",function()  return linearDamping, function(v) linearDamping = v, 0.800,0.999);    
-            //UIBuilders.slider("maxSpeed",     function()  return maxSpeed,      function(v) maxSpeed = v, 0.3,0.9);  
-            
-            UIBuilders.slider("Drone : launchSpeed", function()  return grapplePower, function(v) grapplePower = v, 2.,9.);  
-            //UIBuilders.slider("Drone : reloadSpeed",    function()  return loadSpeed,     function(v) loadSpeed = v, 0.03,0.09);  
-            //UIBuilders.slider("Drone : recallSpeed", function() return recallSpeed , function(v) recallSpeed = v, 2.2,5);
-            //UIBuilders.slider("Drone : expulseOffset",function() return expulseSpeed, function(v) expulseSpeed = v, 1.8,5);  
-            UIBuilders.slider("Drone : BoostSpeed", function()  return droneBoost,    function(v) droneBoost   = v, 0.05,0.2); 
-            UIBuilders.slider("Drone : maxLoad",    function()  return droneMaxLoad,  function(v) droneMaxLoad = v, 1.,4.); 
-            UIBuilders.slider("Drone : slowdown",   function()  return slowdown,     function(v) slowdown     = v, 0.9,1); 
-        #end
           
     }
 
@@ -83,34 +64,31 @@ class LauncherLogicSystem extends echoes.System {
     }
 
     @u function launcherPhysics(launcher:LauncherBodyComponent,fsm:LauncherFSM,vas:VelocityAnalogSpeed,spr:SpriteComponent,inp:InputComponent){
-        var sx = launcher.xSpeed * launcher.direction;
-
-        launcher.acceleration = (-1*gravity/len)*Math.sin(launcher.angle) + (1*sx/len)*Math.cos(launcher.angle);
-        launcher.velocity += launcher.acceleration ;
-        launcher.velocity *= angularDamping;
-        launcher.angle    += launcher.velocity;
-
         
+        launcher.computePendulum();
+
+        launcher.linearDamping = launcherDamping;
+        //easing drone dock ()
         if(fsm.cd.has("onDock")){
-            accel += (droneLoad*droneBoost);
+            launcher.accel += (droneLoad*droneBoost);
         }
 
         if(inp.ca.isDown(MoveRight) && launcher.xSpeed <= launcher.maxSpeed){
-            launcher.xSpeed += accel;
+            launcher.xSpeed += launcher.accel;
         }
 
         if(inp.ca.isDown(MoveLeft)  && launcher.xSpeed <= launcher.maxSpeed){
-            launcher.xSpeed += accel;
+            launcher.xSpeed += launcher.accel;
         }
 
         if(launcher.xSpeed > launcher.maxSpeed && !fsm.cd.has("onDock")){
             launcher.xSpeed = launcher.maxSpeed;
         }
 
-        launcher.xSpeed *= linearDamping;
+        launcher.xSpeed *= launcher.linearDamping;
         vas.xSpeed = launcher.xSpeed * launcher.direction;
         spr.rotation =  launcher.angle;
-        linearDamping = 0.91;
+        launcherDamping = launcher.initialDamping;
     }
   
     @u function inputLauncherStateMachine(dt:Float,launcher:LauncherFSM,input:InputComponent,label:DebugLabel,cl:CollisionsListener){
@@ -162,11 +140,11 @@ class LauncherLogicSystem extends echoes.System {
             case Charging:
                 if(gr.load < droneMaxLoad)
                     gr.load += loadSpeed;
-                linearDamping = 0.85;
+                launcherDamping = 0.5;
             case Charged:
                 if(gr.load < droneMaxLoad)
                     gr.load += loadSpeed*0.9;
-                 linearDamping = 0;
+                launcherDamping = 0;
             case Expulse:
                 if(gr.load >= 0)
                     gr.load *= slowdown;
@@ -186,13 +164,12 @@ class LauncherLogicSystem extends echoes.System {
         gr.grab_state = ac.grab;
     }
     
-    @u function dronePhysics(en:echoes.Entity,gr:GrappleStatusData,tpos:TargetGridPosition,dpc:DynamicBodyComponent,cl:CollisionsListener,inp:InputComponent){
+    @u function dronePhysics(en:echoes.Entity,gr:GrappleStatusData,tpos:TargetGridPosition,dpc:DynamicBodyComponent){
         
        dpc.target = tpos.gpToVector();
         
        switch gr.state {
             case Free:
-                gr.load = 0;
                 dpc.seek(tpos.gpToVector(),recallSpeed);
                 dpc.arrival(tpos.gpToVector());
             case Loaded:
@@ -201,10 +178,7 @@ class LauncherLogicSystem extends echoes.System {
                 dpc.stick(tpos.gpToVector());
             case Charged:
                 dpc.stick(tpos.gpToVector());
-            case Expulse:
-                if(gr.load >= 0)
-                    gr.load *= slowdown;
-                      
+            case Expulse:    
                 dpc.seek(tpos.gpToVector(),expulseSpeed+(gr.load*0.75));
                 dpc.arrival(tpos.gpToVector());
                 dpc.addForce(new Vector(0,(gr.load*grapplePower)*0.5));
