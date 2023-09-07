@@ -173,7 +173,7 @@ class LauncherLogicSystem extends echoes.System {
         gr.cd.update(dt);
         gr.set_synchronized_state(launcher_currentState);
         
-        lab.v = M.pretty(droneLoad,1);//gr.claw_state; //dpc.euler.toString();
+        lab.v = M.pretty(droneLoad,1);
         droneLoad = gr.load;
     }
 

@@ -59,6 +59,14 @@ enum abstract Launcher_State(String) to String {
 	var Expulse;
 }
 
+/* enum abstract Launcher_State(String) to String {
+	var Free;
+	var Load;
+	var Charging;
+	var Charged;
+	var Expulse;
+} */
+
 enum abstract Claw_State(String) to String {
 	var Open;
 	var Close;
@@ -78,6 +86,7 @@ enum abstract Container_State(String) to String {
 	var Gilles;
 	var John;
 }
+
 
 
 enum abstract LevelSubMark(Int) to Int {
