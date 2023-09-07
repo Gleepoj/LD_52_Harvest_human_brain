@@ -10,7 +10,7 @@ private typedef Order      = {from:Launcher_State,to:Launcher_State};
 class LauncherFSM {
         
     var legal:String = "";
-    var state:Launcher_State = Recall;
+    var state:Launcher_State = Free;
    
     var allowed_transitions:Array<Transition>;
     var registered_transition:Null<Order>;
@@ -22,14 +22,14 @@ class LauncherFSM {
     
     public function new(){
         cd = new Cooldown(Const.FIXED_UPDATE_FPS);
-        state = Recall;
+        state = Free;
         
         allowed_transitions = [
-            {from:Idle,   to : [Recall]},
-            {from:Recall, to : [Docked]},// remove idle
-            {from:Docked, to : [Loaded]},// remove expulse
-            {from:Loaded, to : [Expulse]},
-            {from:Expulse,to : [Recall]}
+            {from:Free,     to : [Loaded]},
+            {from:Loaded,   to : [Charging]},// remove idle
+            {from:Charging, to : [Charged,Expulse]},// remove expulse
+            {from:Charged,  to : [Expulse]},
+            {from:Expulse,  to : [Free]}
         ];
         
     }

@@ -21,7 +21,7 @@ class GrappleStatusData {
     
     public var cd:Cooldown;    
 
-    public var onDock(get,never):Bool ; inline function get_onDock() return synchronized_state == Docked || synchronized_state == Loaded ;
+    public var onDock(get,never):Bool ; inline function get_onDock() return synchronized_state == Loaded || synchronized_state == Charging || synchronized_state == Charged ;
     public var onGrab(get,never):Bool ; inline function get_onGrab() return grab_state == true;
     public var onLock(get,never):Bool ; inline function get_onLock() return onDock == true && onGrab == true;
     public var onRelease(get,never):Bool; inline function get_onRelease() return cd.has("On_release");

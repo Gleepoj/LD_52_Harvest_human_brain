@@ -68,17 +68,17 @@ class LauncherLogicSystem extends echoes.System {
 
     @a function onGrappleAdded(en:echoes.Entity,gr:GrappleStatusData,spr:SpriteComponent){
         spr.set(Assets.drone);
-        spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_open,1,3,()->gr.state == Idle);
-        spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_close,1,3,()->gr.state == Recall);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_open,1,3,()->gr.state == Free);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_close,1,3,()->gr.state == Free);
         spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_release,1,3);
     }
 
     @a function onLauncherAdded(en:echoes.Entity,launcher:LauncherFSM,spr:SpriteComponent){ 
         spr.set(Assets.launcher);
-        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.idle,      1,()->launcher.currentState == Idle);
-        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.recall,    1,()->launcher.currentState == Recall);
-        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.dock_empty,1,()->launcher.currentState == Docked);
-        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.load,      1,()->launcher.currentState == Loaded);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.idle,      1,()->launcher.currentState == Free);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.recall,    1,()->launcher.currentState == Free);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.dock_empty,1,()->launcher.currentState == Loaded);
+        spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.load,      1,()->launcher.currentState == Charging);
         spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.expulse,   1,()->launcher.currentState == Expulse);
     }
 
@@ -119,21 +119,21 @@ class LauncherLogicSystem extends echoes.System {
         if(gr.state == Expulse){
             if(cl.onHitHorizontal)
                 autoRecall = true;
-            if(gr.load <= 0.2)
-                autoRecall = true;
+            //if(gr.load <= 0.2)
+               // autoRecall = true;
         }
 
-        
-        if(gr.state == Recall)
-            autoRecall = false;
+/*         
+        if(gr.state == Free)
+            autoRecall = true; */
   
         if(input.ca.isDown(ActionX)){
-            if(launcher_currentState == Docked){
+            if(launcher_currentState == Loaded){
                  if(gr.load < droneMaxLoad)
                     gr.load += loadSpeed;
                 linearDamping = 0.85;
             }
-            if(launcher_currentState == Loaded){
+            if(launcher_currentState == Charging){
                 if(gr.load < droneMaxLoad)
                    gr.load += loadSpeed*0.9;
                 linearDamping = 0;
@@ -148,22 +148,28 @@ class LauncherLogicSystem extends echoes.System {
     @u function inputStateMachine(dt:Float,launcher:LauncherFSM,input:InputComponent,label:DebugLabel,cl:CollisionsListener){
         launcher.cd.update(dt);
 
-        if(input.ca.isDown(ActionX) || autoRecall){
-            launcher.next(Recall);
-        }
+        if(autoRecall == true && launcher.currentState == Expulse)
+            launcher.next(Free);
+
         if(!input.ca.isDown(ActionX)){
             launcher.next(Expulse);
         }
-        if(launcher.currentState == Recall && cl.onDroneInteractLauncher ){
-            launcher.next(Docked);
+
+        if(launcher.currentState == Free && cl.onDroneInteractLauncher ){
+            launcher.next(Loaded);
             launcher.cd.setS("onDock",0.002);
         }
 
-        if(launcher.currentState == Docked && droneLoad >= 1. && grabState == false)
-            launcher.next(Loaded);
+        if(launcher.currentState == Loaded && input.ca.isDown(ActionX)){
+            launcher.next(Charging);
+            autoRecall = false;
+        }
+
+        if(launcher.currentState == Charging && droneLoad >= 1. && grabState == false)
+            launcher.next(Charged);
         
-        if(launcher.currentState != Docked)
-            launcher.cd.unset("onDock");
+        //if(launcher.currentState != Loaded)
+          //  launcher.cd.unset("onDock");
 
         launcher.debugLabelUpdate(label);
         launcher_currentState = launcher.currentState;
@@ -179,21 +185,22 @@ class LauncherLogicSystem extends echoes.System {
 
     @u function dronePhysics(en:echoes.Entity,gr:GrappleStatusData,tpos:TargetGridPosition,dpc:DynamicBodyComponent,cl:CollisionsListener,inp:InputComponent){
         
-        dpc.target = tpos.gpToVector();
+       dpc.target = tpos.gpToVector();
         switch gr.state {
-            case Idle:
-                gr.load = 0;
-                if(!cl.onDroneInteractLauncher){
-                    dpc.seek(tpos.gpToVector(),1.11);
-                    dpc.arrival(tpos.gpToVector());
-                }
-            case Recall:
+            case Free:
                 gr.load = 0;
                 dpc.seek(tpos.gpToVector(),recallSpeed);
                 dpc.arrival(tpos.gpToVector());
-            case Docked:
-                dpc.stick(tpos.gpToVector());
+/*                 gr.load = 0;
+                if(!cl.onDroneInteractLauncher){
+                    dpc.seek(tpos.gpToVector(),1.11);
+                    dpc.arrival(tpos.gpToVector());
+                } */
             case Loaded:
+                dpc.stick(tpos.gpToVector());
+            case Charging:
+                dpc.stick(tpos.gpToVector());
+            case Charged:
                 dpc.stick(tpos.gpToVector());
             case Expulse:
                 if(gr.load >= 0)
@@ -203,7 +210,7 @@ class LauncherLogicSystem extends echoes.System {
                 dpc.seek(tpos.gpToVector(),expulseSpeed+(gr.load*0.75));
                 dpc.arrival(tpos.gpToVector());
                 dpc.addForce(new Vector(0,(gr.load*grapplePower)*0.5));
-        }
+        } 
     
         if(gr.load > droneMaxLoad)
             gr.load = droneMaxLoad;

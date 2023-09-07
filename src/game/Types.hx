@@ -51,21 +51,21 @@ enum abstract LevelMark(Int) to Int {
 }
 
 
-enum abstract Launcher_State(String) to String {
+/* enum abstract Launcher_State(String) to String {
 	var Idle;
 	var Recall;
 	var Docked;
 	var Loaded;
 	var Expulse;
 }
-
-/* enum abstract Launcher_State(String) to String {
+ */
+enum abstract Launcher_State(String) to String {
 	var Free;
-	var Load;
+	var Loaded;
 	var Charging;
 	var Charged;
 	var Expulse;
-} */
+}
 
 enum abstract Claw_State(String) to String {
 	var Open;

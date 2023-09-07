@@ -102,7 +102,7 @@ class SpriteExtensionFx extends System {
        //spr.rotation = 0;
        spr.visible = true;
 
-       if(gr.state == Docked || gr.state == Loaded)
+       if(gr.state == Loaded || gr.state == Charging || gr.state == Charged)
             spr.visible = false;
 
        spr.rotation = M.PIHALF + M.angTo(dpc.location.x,dpc.location.y,dpc.target.x,dpc.target.y-100);
