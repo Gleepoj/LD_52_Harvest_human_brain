@@ -2,6 +2,7 @@ package aleiiioa.builders;
 
 
 
+import aleiiioa.components.logic.DroneLogicComponent;
 import aleiiioa.components.logic.BonhommeComponent;
 import aleiiioa.shaders.PaletteShader;
 import haxe.ds.Map;
@@ -320,6 +321,7 @@ class EntityBuilders {
          var ic  = new InteractiveComponent();
          var em  = new EmitterComponent();
          var ac  = new ActionComponent();
+         var drone = new DroneLogicComponent();
          var gr  = new GrappleStatusData();
          
          //Flags 
@@ -331,7 +333,7 @@ class EntityBuilders {
          var label    = new DebugLabel();  
         
 
-         new echoes.Entity().add(pos,vas,vc,sw,cl,tpos,mpos,master,spr,bb,gr,sq,se,ic,em,ac,inp,body,dyn,targeter,label);
+         new echoes.Entity().add(pos,vas,vc,sw,cl,tpos,mpos,master,spr,bb,gr,sq,se,ic,em,ac,inp,body,dyn,targeter,label,drone);
 
  
     }

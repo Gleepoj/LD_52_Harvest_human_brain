@@ -3,16 +3,15 @@ package aleiiioa.components.logic;
 class DroneLogicComponent {
     public var charge:Float = 0.;
     
-    var recallSpeed  :Float = 3.4;
-    var expulseSpeed :Float = 3.4;
-    var launchSpeed :Float = 2.3;
+    public var recallSpeed  :Float = 3.4;
+    public var expulseSpeed :Float = 3.4;
+    public var launchSpeed  :Float = 2.3;
     
-    var slowdown    :Float = 0.99;
+    var slowDown    :Float = 0.99;
     var chargeSpeed :Float = 0.08;
     var chargeMax:Float = 3.;
     
-    //var droneBoost  :Float = 0.002;
-    
+
 
     public function new (){
         #if debug        
@@ -35,7 +34,7 @@ class DroneLogicComponent {
 
     public function slowdown(?factor:Float = 1.){
         if(charge >=  0)
-            charge *= slowdown ;
+            charge *= slowDown ;
         limit();
     }
 

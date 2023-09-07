@@ -1,6 +1,7 @@
 package aleiiioa.systems.logic;
 
 
+import aleiiioa.components.logic.DroneLogicComponent;
 import aleiiioa.components.logic.LauncherBodyComponent;
 import aleiiioa.builders.UIBuilders;
 import aleiiioa.components.logic.ActionComponent;
@@ -121,56 +122,46 @@ class LauncherLogicSystem extends echoes.System {
         launcher_currentState = launcher.currentState;
     }
     
-    @u function synchronizeState(en:echoes.Entity,dt:Float,gr:GrappleStatusData,dpc:DynamicBodyComponent,lab:DebugLabel,tgp:TargetGridPosition){
+    @u function synchronizeState(en:echoes.Entity,dt:Float,gr:GrappleStatusData,drone:DroneLogicComponent,lab:DebugLabel){
         gr.cd.update(dt);
         gr.set_synchronized_state(launcher_currentState);
         
         lab.v = M.pretty(droneLoad,1);
-        droneLoad = gr.load;
+        droneLoad = drone.charge;
     }
     
 
-    @u function droneLogic(en:echoes.Entity,gr:GrappleStatusData,cl:CollisionsListener,ac:ActionComponent,input:InputComponent){
+    @u function droneLogic(en:echoes.Entity,gr:GrappleStatusData,drone:DroneLogicComponent,cl:CollisionsListener,ac:ActionComponent,input:InputComponent){
         switch gr.state {
             case Free:
-                gr.load = 0;
+                drone.reset();
                 autoRecall = true;
             case Loaded: 
                 autoRecall = false;    
             case Charging:
-                if(gr.load < droneMaxLoad)
-                    gr.load += loadSpeed;
+                drone.power();
                 launcherDamping = 0.5;
             case Charged:
-                if(gr.load < droneMaxLoad)
-                    gr.load += loadSpeed*0.9;
                 launcherDamping = 0;
             case Expulse:
-                if(gr.load >= 0)
-                    gr.load *= slowdown;
+                drone.slowdown();
                 if(cl.onHitHorizontal)
                     autoRecall = true;                    
-                if(gr.load <= 0.2)
+                if(drone.charge <= 0.2)
                     autoRecall = true;
         } 
 
-        if(gr.load > droneMaxLoad)
-            gr.load = droneMaxLoad;
-        
-        if(gr.load < 0)
-            gr.load = 0;
-      
         grabState = gr.onGrab;
         gr.grab_state = ac.grab;
     }
     
-    @u function dronePhysics(en:echoes.Entity,gr:GrappleStatusData,tpos:TargetGridPosition,dpc:DynamicBodyComponent){
+    @u function dronePhysics(en:echoes.Entity,gr:GrappleStatusData,tpos:TargetGridPosition,dpc:DynamicBodyComponent,drone:DroneLogicComponent){
         
        dpc.target = tpos.gpToVector();
         
        switch gr.state {
             case Free:
-                dpc.seek(tpos.gpToVector(),recallSpeed);
+                dpc.seek(tpos.gpToVector(),drone.recallSpeed);
                 dpc.arrival(tpos.gpToVector());
             case Loaded:
                 dpc.stick(tpos.gpToVector());
@@ -179,9 +170,9 @@ class LauncherLogicSystem extends echoes.System {
             case Charged:
                 dpc.stick(tpos.gpToVector());
             case Expulse:    
-                dpc.seek(tpos.gpToVector(),expulseSpeed+(gr.load*0.75));
+                dpc.seek(tpos.gpToVector(),drone.expulseSpeed+(drone.charge*0.75));
                 dpc.arrival(tpos.gpToVector());
-                dpc.addForce(new Vector(0,(gr.load*grapplePower)*0.5));
+                dpc.addForce(new Vector(0,(drone.charge*drone.launchSpeed)*0.5));
         } 
         
     }
