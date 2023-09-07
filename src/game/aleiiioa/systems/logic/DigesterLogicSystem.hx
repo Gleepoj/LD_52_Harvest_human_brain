@@ -28,11 +28,11 @@ class DigesterLogicSystem extends echoes.System {
     var cd:Cooldown;
     
     public function new(){
-        var a:ContainersStatus = {left: [Gilles,Gilles,Gilles], right:[John,John,John]};
-        var b:ContainersStatus = {left: [Gilles,John,Gilles], right:[Gilles,John,Gilles]};
+        var a:ContainersStatus = {left: [Gilles,Gilles,Gilles], right:[John,John,John]      };
+        var b:ContainersStatus = {left: [Gilles,John,Gilles],   right:[Gilles,John,Gilles]  };
         var c:ContainersStatus = {left: [Gilles,Gilles,Gilles], right:[Gilles,Gilles,Gilles]};
-        var d:ContainersStatus = {left: [John,John,John], right:[John,John,John]};
-        var e:ContainersStatus = {left: [John,John,John], right:[Empty,Empty,Empty]};
+        var d:ContainersStatus = {left: [John,John,John],       right:[John,John,John]      };
+        var e:ContainersStatus = {left: [John,John,John],       right:[Gilles,Gilles,Gilles] };
 
         point_map.set(1,{pts: 100, status : a});
         point_map.set(2,{pts: 100, status : b});

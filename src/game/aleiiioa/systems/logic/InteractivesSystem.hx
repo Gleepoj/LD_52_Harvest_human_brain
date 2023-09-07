@@ -28,8 +28,6 @@ class InteractivesSystem extends echoes.System {
     
 
     public function new() {
-        //UIBuilders.slider("GrapplePower",function() return  grapplePower, function(v)  grapplePower = v, 0.5,5);
-        //UIBuilders.slider("RewindPower",function() return  rewind, function(v)  rewind = v, 0.05,0.9);
     }
 
 
@@ -91,7 +89,6 @@ class InteractivesSystem extends echoes.System {
     
     @r function onRemoveGrabbedGilles(en:echoes.Entity,catchable:CatchableFlag,g:BonhommeComponent){
         if(en.exists(ChildFlag)){
-            //trace("Died without unlink");
             diedWithoutUnlink = true;
         }
     }

@@ -1,6 +1,7 @@
 package aleiiioa.systems.logic;
 
 
+import aleiiioa.components.logic.LauncherBodyComponent;
 import aleiiioa.builders.UIBuilders;
 import aleiiioa.components.logic.ActionComponent;
 import aleiiioa.components.core.velocity.VelocityAnalogSpeed;
@@ -29,7 +30,7 @@ class LauncherLogicSystem extends echoes.System {
     var gravity:Float = 0.71;
     var angularDamping:Float = 0.79;
     var linearDamping :Float = 0.91;
-    var maxSpeed      :Float = 0.51;//0.41
+    //var maxSpeed      :Float = 0.51;//0.41
 
     // Drone Parameter
 
@@ -51,7 +52,7 @@ class LauncherLogicSystem extends echoes.System {
             //UIBuilders.slider("gravity",function() return gravity, function(v) gravity = v, 0.1,4);
             //UIBuilders.slider("angularDamping",function() return angularDamping, function(v) angularDamping = v, 0.1,4);     
             //UIBuilders.slider("linearDamping",function()  return linearDamping, function(v) linearDamping = v, 0.800,0.999);    
-            UIBuilders.slider("maxSpeed",     function()  return maxSpeed,      function(v) maxSpeed = v, 0.3,0.9);  
+            //UIBuilders.slider("maxSpeed",     function()  return maxSpeed,      function(v) maxSpeed = v, 0.3,0.9);  
             
             UIBuilders.slider("Drone : launchSpeed", function()  return grapplePower, function(v) grapplePower = v, 2.,9.);  
             //UIBuilders.slider("Drone : reloadSpeed",    function()  return loadSpeed,     function(v) loadSpeed = v, 0.03,0.09);  
@@ -81,8 +82,7 @@ class LauncherLogicSystem extends echoes.System {
         spr.anim.registerStateAnim(AssetsDictionaries.anim_launcher.expulse,   1,()->launcher.currentState == Expulse);
     }
 
-    @u function launcherDirection(launcher:LauncherFSM,vas:VelocityAnalogSpeed,spr:SpriteComponent,inp:InputComponent){
-        
+    @u function launcherPhysics(launcher:LauncherBodyComponent,fsm:LauncherFSM,vas:VelocityAnalogSpeed,spr:SpriteComponent,inp:InputComponent){
         var sx = launcher.xSpeed * launcher.direction;
 
         launcher.acceleration = (-1*gravity/len)*Math.sin(launcher.angle) + (1*sx/len)*Math.cos(launcher.angle);
@@ -90,28 +90,29 @@ class LauncherLogicSystem extends echoes.System {
         launcher.velocity *= angularDamping;
         launcher.angle    += launcher.velocity;
 
-        if(launcher.cd.has("onDock")){
+        
+        if(fsm.cd.has("onDock")){
             accel += (droneLoad*droneBoost);
         }
 
-        if(inp.ca.isDown(MoveRight) && launcher.xSpeed <=maxSpeed){
+        if(inp.ca.isDown(MoveRight) && launcher.xSpeed <= launcher.maxSpeed){
             launcher.xSpeed += accel;
         }
 
-        if(inp.ca.isDown(MoveLeft)  && launcher.xSpeed <=maxSpeed){
+        if(inp.ca.isDown(MoveLeft)  && launcher.xSpeed <= launcher.maxSpeed){
             launcher.xSpeed += accel;
         }
 
-        if(launcher.xSpeed > maxSpeed && !launcher.cd.has("onDock")){
-            launcher.xSpeed = maxSpeed;
+        if(launcher.xSpeed > launcher.maxSpeed && !fsm.cd.has("onDock")){
+            launcher.xSpeed = launcher.maxSpeed;
         }
 
         launcher.xSpeed *= linearDamping;
         vas.xSpeed = launcher.xSpeed * launcher.direction;
         spr.rotation =  launcher.angle;
         linearDamping = 0.91;
-        
     }
+
 
     @u function setAutoRecall(en:echoes.Entity,gr:GrappleStatusData,cl:CollisionsListener,ac:ActionComponent,input:InputComponent){
         

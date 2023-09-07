@@ -13,7 +13,7 @@ import aleiiioa.components.tools.DigesterFSM;
 import aleiiioa.components.tools.GrappleStatusData;
 import aleiiioa.components.tools.LauncherFSM;
 
-import aleiiioa.components.logic.LauncherComponent;
+import aleiiioa.components.logic.LauncherBodyComponent;
 import hxd.Math;
 import aleiiioa.components.logic.SpawnerPointComponent;
 import aleiiioa.components.flags.hierarchy.TargetedFlag;
@@ -276,7 +276,8 @@ class EntityBuilders {
         var em = new EmitterComponent();
         var ac = new ActionComponent();
         var inp= new InputComponent();
-        var launcher = new LauncherFSM();
+        var launcherFSM = new LauncherFSM();
+        var launcherBody = new LauncherBodyComponent();
         
         //Flags
         var body   = new BodyFlag();   
@@ -287,7 +288,7 @@ class EntityBuilders {
         var label = new DebugLabel();
 
         
-        new echoes.Entity().add(pos,vas,vc,cl,tpos,mpos,spr,bb,sq,se,ic,em,ac,inp,body,player,master,kinematic,td,launcher,targeted,label);
+        new echoes.Entity().add(pos,vas,vc,cl,tpos,mpos,spr,bb,sq,se,ic,em,ac,inp,body,player,master,kinematic,td,launcherBody,launcherFSM,targeted,label);
 
         /////DRONE////
          

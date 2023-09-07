@@ -15,13 +15,7 @@ class LauncherFSM {
     var allowed_transitions:Array<Transition>;
     var registered_transition:Null<Order>;
     
-    public var xSpeed:Float = 0;
-    public var angle:Float = 0 - Math.PI/4;
-    public var velocity:Float = 0;
-    public var acceleration:Float =0;
-    public var damping:Float = 0.995;
-        
-    public var direction:Int = 0;
+
     public var currentState(get,never):Launcher_State; inline function get_currentState() return state;
     
     public var cd:Cooldown;
