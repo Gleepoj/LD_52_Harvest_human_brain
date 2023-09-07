@@ -79,23 +79,6 @@ enum abstract Container_State(String) to String {
 	var John;
 }
 
-extern class AState {
-	function new(state:AState):Void;
-}
-/* 
-enum abstract Blur_State(AState) to AState{
-	var Bim;
-	var Ban;
-} */
-
-//typedef AState = {to:String,from:Array<String>}; 
-/* abstract AState(String) from String to String  {
-    @:from 
-	public static inline function fromString(state : String) : AState {
-		return new AState(state);
-	}
-	inline function new(state : String) this = state;
-} */
 
 enum abstract LevelSubMark(Int) to Int {
 	var None; // 0

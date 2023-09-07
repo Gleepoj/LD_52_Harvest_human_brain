@@ -6,9 +6,8 @@ import aleiiioa.components.logic.ContainerComponent;
 import aleiiioa.components.tools.DigesterFSM;
 import aleiiioa.components.logic.DoorComponent;
 import aleiiioa.components.core.velocity.DynamicBodyComponent;
-import aleiiioa.components.tools.GrappleFSM;
-import aleiiioa.components.logic.StaticBouleComponent;
-import aleiiioa.components.logic.StaticBrainComponent;
+import aleiiioa.components.tools.GrappleStatusData;
+
 import aleiiioa.components.logic.ActionComponent;
 import h3d.Vector;
 import aleiiioa.components.core.collision.CollisionsListener;
@@ -27,22 +26,6 @@ class SpriteExtensionFx extends System {
     @a function onAdded(spr:SpriteComponent,se:SpriteExtension) {
         if(se.baseColor != null)
             spr.colorize(se.baseColor.toColor());
-    }
-
-    @u function visibilytybrain(b:StaticBrainComponent,spr:SpriteComponent){
-        if(b.id > NB_BRAIN)
-           spr.visible = false; 
-
-        if(b.id <= NB_BRAIN)
-            spr.visible = true; 
-    }
-
-    @u function visibilytyboule(b:StaticBouleComponent,spr:SpriteComponent){
-        if(b.id > NB_BOULE)
-           spr.visible = false; 
-
-        if(b.id <= NB_BOULE)
-            spr.visible = true; 
     }
 
     @u function collideDebug(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener) {
@@ -106,7 +89,7 @@ class SpriteExtensionFx extends System {
 
     }
 
-    @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,ac:ActionComponent,gr:GrappleFSM,dpc:DynamicBodyComponent) {
+    @u function colorGrapple(spr:SpriteComponent,se:SpriteExtension,cl:CollisionsListener,ac:ActionComponent,gr:GrappleStatusData,dpc:DynamicBodyComponent) {
        //var col:Vector = new Vector(gr.load,se.baseColor.g,se.baseColor.b);
        //spr.colorize(col.toColor());
        /* if(ac.grab == true){

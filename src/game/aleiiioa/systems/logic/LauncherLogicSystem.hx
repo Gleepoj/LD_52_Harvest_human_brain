@@ -8,7 +8,7 @@ import h3d.Vector;
 import aleiiioa.components.core.collision.CollisionsListener;
 import aleiiioa.components.core.velocity.DynamicBodyComponent;
 import aleiiioa.components.core.position.TargetGridPosition;
-import aleiiioa.components.tools.GrappleFSM;
+import aleiiioa.components.tools.GrappleStatusData;
 import aleiiioa.components.core.rendering.SpriteComponent;
 import aleiiioa.components.core.InputComponent;
 import aleiiioa.components.core.rendering.DebugLabel;
@@ -65,7 +65,7 @@ class LauncherLogicSystem extends echoes.System {
     }
 
 
-    @a function onGrappleAdded(en:echoes.Entity,gr:GrappleFSM,spr:SpriteComponent){
+    @a function onGrappleAdded(en:echoes.Entity,gr:GrappleStatusData,spr:SpriteComponent){
         spr.set(Assets.drone);
         spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_open,1,3,()->gr.state == Idle);
         spr.anim.registerStateAnim(AssetsDictionaries.anim_drone.fly_close,1,3,()->gr.state == Recall);
@@ -113,7 +113,7 @@ class LauncherLogicSystem extends echoes.System {
         
     }
 
-    @u function setAutoRecall(en:echoes.Entity,gr:GrappleFSM,cl:CollisionsListener,ac:ActionComponent,input:InputComponent){
+    @u function setAutoRecall(en:echoes.Entity,gr:GrappleStatusData,cl:CollisionsListener,ac:ActionComponent,input:InputComponent){
         
         if(gr.state == Expulse){
             if(cl.onHitHorizontal)
@@ -168,7 +168,7 @@ class LauncherLogicSystem extends echoes.System {
         launcher_currentState = launcher.currentState;
     }
     
-    @u function synchronizeState(en:echoes.Entity,dt:Float,gr:GrappleFSM,dpc:DynamicBodyComponent,lab:DebugLabel,tgp:TargetGridPosition){
+    @u function synchronizeState(en:echoes.Entity,dt:Float,gr:GrappleStatusData,dpc:DynamicBodyComponent,lab:DebugLabel,tgp:TargetGridPosition){
         gr.cd.update(dt);
         gr.set_synchronized_state(launcher_currentState);
         
@@ -176,7 +176,7 @@ class LauncherLogicSystem extends echoes.System {
         droneLoad = gr.load;
     }
 
-    @u function dronePhysics(en:echoes.Entity,gr:GrappleFSM,tpos:TargetGridPosition,dpc:DynamicBodyComponent,cl:CollisionsListener,inp:InputComponent){
+    @u function dronePhysics(en:echoes.Entity,gr:GrappleStatusData,tpos:TargetGridPosition,dpc:DynamicBodyComponent,cl:CollisionsListener,inp:InputComponent){
         
         dpc.target = tpos.gpToVector();
         switch gr.state {

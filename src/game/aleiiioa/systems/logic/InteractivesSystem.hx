@@ -1,7 +1,8 @@
 package aleiiioa.systems.logic;
 
+import aleiiioa.components.tools.GrappleStatusData;
 import aleiiioa.systems.collisions.CollisionEvent.Event_OnContact;
-import aleiiioa.components.tools.GrappleFSM;
+import aleiiioa.components.tools.GrappleStatusData;
 import aleiiioa.components.core.rendering.SpriteComponent;
 import aleiiioa.builders.UIBuilders;
 import h3d.Vector;
@@ -20,7 +21,7 @@ import aleiiioa.components.core.velocity.*;
 class InteractivesSystem extends echoes.System {
     
     var ALL_PLAYERS :View<GridPosition,PlayerFlag>;
-    var ALL_GRAPPLE :View<GridPosition,GrappleFSM>;
+    var ALL_GRAPPLE :View<GridPosition,GrappleStatusData>;
     var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent>;
     var lastActionX:Bool = false;
     var diedWithoutUnlink:Bool = false;
@@ -36,14 +37,14 @@ class InteractivesSystem extends echoes.System {
         ic.cd.update(dt);
     }
 
-    @u function grappleGrabObject(gr:GrappleFSM,cl:CollisionsListener,inp:InputComponent,ac:ActionComponent) {
+    @u function grappleGrabObject(gr:GrappleStatusData,cl:CollisionsListener,inp:InputComponent,ac:ActionComponent) {
         if(cl.onContact && inp.ca.isPressed(ActionX)){
             ac.query = true;
         }
     }
 
 
-    @u function releaseCatchable(gr:GrappleFSM,inp:InputComponent,ac:ActionComponent,vc:VelocityComponent,cl:CollisionsListener){
+    @u function releaseCatchable(gr:GrappleStatusData,inp:InputComponent,ac:ActionComponent,vc:VelocityComponent,cl:CollisionsListener){
         //if(ac.grab && !en.exists())
         if(diedWithoutUnlink){
             diedWithoutUnlink = false;

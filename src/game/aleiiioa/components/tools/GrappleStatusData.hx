@@ -2,7 +2,7 @@ package aleiiioa.components.tools;
 
 import dn.Cooldown;
 
-class GrappleFSM {
+class GrappleStatusData {
     
     public var synchronized_state(default,set):Launcher_State; 
         inline public function set_synchronized_state(s:Launcher_State){return synchronized_state = s;}

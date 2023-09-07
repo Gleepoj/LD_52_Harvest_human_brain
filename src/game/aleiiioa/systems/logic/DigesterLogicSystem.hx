@@ -46,10 +46,7 @@ class DigesterLogicSystem extends echoes.System {
 
 
     }
-    /* 
-    @a function FSM(dor:DoorComponent){
-        var ping = new BlurFsm();
-    } */
+
     @u function updateScore(um:UIMessageComponent){
         level = M.floor(score/100);
         um.message = 'Score :: $score  Level :: $level';
@@ -60,7 +57,6 @@ class DigesterLogicSystem extends echoes.System {
         var last = container_full;
         container_full = getContainerFullness();
         
-
         if(container_full){
             if(!last){
                 cd.setS("full_cooldown",0.04);

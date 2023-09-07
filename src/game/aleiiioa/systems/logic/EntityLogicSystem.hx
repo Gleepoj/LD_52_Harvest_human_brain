@@ -21,8 +21,6 @@ class EntityLogicSystem  extends echoes.System{
     public var lastSpawnState:Bool = false;
     public var level(get,never) : Level; inline function get_level() return Game.ME.level;
 
-    var sysEnergyOutput:Float = 0.; // nb de gilles dans methaniseur;
-    var sysEnergyConsumption:Float = 0.001; // nb de gilles dans IA;
 
     var addCorpse:Bool = false;
     var addBrain:Bool = false;
@@ -55,12 +53,12 @@ class EntityLogicSystem  extends echoes.System{
 
             if(cl.onContactDoor && !en.exists(IsDiedFlag)){
                 en.add(new IsDiedFlag());
-                addCorpse = true;
+                //addCorpse = true;
             }
 
             if(level.hasMetro(pos.cx,pos.cy) && !en.exists(IsDiedFlag)){
                 en.add(new IsDiedFlag());
-                addEscape = true;
+                //addEscape = true;
             }
     }
     
@@ -78,27 +76,11 @@ class EntityLogicSystem  extends echoes.System{
         }
         
         if(spp.onSpawn){
-            EntityBuilders.gille(pos.cx,pos.cy);
+            EntityBuilders.bonhomme(pos.cx,pos.cy);
             spp.onSpawn = false;
         }
 
         if(cl.cd.has("spawn_cooldown"))
             lastSpawnState = true;
-    }
-
-    @u function bombBehavior(en:echoes.Entity,bomb:BombFlag,ic:InteractiveComponent,em:EmitterComponent,gp:GridPosition){
-        
-        
-        if(ic.isGrabbed && !ic.cd.has("countdown")){
-            //ic.cd.setS("countdown",3);
-        }
-        
-        if(ic.cd.has("countdown")){
-            if(ic.cd.getRatio("countdown") <= 0.05){
-             VfxBuilders.bombSmoke(em,gp);
-             en.add(new IsDiedFlag());
-            }
-        }
-
     }
 }

@@ -10,10 +10,9 @@ import aleiiioa.components.logic.ContainerSharedComponent;
 import aleiiioa.components.logic.DigesterSharedComponent;
 import aleiiioa.components.logic.DoorComponent;
 import aleiiioa.components.tools.DigesterFSM;
-import aleiiioa.components.tools.GrappleFSM;
+import aleiiioa.components.tools.GrappleStatusData;
 import aleiiioa.components.tools.LauncherFSM;
-import aleiiioa.components.logic.StaticBouleComponent;
-import aleiiioa.components.logic.StaticBrainComponent;
+
 import aleiiioa.components.logic.LauncherComponent;
 import hxd.Math;
 import aleiiioa.components.logic.SpawnerPointComponent;
@@ -48,83 +47,80 @@ import aleiiioa.components.core.collision.*;
 
 
 class EntityBuilders {    
-
-    public static function pnj(cx:Int,cy:Int,yarnDialogName:String) {
-        //Physics Component
+    public static function bonhomme(cx:Int,cy:Int) {
+        
         var pos = new GridPosition(cx,cy);
         var vas = new VelocityAnalogSpeed(0,0);
+        
+        
+        //Physics Component
+        var rdir = M.randRange(1,2);
+        var rcolor = M.randRange(1,2);
+        
+        if(rdir == 2)
+            rdir = -1;
+
+        if(rcolor ==2)
+            rcolor = -1;
+
+        var dir = rdir;
+        var color = rcolor;
+
+        var bonhomme = new BonhommeComponent(dir,color);
+
         var vc  = new VelocityComponent(true);
         var cl  = new CollisionsListener();
         
         //Rendering Component
-        var spr = new SpriteComponent(D.tiles.fxCircle15);
+        var spr = new SpriteComponent(D.tiles.gille);
+        spr.pivot.setCenterRatio(0.5,0.5);
+        //spr.scale(1);
+
         var sq  = new SquashComponent();
         var se  = new SpriteExtension();
-        se.baseColor = new Vector(0.3,0.8,0.6);
+        //se.sprScaleX = 2;
+        //se.sprScaleY = 2;
+        se.baseColor = new Vector(1,1,1);
+        var bb  = new BoundingBox(spr);      
+
 
         //Logic and Dialog Component
         var ic    = new InteractiveComponent();
-        var em    = new EmitterComponent();
-        var yarn  = new DialogReferenceComponent(yarnDialogName,pos.attachX,pos.attachY);
         
         //Flags
-        var pnj   = new PNJFlag();
-        var body  = new BodyFlag();   
+        //gille.right = color;
+
+        if(color == -1){
+            var colorSwap:Map<Int,Int> = new Map();
+            colorSwap.set(0x505acc,0xd8ab53);
+            colorSwap.set(0x4d5182,0xe2672a);
+            colorSwap.set(0x9badb7,0x56baa1);
+    
+            var shader = new PaletteShader(colorSwap);
+            spr.addShader(shader);
+            //gille.color = -1;
+        }
+
+
+        var body = new BodyFlag();
         var catchable = new CatchableFlag();
+        var plateformer = new PlateformerPhysicsFlag();
+        var kinematic = new KinematicBodyFlag();
         
-        
-        new echoes.Entity().add(pos,vas,vc,cl,spr,sq,se,ic,em,yarn,pnj,body,catchable);
-        // Uncomment next entity creation and comment previous one to remove catchable behavior 
-        // new echoes.Entity().add(pos,vas,vc,cl,spr,sq,se,ic,em,yarn,pnj,body);
-    }
-
-    public static function boule(cx:Int,cy:Int,id:Int) {
-        //Physics Component
-        var pos = new GridPosition(cx,cy);
-        var cl  = new CollisionsListener();
-        
-        //Rendering Component
-        var spr = new SpriteComponent(D.tiles.gille_boule);
-        spr.pivot.setCenterRatio(0.5,0.5);
-        //spr.visible = false;
-        var sq  = new SquashComponent();
-        var se  = new SpriteExtension();
-        var bb  = new BoundingBox(spr);
-        se.baseColor = new Vector(1,1,1);
-
-        var boule = new StaticBouleComponent(id);
-        //var spp = new SpawnerPointComponent();
-        
-        new echoes.Entity().add(pos,cl,spr,sq,se,bb,boule);
-
-    }
-
-    public static function brain(cx:Int,cy:Int,id:Int) {
-        //Physics Component
-        var pos = new GridPosition(cx,cy);
-        var cl  = new CollisionsListener();
-        
-        //Rendering Component
-        var spr = new SpriteComponent(D.tiles.brain);
-        spr.pivot.setCenterRatio(0.5,0.5);
-        //spr.visible = false;
-        var sq  = new SquashComponent();
-        var se  = new SpriteExtension();
-        var bb  = new BoundingBox(spr);
-        se.baseColor = new Vector(1,1,1);
-
-        var brain = new StaticBrainComponent(id);
         var dl = new DebugLabel();
         
-  
-        //var spp = new SpawnerPointComponent();
-        
-        new echoes.Entity().add(pos,cl,spr,sq,se,bb,brain,dl);
+        if(bonhomme.color == 1){
+           var gille = new GilleFlag();
+           new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,body,catchable,plateformer,kinematic,gille,bonhomme,dl);
+        }
 
+             
+        if(bonhomme.color == -1){
+            var john = new JohnFlag();
+            new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,body,catchable,plateformer,kinematic,john,bonhomme,dl);
+         }
     }
 
-    
-    
     public static function spawnPoint(cx:Int,cy:Int) {
         //Physics Component
         var pos = new GridPosition(cx,cy,0);
@@ -247,113 +243,6 @@ class EntityBuilders {
 
     }
 
-    
-    
-    public static function chouxPeteur(cx:Int,cy:Int) {
-
-        //Physics Component
-        var pos = new GridPosition(cx,cy);
-        var vas = new VelocityAnalogSpeed(0,0);
-        var vc  = new VelocityComponent(true);
-        var cl  = new CollisionsListener();
-        
-        //Rendering Component
-        var spr = new SpriteComponent(D.tiles.fxCircle15);
-        spr.pivot.setCenterRatio(0.5,0.5);
-        var sq  = new SquashComponent();
-        var se  = new SpriteExtension();
-        se.baseColor = new Vector(0.3,0.2,0.8);
-        var bb  = new BoundingBox(spr);
-
-        //Logic and Dialog Component
-        var ic    = new InteractiveComponent();
-        var em    = new EmitterComponent();
-        
-        //Flags
-        var body = new BodyFlag(); 
-        var bomb = new BombFlag();
-        var catchable = new CatchableFlag();
-        var plateformer = new PlateformerPhysicsFlag();
-        var kinematic = new KinematicBodyFlag();
-        
-        
-        new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,em,body,bomb,catchable,plateformer,kinematic);
-    }
-
-    public static function gille(cx:Int,cy:Int) {
-        
-        var pos = new GridPosition(cx,cy);
-        var vas = new VelocityAnalogSpeed(0,0);
-        
-        
-        //Physics Component
-        var rdir = M.randRange(1,2);
-        var rcolor = M.randRange(1,2);
-        
-        if(rdir == 2)
-            rdir = -1;
-
-        if(rcolor ==2)
-            rcolor = -1;
-
-        var dir = rdir;
-        var color = rcolor;
-
-        var bonhomme = new BonhommeComponent(dir,color);
-
-        var vc  = new VelocityComponent(true);
-        var cl  = new CollisionsListener();
-        
-        //Rendering Component
-        var spr = new SpriteComponent(D.tiles.gille);
-        spr.pivot.setCenterRatio(0.5,0.5);
-        //spr.scale(1);
-
-        var sq  = new SquashComponent();
-        var se  = new SpriteExtension();
-        //se.sprScaleX = 2;
-        //se.sprScaleY = 2;
-        se.baseColor = new Vector(1,1,1);
-        var bb  = new BoundingBox(spr);      
-
-
-        //Logic and Dialog Component
-        var ic    = new InteractiveComponent();
-        
-        //Flags
-        //gille.right = color;
-
-        if(color == -1){
-            var colorSwap:Map<Int,Int> = new Map();
-            colorSwap.set(0x505acc,0xd8ab53);
-            colorSwap.set(0x4d5182,0xe2672a);
-            colorSwap.set(0x9badb7,0x56baa1);
-    
-            var shader = new PaletteShader(colorSwap);
-            spr.addShader(shader);
-            //gille.color = -1;
-        }
-
-
-        var body = new BodyFlag();
-        var catchable = new CatchableFlag();
-        var plateformer = new PlateformerPhysicsFlag();
-        var kinematic = new KinematicBodyFlag();
-        
-        var dl = new DebugLabel();
-        
-        if(bonhomme.color == 1){
-           var gille = new GilleFlag();
-           new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,body,catchable,plateformer,kinematic,gille,bonhomme,dl);
-        }
-
-             
-        if(bonhomme.color == -1){
-            var john = new JohnFlag();
-            new echoes.Entity().add(pos,vas,vc,cl,spr,sq,bb,se,ic,body,catchable,plateformer,kinematic,john,bonhomme,dl);
-         }
-    }
-
     public static function player(cx:Int,cy:Int) {
         
         //Physics Component
@@ -430,7 +319,7 @@ class EntityBuilders {
          var ic  = new InteractiveComponent();
          var em  = new EmitterComponent();
          var ac  = new ActionComponent();
-         var gr  = new GrappleFSM();
+         var gr  = new GrappleStatusData();
          
          //Flags 
          var body   = new BodyFlag(); 

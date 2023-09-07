@@ -40,14 +40,6 @@ class Aleiiioa extends Game {
 		var player = level.data.l_Entities.all_Player[0];
 		EntityBuilders.player(player.cx,player.cy);
 
-		for (e in level.data.l_Entities.all_PNJ){
-			EntityBuilders.pnj(e.cx,e.cy,e.f_Dialog);
-		}
-
-		for (cp in level.data.l_Entities.all_ChouxPeteur){
-			EntityBuilders.chouxPeteur(cp.cx,cp.cy);
-		}
-
 		for (sp in level.data.l_Entities.all_SpawnPoint){
 			EntityBuilders.spawnPoint(sp.cx,sp.cy);
 		}
@@ -58,17 +50,6 @@ class Aleiiioa extends Game {
 		
 		for (met in level.data.l_Entities.all_Methanizer){
 			EntityBuilders.methanizer(met.cx,met.cy);
-		}
-
-		var brainID:Int = 0;
-		for (b in level.data.l_Entities.all_Brain){
-			brainID +=1;
-			EntityBuilders.brain(b.cx,b.cy,brainID);
-		}
-		var bouleID:Int = 0;
-		for (bo in level.data.l_Entities.all_Boule){
-			bouleID += 1;
-			EntityBuilders.boule(bo.cx,bo.cy,bouleID);
 		}
 
 		//Collision

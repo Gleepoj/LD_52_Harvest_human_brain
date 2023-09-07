@@ -2,7 +2,7 @@ package aleiiioa.systems.collisions;
 
 import aleiiioa.components.logic.DoorComponent;
 import aleiiioa.components.tools.LauncherFSM;
-import aleiiioa.components.tools.GrappleFSM;
+import aleiiioa.components.tools.GrappleStatusData;
 import echoes.core.RestrictedLinkedList;
 import echoes.utils.LinkedList.LinkedNode;
 import h3d.Vector;
@@ -18,13 +18,13 @@ import aleiiioa.components.core.collision.CollisionsListener;
 import aleiiioa.components.core.position.GridPosition;
 
 class EntityCollisionsSystem extends echoes.System {
-    var ALL_PNJ:View<GridPosition,PNJFlag>;
+   
     var ALL_CATCHABLE:View<CatchableFlag,InteractiveComponent,GridPosition,BoundingBox,CollisionsListener>;
     var ALL_GILLE:View<CatchableFlag,InteractiveComponent,GridPosition,BoundingBox,CollisionsListener,GilleFlag>;
     var ALL_JOHN:View<CatchableFlag,InteractiveComponent,GridPosition,BoundingBox,CollisionsListener,JohnFlag>;
     
     var PLAYER :View<GridPosition,PlayerFlag>;
-    var GRAPPLE:View<GridPosition,GrappleFSM>;
+    var GRAPPLE:View<GridPosition,GrappleStatusData>;
     var LAUNCHER:View<GridPosition,LauncherFSM>;
     //var DOOR:View<GridPosition,DoorComponent>;
     
@@ -41,7 +41,7 @@ class EntityCollisionsSystem extends echoes.System {
             cl.lastEvent.send(cl);
     }
     
-    @u function grappleCollisions(flag:GrappleFSM,gp:GridPosition,cl:CollisionsListener,bb:BoundingBox){
+    @u function grappleCollisions(flag:GrappleStatusData,gp:GridPosition,cl:CollisionsListener,bb:BoundingBox){
      
         preCollide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.interact);
         collide(gp,bb,cl,ALL_CATCHABLE.entities.head,events.contact);
